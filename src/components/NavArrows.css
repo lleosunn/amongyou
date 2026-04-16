@@ -1,0 +1,50 @@
+.nav-arrows {
+  display: grid;
+  grid-template-areas:
+    '.    up   .'
+    'left .    right'
+    '.    down .';
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px;
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+.nav-btn {
+  background: rgba(30, 30, 50, 0.85);
+  border: 2px solid #555;
+  border-radius: 10px;
+  color: #ddd;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  backdrop-filter: blur(4px);
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: rgba(60, 60, 100, 0.9);
+  border-color: #aaa;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.nav-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.nav-btn:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.nav-up    { grid-area: up; }
+.nav-left  { grid-area: left; }
+.nav-right { grid-area: right; }
+.nav-down  { grid-area: down; }
