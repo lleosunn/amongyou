@@ -1,4 +1,5 @@
 import { rooms } from '../gameData';
+import { useGameState } from '../gameState';
 import './Minimap.css';
 
 const allRooms = Object.values(rooms);
@@ -22,7 +23,12 @@ function getConnections() {
       if (seen.has(key)) continue;
       seen.add(key);
       const neighbor = rooms[neighborId];
-      conns.push({ from: room.gridPos, to: neighbor.gridPos });
+      conns.push({
+        from: room.gridPos,
+        to: neighbor.gridPos,
+        fromId: room.id,
+        toId: neighborId,
+      });
     }
   }
   return conns;
@@ -44,19 +50,25 @@ const svgW = cols * CELL + (cols - 1) * GAP;
 const svgH = rows * CELL + (rows - 1) * GAP;
 
 export default function Minimap({ currentRoomId }) {
+  const { isUnlocked } = useGameState();
+
   return (
     <div className="minimap">
       <svg width={svgW} height={svgH} viewBox={`0 0 ${svgW} ${svgH}`}>
-        {connections.map(({ from, to }, i) => {
+        {connections.map(({ from, to, fromId, toId }, i) => {
           const a = posToPixel(from.col, from.row);
           const b = posToPixel(to.col, to.row);
+          const bothUnlocked = isUnlocked(rooms[fromId]) && isUnlocked(rooms[toId]);
           return (
             <line
               key={i}
-              x1={a.x} y1={a.y}
-              x2={b.x} y2={b.y}
-              stroke="#555"
+              x1={a.x}
+              y1={a.y}
+              x2={b.x}
+              y2={b.y}
+              stroke={bothUnlocked ? '#888' : '#333'}
               strokeWidth={3}
+              strokeDasharray={bothUnlocked ? 'none' : '4 4'}
             />
           );
         })}
@@ -66,27 +78,30 @@ export default function Minimap({ currentRoomId }) {
           const x = (col - minCol) * (CELL + GAP);
           const y = (row - minRow) * (CELL + GAP);
           const isCurrent = room.id === currentRoomId;
+          const unlocked = isUnlocked(room);
           return (
             <g key={room.id}>
               <rect
-                x={x} y={y}
-                width={CELL} height={CELL}
+                x={x}
+                y={y}
+                width={CELL}
+                height={CELL}
                 rx={6}
-                fill={isCurrent ? room.color : '#2a2a3e'}
-                stroke={room.color}
+                fill={isCurrent ? room.color : unlocked ? '#2a2a3e' : '#15151e'}
+                stroke={unlocked ? room.color : '#444'}
                 strokeWidth={isCurrent ? 3 : 1.5}
-                opacity={isCurrent ? 1 : 0.5}
+                opacity={isCurrent ? 1 : unlocked ? 0.6 : 0.4}
               />
               <text
                 x={x + CELL / 2}
                 y={y + CELL / 2 + 1}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill={isCurrent ? '#1a1a2e' : '#aaa'}
+                fill={isCurrent ? '#1a1a2e' : unlocked ? '#aaa' : '#555'}
                 fontSize={9}
                 fontWeight={isCurrent ? 700 : 400}
               >
-                {room.name.slice(0, 3).toUpperCase()}
+                {unlocked ? room.name.slice(0, 3).toUpperCase() : '🔒'}
               </text>
             </g>
           );

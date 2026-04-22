@@ -44,6 +44,12 @@
   cursor: not-allowed;
 }
 
+.nav-btn.nav-locked {
+  opacity: 0.55;
+  font-size: 1.1rem;
+  border-style: dashed;
+}
+
 .nav-up    { grid-area: up; }
 .nav-left  { grid-area: left; }
 .nav-right { grid-area: right; }

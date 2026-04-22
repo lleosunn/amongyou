@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#f4e9c8"/>
+  <rect x="4" y="4" width="792" height="592" fill="none" stroke="#b89968" stroke-width="6"/>
+
+  <!-- MOM (left) - woman in white doctor coat -->
+  <g transform="translate(170, 300)">
+    <!-- head -->
+    <circle cx="0" cy="-130" r="36" fill="#ffd9b5" stroke="#3a2a1a" stroke-width="3"/>
+    <!-- long hair -->
+    <path d="M -36 -130 Q -45 -90 -36 -60 L 36 -60 Q 45 -90 36 -130" fill="#6b3a1a" stroke="#3a2a1a" stroke-width="3"/>
+    <!-- smile -->
+    <path d="M -12 -120 Q 0 -108 12 -120" fill="none" stroke="#3a2a1a" stroke-width="2.5"/>
+    <circle cx="-10" cy="-135" r="2.5" fill="#3a2a1a"/>
+    <circle cx="10" cy="-135" r="2.5" fill="#3a2a1a"/>
+    <!-- doctor coat body -->
+    <path d="M -45 -90 L -55 90 L 55 90 L 45 -90 Z" fill="#ffffff" stroke="#3a2a1a" stroke-width="3"/>
+    <!-- stethoscope -->
+    <path d="M -15 -75 Q 0 -30 15 -75" fill="none" stroke="#2a2a2a" stroke-width="3"/>
+    <circle cx="0" cy="-28" r="5" fill="#999" stroke="#2a2a2a" stroke-width="2"/>
+    <!-- red cross on coat -->
+    <rect x="-8" y="-50" width="4" height="24" fill="#d33"/>
+    <rect x="-18" y="-40" width="24" height="4" fill="#d33"/>
+    <!-- arms -->
+    <line x1="-45" y1="-80" x2="-75" y2="20" stroke="#3a2a1a" stroke-width="4"/>
+    <line x1="45" y1="-80" x2="75" y2="20" stroke="#3a2a1a" stroke-width="4"/>
+    <!-- legs -->
+    <line x1="-20" y1="90" x2="-25" y2="170" stroke="#3a2a1a" stroke-width="5"/>
+    <line x1="20" y1="90" x2="25" y2="170" stroke="#3a2a1a" stroke-width="5"/>
+  </g>
+
+  <!-- CHILD (center) -->
+  <g transform="translate(400, 340)">
+    <!-- head -->
+    <circle cx="0" cy="-90" r="26" fill="#ffd9b5" stroke="#3a2a1a" stroke-width="3"/>
+    <!-- short hair tufts -->
+    <path d="M -22 -100 L -14 -114 L -6 -102 L 2 -116 L 10 -102 L 18 -114 L 22 -100" fill="none" stroke="#3a2a1a" stroke-width="2.5"/>
+    <!-- eyes -->
+    <circle cx="-8" cy="-92" r="2.5" fill="#3a2a1a"/>
+    <circle cx="8" cy="-92" r="2.5" fill="#3a2a1a"/>
+    <!-- smile -->
+    <path d="M -8 -82 Q 0 -76 8 -82" fill="none" stroke="#3a2a1a" stroke-width="2.5"/>
+    <!-- body -->
+    <path d="M -28 -60 L -34 40 L 34 40 L 28 -60 Z" fill="#ffc94a" stroke="#3a2a1a" stroke-width="3"/>
+    <!-- arms -->
+    <line x1="-28" y1="-55" x2="-50" y2="10" stroke="#3a2a1a" stroke-width="4"/>
+    <line x1="28" y1="-55" x2="50" y2="10" stroke="#3a2a1a" stroke-width="4"/>
+    <!-- legs -->
+    <line x1="-14" y1="40" x2="-18" y2="100" stroke="#3a2a1a" stroke-width="5"/>
+    <line x1="14" y1="40" x2="18" y2="100" stroke="#3a2a1a" stroke-width="5"/>
+  </g>
+
+  <!-- DAD (right) - man in pilot helmet -->
+  <g transform="translate(630, 300)">
+    <!-- head -->
+    <circle cx="0" cy="-130" r="36" fill="#ffd9b5" stroke="#3a2a1a" stroke-width="3"/>
+    <!-- pilot helmet (dome) -->
+    <path d="M -40 -130 Q -40 -170 0 -172 Q 40 -170 40 -130 L 38 -120 L -38 -120 Z" fill="#4a6aa8" stroke="#3a2a1a" stroke-width="3"/>
+    <!-- visor -->
+    <rect x="-30" y="-140" width="60" height="14" rx="3" fill="#2a2a40" stroke="#3a2a1a" stroke-width="2"/>
+    <!-- smile -->
+    <path d="M -12 -120 Q 0 -108 12 -120" fill="none" stroke="#3a2a1a" stroke-width="2.5"/>
+    <!-- body (flight suit) -->
+    <path d="M -45 -90 L -55 90 L 55 90 L 45 -90 Z" fill="#d9a94a" stroke="#3a2a1a" stroke-width="3"/>
+    <!-- pilot wing badge -->
+    <path d="M -12 -60 L 12 -60 L 20 -55 L 12 -50 L -12 -50 L -20 -55 Z" fill="#e8c840" stroke="#3a2a1a" stroke-width="2"/>
+    <!-- arms -->
+    <line x1="-45" y1="-80" x2="-75" y2="20" stroke="#3a2a1a" stroke-width="4"/>
+    <line x1="45" y1="-80" x2="75" y2="20" stroke="#3a2a1a" stroke-width="4"/>
+    <!-- legs -->
+    <line x1="-20" y1="90" x2="-25" y2="170" stroke="#3a2a1a" stroke-width="5"/>
+    <line x1="20" y1="90" x2="25" y2="170" stroke="#3a2a1a" stroke-width="5"/>
+  </g>
+
+  <!-- Handwritten alien labels -->
+  <g font-family="Comic Sans MS, cursive" font-size="22" fill="#3a2a1a" text-anchor="middle">
+    <text x="170" y="500" transform="rotate(-2 170 500)">ema</text>
+    <text x="170" y="530" transform="rotate(-2 170 530)">derbe-nu</text>
+
+    <text x="400" y="505" transform="rotate(1 400 505)">il</text>
+
+    <text x="630" y="500" transform="rotate(2 630 500)">eba</text>
+    <text x="630" y="530" transform="rotate(2 630 530)">ramde-nu</text>
+  </g>
+
+  <!-- Scribbly sun & grass -->
+  <circle cx="80" cy="80" r="30" fill="#ffcc33" stroke="#3a2a1a" stroke-width="2"/>
+  <g stroke="#ffcc33" stroke-width="3" stroke-linecap="round">
+    <line x1="80" y1="30" x2="80" y2="10"/>
+    <line x1="80" y1="130" x2="80" y2="150"/>
+    <line x1="30" y1="80" x2="10" y2="80"/>
+    <line x1="130" y1="80" x2="150" y2="80"/>
+    <line x1="45" y1="45" x2="30" y2="30"/>
+    <line x1="115" y1="45" x2="130" y2="30"/>
+  </g>
+  <path d="M 0 560 Q 100 540 200 560 T 400 560 T 600 560 T 800 560 L 800 600 L 0 600 Z" fill="#8fc866" stroke="#3a2a1a" stroke-width="2"/>
+</svg>

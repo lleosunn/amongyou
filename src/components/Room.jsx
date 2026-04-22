@@ -1,6 +1,14 @@
+import { useGameState } from '../gameState';
 import './Room.css';
 
 export default function Room({ room, onInteract, children }) {
+  const { isComplete } = useGameState();
+
+  const visibleHotspots = (room.hotspots ?? []).filter((h) => {
+    if (!h.requiresObjectives) return true;
+    return h.requiresObjectives.every((o) => isComplete(o));
+  });
+
   return (
     <div className="room-wrapper">
       <div className="room" style={{ '--room-accent': room.color }}>
@@ -8,10 +16,14 @@ export default function Room({ room, onInteract, children }) {
         <div className="room-label">
           <h1 className="room-name">{room.name}</h1>
         </div>
-        {room.hotspots?.map((hotspot) => (
+        {visibleHotspots.map((hotspot) => (
           <button
             key={hotspot.id}
-            className="hotspot"
+            className={`hotspot ${
+              hotspot.stage1Objective && isComplete(hotspot.stage1Objective)
+                ? 'hotspot-done'
+                : ''
+            } ${hotspot.highlight ? 'hotspot-highlight' : ''}`}
             style={{
               left: hotspot.x,
               top: hotspot.y,
