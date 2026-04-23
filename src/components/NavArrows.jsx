@@ -1,5 +1,5 @@
 import { rooms } from '../gameData';
-import { useGameState } from '../gameState';
+import { useGameState } from '../gameContext';
 import './NavArrows.css';
 
 const arrows = [

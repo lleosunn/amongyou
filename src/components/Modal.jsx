@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import MatchingPuzzle from './MatchingPuzzle';
+import PrefixWheelPuzzle from './PrefixWheelPuzzle';
+import SequencePuzzle from './SequencePuzzle';
 import './Modal.css';
 
 function ClueContent({ title, body, note }) {
@@ -86,17 +88,49 @@ export default function Modal({ children, onClose }) {
             }}
           />
         );
+      case 'prefix-wheel':
+        return (
+          <PrefixWheelPuzzle
+            title={content.title}
+            instructions={content.instructions}
+            rootWord={content.rootWord}
+            suffix={content.suffix}
+            prefixes={content.prefixes}
+            correctPrefixId={content.correctPrefixId}
+            wrongMessage={content.wrongMessage}
+            successMessage={content.successMessage}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
+      case 'sequence':
+        return (
+          <SequencePuzzle
+            title={content.title}
+            instructions={content.instructions}
+            entries={content.entries}
+            correctOrder={content.correctOrder}
+            replaySteps={content.replaySteps}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
       default:
         return content;
     }
   };
 
-  const isMatching = content?.type === 'matching';
+  const isWide =
+    content?.type === 'matching' ||
+    content?.type === 'prefix-wheel' ||
+    content?.type === 'sequence';
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div
-        className={`modal-content ${isMatching ? 'modal-wide' : ''}`}
+        className={`modal-content ${isWide ? 'modal-wide' : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
         {renderContent()}

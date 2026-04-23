@@ -5,7 +5,9 @@ export default function NarrationBox({ lines, onComplete }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    setIndex(0);
+    const timeout = setTimeout(() => setIndex(0), 0);
+
+    return () => clearTimeout(timeout);
   }, [lines]);
 
   if (!lines || lines.length === 0) return null;

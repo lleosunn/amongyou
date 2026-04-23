@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useGameState } from '../gameState';
+import { useGameState } from '../gameContext';
 import { getMorpheme } from '../languageData';
 import './MorphemeInventory.css';
 

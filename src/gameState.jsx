@@ -1,6 +1,5 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-
-const GameContext = createContext(null);
+import { useCallback, useMemo, useState } from 'react';
+import { GameContext } from './gameContext';
 
 export function GameProvider({ children, initialStage = 1 }) {
   const [learnedMorphemes, setLearnedMorphemes] = useState(() => new Set());
@@ -70,12 +69,4 @@ export function GameProvider({ children, initialStage = 1 }) {
   );
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
-}
-
-export function useGameState() {
-  const ctx = useContext(GameContext);
-  if (!ctx) {
-    throw new Error('useGameState must be used within a GameProvider');
-  }
-  return ctx;
 }

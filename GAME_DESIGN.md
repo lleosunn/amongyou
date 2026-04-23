@@ -98,6 +98,8 @@ Linear left-to-right. All rooms except the Pilot's Cabin start **locked**. Each 
 - A **Morpheme Inventory** panel (bottom-left) tracks every BLAH morpheme the player has learned, with its English translation.
 - **Narration boxes** carry the astronaut's inner monologue and objective hints.
 - **Matching puzzles** teach new morphemes by having the player drop BLAH chips onto the correct figures/objects in a visual scene.
+- **Prefix wheel puzzles** have the player cycle through prefix options to form the correct word (e.g. `op-gane-uk` to unlock a door).
+- **Sequence puzzles** have the player arrange log entries in the correct causal order, then watch an animated replay confirming the events.
 
 ## Stage-by-stage design
 
@@ -112,20 +114,29 @@ Linear left-to-right. All rooms except the Pilot's Cabin start **locked**. Each 
 
 **Morphemes learned:** `ema`, `eba`, `il`, `derbe`, `ramde`, `-nu`.
 
-### Stage 2 — Clinic (PENDING)
+### Stage 2 — Clinic (IMPLEMENTED)
 
-1. Locked door puzzle: turn a prefix wheel until the display reads `op-gane-uk` (`un-locked`). Door opens.
-2. Wall of before/after patient photographs labeled `a-sondy` / `me-sondy` → teaches `a-` (pre-) and `me-` (post-).
-3. Medicine-bottle counter: full bottles labeled `pua-virus` → teaches `pua-` (anti-). Empty bottles near a `ya-moll` machine → teaches `ya-` (re-) and `moll` (fill).
-4. Completing all interactions unlocks the Lab.
+1. Intro narration on first entry: the astronaut recognizes this as the medical clinic and notices a locked service door reading `gane-uk`.
+2. Four hotspots are available:
+   - **Locked service door** (left) opens a **prefix wheel puzzle**: the display shows `[?]-gane-uk`. The player cycles through 8 prefixes and presses "Try it". Only `op-` opens the door. On solve, learns `op-`, `gane`, `-uk`.
+   - **Before/after patient photographs** (top-center) opens a clue revealing `a-sondy` / `me-sondy`. Learns `a-`, `me-`, `sondy`.
+   - **Full medicine bottles** (counter) opens a clue showing `pua-virus`. Learns `pua-`.
+   - **Med Refill machine** (right) opens a clue showing `ya-moll`. Learns `ya-`, `moll`.
+3. After all four objectives are complete, a reveal narration plays tying the morphemes together, and the Lab unlocks.
 
-**Morphemes learned:** `op-`, `-uk`, `gane`, `a-`, `me-`, `sondy`, `pua-`, `ya-`, `moll`.
+**Morphemes learned:** `op-`, `gane`, `-uk`, `a-`, `me-`, `sondy`, `pua-`, `ya-`, `moll`.
 
-### Stage 3 — Lab (PENDING)
+### Stage 3 — Lab (IMPLEMENTED)
 
-1. Player pieces together that the child from the drawing is themselves — a virus escaped from the lab and infected the parents.
-2. Puzzles combine previously-learned morphemes to activate lab machinery.
-3. Completing this stage unlocks the Comms Room.
+1. Intro narration on first entry: the astronaut sees the shattered containment chamber and biohazard warnings. Everything in this room uses past tense (`-uk`).
+2. Three hotspots, the third gated behind the first two:
+   - **Broken containment chamber** (left) — a clue showing `escape-uk` ("escaped"), introducing `-uk` as past tense.
+   - **System warning display** (top-right) — a clue showing a timestamped event log: `op-gane-uk`, `escape-uk`, `gane-uk`. Reinforces `-uk` and teaches that verbs can be inferred from context.
+   - **Central console** (center, appears after chamber + logs) — opens a **sequence puzzle**: three log entries must be arranged in the correct causal order (unlock → escape → lock). On submit, the system runs a step-by-step animated replay confirming the sequence.
+3. After all three objectives are complete, a reveal narration explains what happened: the chamber was unlocked, the virus escaped, the system locked down too late. The Comms Room unlocks.
+
+**Morphemes reinforced/learned:** `-uk` (past tense / -ed).
+**Concepts taught:** Verbs represent actions; `-uk` marks past tense; order of events reflects causality encoded in language.
 
 ### Stages 4–5 — Comms Room (PENDING)
 
@@ -157,18 +168,18 @@ Player constructs the sentence `il ya-ramde Earth` ("I return to Earth") using t
 - Click-based directional navigation with locked-room gating.
 - Minimap with locked / unlocked visualization.
 - Hotspot system with percentage-based positioning and visibility gating.
-- Modal system supporting `clue`, `narration`, and `matching` content types.
+- Modal system supporting `clue`, `narration`, `matching`, `prefix-wheel`, and `sequence` content types.
 - `GameContext` tracking learned morphemes, completed objectives, and current stage.
 - `MorphemeInventory` panel with collapsible UI.
 - `NarrationBox` for multi-line inner monologue.
 - `MatchingPuzzle` component with click-to-select chip-to-target interaction.
+- `PrefixWheelPuzzle` component for cycling BLAH prefixes onto a root word.
 - Full BLAH dictionary (`src/languageData.js`).
 - Stage 1 end-to-end: wake-up narration → sequential hotspot exploration → drawing puzzle → morpheme gain → Clinic unlock.
+- Stage 2 end-to-end: intro narration → four clinic hotspots (door prefix-wheel puzzle, before/after photos, medicine bottles, refill machine) → morpheme gain → Lab unlock.
+- Stage 3 end-to-end: intro narration → broken chamber clue → system logs clue → sequence ordering puzzle with animated replay → Comms Room unlock.
 
 ### Pending
-
-- Stage 2 interactions (door prefix wheel, before/after photos, medicine bottles, refill machine).
-- Stage 3 puzzles and story beats.
 - Stages 4–5 sentence-building / dialogue system and final conversation.
 - Final "unmasking" that reveals the BLAH ↔ English mapping.
 - Polished artwork for all four rooms (currently using placeholder images).
@@ -184,11 +195,15 @@ Player constructs the sentence `il ya-ramde Earth` ("I return to Earth") using t
 | `src/gameData.js`                              | Room definitions, connections, hotspots           |
 | `src/languageData.js`                          | BLAH dictionary + `translate()` helper            |
 | `src/stages/stage1.js`                         | Stage 1 narration, puzzle config, objective IDs   |
+| `src/stages/stage2.js`                         | Stage 2 narration, prefix-wheel config, clues     |
+| `src/stages/stage3.js`                         | Stage 3 narration, sequence puzzle config, clues  |
 | `src/components/Room.jsx`                      | Room renderer + hotspot rendering & gating        |
 | `src/components/Modal.jsx`                     | Modal dispatcher (`clue` / `narration` / `matching`) |
 | `src/components/NavArrows.jsx`                 | Directional movement with locked-room awareness   |
 | `src/components/Minimap.jsx`                   | SVG minimap                                        |
 | `src/components/MatchingPuzzle.jsx`            | Chip-on-target matching interaction               |
+| `src/components/PrefixWheelPuzzle.jsx`         | Cycling prefix selector for the locked-door puzzle |
+| `src/components/SequencePuzzle.jsx`            | Reorder-and-replay event sequence puzzle          |
 | `src/components/MorphemeInventory.jsx`         | Bottom-left collapsible learned-words panel       |
 | `src/components/NarrationBox.jsx`              | Standalone click-to-advance narration (unused, reserved) |
 | `src/assets/rooms/*.png`                       | Room background placeholders                       |

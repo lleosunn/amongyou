@@ -1,4 +1,4 @@
-import { useGameState } from '../gameState';
+import { useGameState } from '../gameContext';
 import './Room.css';
 
 export default function Room({ room, onInteract, children }) {
@@ -20,7 +20,7 @@ export default function Room({ room, onInteract, children }) {
           <button
             key={hotspot.id}
             className={`hotspot ${
-              hotspot.stage1Objective && isComplete(hotspot.stage1Objective)
+              hotspot.objective && isComplete(hotspot.objective)
                 ? 'hotspot-done'
                 : ''
             } ${hotspot.highlight ? 'hotspot-highlight' : ''}`}
