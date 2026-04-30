@@ -27,7 +27,7 @@
 
 .room-label {
   position: absolute;
-  top: 16px;
+  top: calc(16px + var(--hud-clear, 0px));
   left: 20px;
   z-index: 2;
 }
@@ -79,9 +79,12 @@
 }
 
 @keyframes hotspot-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(255, 220, 100, 0.5);
   }
+
   50% {
     box-shadow: 0 0 0 10px rgba(255, 220, 100, 0);
   }

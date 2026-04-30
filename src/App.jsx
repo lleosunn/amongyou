@@ -6,6 +6,7 @@ import NavArrows from './components/NavArrows';
 import Minimap from './components/Minimap';
 import Modal from './components/Modal';
 import MorphemeInventory from './components/MorphemeInventory';
+import HealthBar from './components/HealthBar';
 import { stage1 } from './stages/stage1';
 import { stage2 } from './stages/stage2';
 import { stage3 } from './stages/stage3';
@@ -21,8 +22,13 @@ export default function App() {
   const [s2IntroShown, setS2IntroShown] = useState(false);
   const [s3IntroShown, setS3IntroShown] = useState(false);
 
-  const { learn, complete, isComplete, isUnlocked } = useGameState();
+  const { learn, complete, isComplete, isUnlocked, health, heal } = useGameState();
   const room = rooms[currentRoomId];
+
+  const healthWarningOpacity = Math.max(
+    0,
+    Math.min(0.7, (0.35 - health) / 0.15)
+  );
 
   useEffect(() => {
     if (!s1IntroShown && currentRoomId === 'pilotCabin') {
@@ -163,8 +169,12 @@ export default function App() {
 
   const openTeachClue = useCallback(
     (clue) => {
+      const wasComplete = clue.objective ? isComplete(clue.objective) : false;
       if (clue.morphemesLearned) learn(clue.morphemesLearned);
       if (clue.objective) complete(clue.objective);
+      if (!wasComplete && clue.objective === 'clinic-bottles') {
+        heal(0.25);
+      }
       setModalContent({
         type: 'clue',
         title: clue.title,
@@ -172,7 +182,7 @@ export default function App() {
         note: clue.note,
       });
     },
-    [learn, complete]
+    [learn, complete, isComplete, heal]
   );
 
   const openSequencePuzzle = useCallback(() => {
@@ -240,7 +250,14 @@ export default function App() {
         <Room key={currentRoomId} room={room} onInteract={handleInteract}>
           <Minimap currentRoomId={currentRoomId} />
           <NavArrows room={room} onMove={handleMove} />
-          <MorphemeInventory />
+          <div className="hud">
+            <HealthBar />
+            <MorphemeInventory />
+          </div>
+          <div
+            className="health-warning"
+            style={{ opacity: healthWarningOpacity }}
+          />
         </Room>
       </div>
       {modalContent && (

@@ -1,6 +1,6 @@
 .minimap {
   position: absolute;
-  top: 12px;
+  top: calc(12px + var(--hud-clear, 0px));
   right: 12px;
   background: rgba(20, 20, 35, 0.9);
   border: 1.5px solid #444;

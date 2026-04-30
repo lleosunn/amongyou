@@ -11,7 +11,10 @@ export default function Room({ room, onInteract, children }) {
 
   return (
     <div className="room-wrapper">
-      <div className="room" style={{ '--room-accent': room.color }}>
+      <div
+        className="room"
+        style={{ '--room-accent': room.color, '--hud-clear': '64px' }}
+      >
         <img className="room-bg" src={room.image} alt={room.name} />
         <div className="room-label">
           <h1 className="room-name">{room.name}</h1>
@@ -19,11 +22,10 @@ export default function Room({ room, onInteract, children }) {
         {visibleHotspots.map((hotspot) => (
           <button
             key={hotspot.id}
-            className={`hotspot ${
-              hotspot.objective && isComplete(hotspot.objective)
+            className={`hotspot ${hotspot.objective && isComplete(hotspot.objective)
                 ? 'hotspot-done'
                 : ''
-            } ${hotspot.highlight ? 'hotspot-highlight' : ''}`}
+              } ${hotspot.highlight ? 'hotspot-highlight' : ''}`}
             style={{
               left: hotspot.x,
               top: hotspot.y,

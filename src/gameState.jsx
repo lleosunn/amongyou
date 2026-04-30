@@ -1,10 +1,23 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { GameContext } from './gameContext';
+
+const HEALTH_START = 0.6;
+const HEALTH_MIN = 0.2;
+const HEALTH_DRAIN_PER_SEC = 0.00035;
 
 export function GameProvider({ children, initialStage = 1 }) {
   const [learnedMorphemes, setLearnedMorphemes] = useState(() => new Set());
   const [completedObjectives, setCompletedObjectives] = useState(() => new Set());
   const [currentStage, setCurrentStage] = useState(initialStage);
+  const [health, setHealth] = useState(HEALTH_START);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHealth((prev) => Math.max(HEALTH_MIN, prev - HEALTH_DRAIN_PER_SEC));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const learn = useCallback((...morphemeIds) => {
     setLearnedMorphemes((prev) => {
@@ -44,12 +57,18 @@ export function GameProvider({ children, initialStage = 1 }) {
     [completedObjectives]
   );
 
+  const heal = useCallback((amount) => {
+    setHealth((prev) => Math.min(1, Math.max(HEALTH_MIN, prev + amount)));
+  }, []);
+
   const value = useMemo(
     () => ({
       learnedMorphemes,
       completedObjectives,
       currentStage,
       setCurrentStage,
+      health,
+      heal,
       learn,
       hasLearned,
       complete,
@@ -60,6 +79,8 @@ export function GameProvider({ children, initialStage = 1 }) {
       learnedMorphemes,
       completedObjectives,
       currentStage,
+      health,
+      heal,
       learn,
       hasLearned,
       complete,

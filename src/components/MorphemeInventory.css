@@ -1,17 +1,18 @@
 .morpheme-inventory {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
-  background: rgba(20, 20, 35, 0.92);
-  border: 1.5px solid #444;
-  border-radius: 10px;
+  top: 0;
+  right: 0;
+  background: rgba(14, 18, 28, 0.85);
+  border: 1px solid rgba(120, 140, 160, 0.6);
+  border-radius: 16px;
   z-index: 5;
-  backdrop-filter: blur(6px);
-  min-width: 180px;
-  max-width: 240px;
+  backdrop-filter: blur(8px);
+  min-width: 220px;
+  max-width: 300px;
   color: #e0e0e0;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
 }
 
 .morpheme-toggle {
@@ -19,13 +20,13 @@
   background: transparent;
   border: none;
   color: #ccc;
-  padding: 8px 12px;
+  padding: 8px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  font-size: 0.82rem;
-  letter-spacing: 1px;
+  font-size: 0.78rem;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
@@ -37,28 +38,19 @@
   font-weight: 600;
 }
 
-.morpheme-count {
-  background: rgba(100, 100, 150, 0.4);
-  border-radius: 10px;
-  padding: 1px 8px;
-  font-size: 0.72rem;
-  margin-left: 6px;
-  color: #fff;
-}
-
 .morpheme-chevron {
   font-size: 0.9rem;
   color: #888;
 }
 
 .morpheme-list {
-  border-top: 1px solid #333;
-  padding: 8px 4px;
-  max-height: 260px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 10px 12px;
+  max-height: 280px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 10px;
 }
 
 .morpheme-empty {
@@ -69,28 +61,47 @@
   text-align: center;
 }
 
+.morpheme-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.morpheme-group-title {
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  padding-left: 4px;
+}
+
 .morpheme-row {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto 1fr auto 1.2fr;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: 4px 6px;
+  border-radius: 6px;
   font-family: 'Courier New', monospace;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .morpheme-row:hover {
   background: rgba(255, 255, 255, 0.04);
 }
 
+.morpheme-row.is-new {
+  animation: morpheme-flash 1.2s ease;
+}
+
 .morpheme-blah {
   color: #a8c0ff;
   font-weight: 600;
-  text-align: right;
+  text-align: left;
 }
 
-.morpheme-arrow {
-  color: #555;
+.morpheme-equals {
+  color: #666;
   font-size: 0.75rem;
 }
 
@@ -99,12 +110,46 @@
   text-align: left;
 }
 
+.morpheme-kind {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0b0b12;
+  text-transform: uppercase;
+}
+
+.morpheme-kind-prefix {
+  background: rgba(255, 179, 126, 0.9);
+}
+
+.morpheme-kind-root {
+  background: rgba(168, 192, 255, 0.9);
+}
+
+.morpheme-kind-suffix {
+  background: rgba(126, 255, 179, 0.9);
+}
+
 .morpheme-prefix .morpheme-blah {
   color: #ffb37e;
 }
 
 .morpheme-suffix .morpheme-blah {
   color: #7effb3;
+}
+
+@keyframes morpheme-flash {
+  0% {
+    background: rgba(120, 210, 255, 0.4);
+  }
+
+  100% {
+    background: rgba(255, 255, 255, 0.02);
+  }
 }
 
 .morpheme-list::-webkit-scrollbar {
