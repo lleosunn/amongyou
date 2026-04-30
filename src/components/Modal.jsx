@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MatchingPuzzle from './MatchingPuzzle';
 import PrefixWheelPuzzle from './PrefixWheelPuzzle';
 import SequencePuzzle from './SequencePuzzle';
+import ChoicePuzzle from './ChoicePuzzle';
+import BuilderPuzzle from './BuilderPuzzle';
+import ConversationPuzzle from './ConversationPuzzle';
 import './Modal.css';
 
 function ClueContent({ title, body, note }) {
@@ -51,6 +54,22 @@ function NarrationContent({ title, lines = [], onAdvance }) {
 
 export default function Modal({ children, onClose }) {
   const content = children;
+  const isInteractive =
+    content?.type === 'matching' ||
+    content?.type === 'choice' ||
+    content?.type === 'builder' ||
+    content?.type === 'conversation' ||
+    content?.type === 'prefix-wheel' ||
+    content?.type === 'sequence';
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onClose?.();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const renderContent = () => {
     if (!content || typeof content !== 'object') return content;
@@ -83,6 +102,49 @@ export default function Modal({ children, onClose }) {
             image={content.image}
             targets={content.targets}
             chips={content.chips}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
+      case 'choice':
+        return (
+          <ChoicePuzzle
+            title={content.title}
+            instructions={content.instructions}
+            body={content.body}
+            question={content.question}
+            options={content.options}
+            correctOptionId={content.correctOptionId}
+            steps={content.steps}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
+      case 'builder':
+        return (
+          <BuilderPuzzle
+            title={content.title}
+            instructions={content.instructions}
+            prompt={content.prompt}
+            availableTiles={content.availableTiles}
+            correctSequence={content.correctSequence}
+            slotCount={content.slotCount}
+            steps={content.steps}
+            wrongMessage={content.wrongMessage}
+            successMessage={content.successMessage}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
+      case 'conversation':
+        return (
+          <ConversationPuzzle
+            title={content.title}
+            instructions={content.instructions}
+            steps={content.steps}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -122,18 +184,36 @@ export default function Modal({ children, onClose }) {
     }
   };
 
-  const isWide =
-    content?.type === 'matching' ||
-    content?.type === 'prefix-wheel' ||
-    content?.type === 'sequence';
+  const isWide = isInteractive;
+  const closeLabel = isInteractive ? 'Close and reset puzzle' : 'Close modal';
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className={`modal-overlay ${isInteractive ? 'modal-locked' : ''}`}
+      onClick={() => {
+        if (!isInteractive) onClose?.();
+      }}
+      role="presentation"
+    >
       <div
         className={`modal-content ${isWide ? 'modal-wide' : ''}`}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={content?.title ?? 'Game modal'}
       >
+        <button className="modal-close" onClick={onClose} aria-label={closeLabel}>
+          x
+        </button>
+        {content?.stationLabel && (
+          <div className="modal-station-label">
+            Inspecting: {content.stationLabel}
+          </div>
+        )}
         {renderContent()}
+        {isInteractive && (
+          <p className="modal-close-note">Closing resets this interaction.</p>
+        )}
       </div>
     </div>
   );

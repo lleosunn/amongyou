@@ -1,37 +1,151 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { rooms, startingRoom } from './gameData';
 import { useGameState } from './gameContext';
+import { getMorpheme } from './languageData';
 import Room from './components/Room';
 import NavArrows from './components/NavArrows';
 import Minimap from './components/Minimap';
 import Modal from './components/Modal';
 import MorphemeInventory from './components/MorphemeInventory';
 import HealthBar from './components/HealthBar';
+import RoomStationPanel from './components/RoomStationPanel';
+import { isSoundMuted, playTone, setSoundMuted } from './sound';
 import { stage1 } from './stages/stage1';
 import { stage2 } from './stages/stage2';
 import { stage3 } from './stages/stage3';
-import drawingImg from './assets/childs-drawing.svg';
+import { stage4 } from './stages/stage4';
 import './App.css';
+
+const INTERACTIVE_TYPES = new Set([
+  'choice',
+  'builder',
+  'conversation',
+  'matching',
+  'prefix-wheel',
+  'sequence',
+]);
+
+function getCompletionId(hotspot, content) {
+  return content?.objective ?? content?.completionObjective ?? hotspot.objective;
+}
+
+function getLearnedIds(hotspot, content) {
+  return content?.morphemesLearned ?? hotspot.morphemesToLearn ?? [];
+}
+
+function getRoomUnlockedByObjective(objectiveId) {
+  return Object.values(rooms).find((room) => {
+    if (!room.unlockedBy) return false;
+    const required = Array.isArray(room.unlockedBy)
+      ? room.unlockedBy
+      : [room.unlockedBy];
+    return required.includes(objectiveId);
+  });
+}
 
 export default function App() {
   const [currentRoomId, setCurrentRoomId] = useState(startingRoom);
   const [modalContent, setModalContent] = useState(null);
+  const [idleHint, setIdleHint] = useState(null);
+  const [completedPulseObjective, setCompletedPulseObjective] = useState(null);
+  const [unlockedPulseRoomId, setUnlockedPulseRoomId] = useState(null);
+  const [wordToast, setWordToast] = useState(null);
+  const [soundMuted, setSoundMutedState] = useState(() => isSoundMuted());
+  const learnedRef = useRef(new Set());
+  const pulseTimeoutRef = useRef(null);
+  const unlockTimeoutRef = useRef(null);
 
   const [s1IntroShown, setS1IntroShown] = useState(false);
-  const [s1DrawingPromptShown, setS1DrawingPromptShown] = useState(false);
   const [s2IntroShown, setS2IntroShown] = useState(false);
   const [s3IntroShown, setS3IntroShown] = useState(false);
+  const [s4IntroShown, setS4IntroShown] = useState(false);
 
-  const { learn, complete, isComplete, isUnlocked, health, heal } = useGameState();
+  const {
+    learn,
+    complete,
+    isComplete,
+    isUnlocked,
+    completedObjectives,
+    learnedMorphemes,
+    health,
+    heal,
+  } = useGameState();
   const room = rooms[currentRoomId];
+
+  const visibleHotspots = useMemo(
+    () =>
+      (room.hotspots ?? []).filter((hotspot) => {
+        if (!hotspot.requiresObjectives) return true;
+        return hotspot.requiresObjectives.every((id) => isComplete(id));
+      }),
+    [room, isComplete]
+  );
 
   const healthWarningOpacity = Math.max(
     0,
     Math.min(0.7, (0.35 - health) / 0.15)
   );
 
+  useEffect(
+    () => () => {
+      if (pulseTimeoutRef.current) clearTimeout(pulseTimeoutRef.current);
+      if (unlockTimeoutRef.current) clearTimeout(unlockTimeoutRef.current);
+    },
+    []
+  );
+
   useEffect(() => {
-    if (!s1IntroShown && currentRoomId === 'pilotCabin') {
+    const previous = learnedRef.current;
+    const current = new Set(learnedMorphemes);
+    const added = [...current].filter((id) => !previous.has(id));
+    learnedRef.current = current;
+
+    if (!added.length) return undefined;
+
+    const label = added
+      .map((id) => getMorpheme(id)?.blah ?? id)
+      .slice(0, 4)
+      .join(', ');
+    const extra = added.length > 4 ? ` +${added.length - 4}` : '';
+
+    const showTimeout = setTimeout(() => {
+      setWordToast(`Learned: ${label}${extra}`);
+    }, 0);
+    const hideTimeout = setTimeout(() => setWordToast(null), 2200);
+
+    return () => {
+      clearTimeout(showTimeout);
+      clearTimeout(hideTimeout);
+    };
+  }, [learnedMorphemes]);
+
+  const markObjectiveComplete = useCallback(
+    (objectiveId, alreadyComplete = false) => {
+      if (!objectiveId) return;
+
+      complete(objectiveId);
+      if (alreadyComplete) return;
+
+      setCompletedPulseObjective(objectiveId);
+      if (pulseTimeoutRef.current) clearTimeout(pulseTimeoutRef.current);
+      pulseTimeoutRef.current = setTimeout(() => {
+        setCompletedPulseObjective(null);
+      }, 1400);
+
+      const unlockedRoom = getRoomUnlockedByObjective(objectiveId);
+      if (unlockedRoom) {
+        setUnlockedPulseRoomId(unlockedRoom.id);
+        if (unlockTimeoutRef.current) clearTimeout(unlockTimeoutRef.current);
+        unlockTimeoutRef.current = setTimeout(() => {
+          setUnlockedPulseRoomId(null);
+        }, 9000);
+      }
+    },
+    [complete]
+  );
+
+  useEffect(() => {
+    if (!s1IntroShown && currentRoomId === stage1.room) {
       const timeout = setTimeout(() => {
         setModalContent((current) =>
           current ?? {
@@ -46,29 +160,7 @@ export default function App() {
   }, [s1IntroShown, currentRoomId]);
 
   useEffect(() => {
-    if (!s1IntroShown) return;
-    if (s1DrawingPromptShown) return;
-    if (isComplete(stage1.exploreCompletionObjective)) return;
-    if (modalContent) return;
-
-    const allExplored = stage1.exploreHotspotIds.every((id) =>
-      isComplete(`explore-${id.replace(/^pilot-/, '')}`)
-    );
-    if (allExplored) {
-      const timeout = setTimeout(() => {
-        complete(stage1.exploreCompletionObjective);
-        setS1DrawingPromptShown(true);
-        setModalContent((current) =>
-          current ?? { ...stage1.drawingPromptNarration }
-        );
-      }, 0);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [s1IntroShown, s1DrawingPromptShown, modalContent, isComplete, complete]);
-
-  useEffect(() => {
-    if (currentRoomId !== 'clinic') return;
+    if (currentRoomId !== stage2.room) return;
     if (s2IntroShown) return;
     if (modalContent) return;
 
@@ -87,20 +179,22 @@ export default function App() {
   useEffect(() => {
     if (isComplete(stage2.completionObjective)) return;
     if (modalContent) return;
-    if (!stage2.allObjectives.every((o) => isComplete(o))) return;
+    if (!stage2.allObjectives.every((objective) => isComplete(objective))) {
+      return;
+    }
 
     const timeout = setTimeout(() => {
-      complete(stage2.completionObjective);
+      markObjectiveComplete(stage2.completionObjective);
       setModalContent((current) =>
         current ?? { ...stage2.completionNarration }
       );
     }, 700);
 
     return () => clearTimeout(timeout);
-  }, [modalContent, isComplete, complete]);
+  }, [modalContent, isComplete, markObjectiveComplete, completedObjectives]);
 
   useEffect(() => {
-    if (currentRoomId !== 'lab') return;
+    if (currentRoomId !== stage3.room) return;
     if (s3IntroShown) return;
     if (modalContent) return;
 
@@ -119,17 +213,55 @@ export default function App() {
   useEffect(() => {
     if (isComplete(stage3.completionObjective)) return;
     if (modalContent) return;
-    if (!stage3.allObjectives.every((o) => isComplete(o))) return;
+    if (!stage3.allObjectives.every((objective) => isComplete(objective))) {
+      return;
+    }
 
     const timeout = setTimeout(() => {
-      complete(stage3.completionObjective);
+      markObjectiveComplete(stage3.completionObjective);
       setModalContent((current) =>
         current ?? { ...stage3.completionNarration }
       );
     }, 700);
 
     return () => clearTimeout(timeout);
-  }, [modalContent, isComplete, complete]);
+  }, [modalContent, isComplete, markObjectiveComplete, completedObjectives]);
+
+  useEffect(() => {
+    if (currentRoomId !== stage4.room) return;
+    if (s4IntroShown) return;
+    if (modalContent) return;
+
+    const timeout = setTimeout(() => {
+      setModalContent((current) =>
+        current ?? {
+          ...stage4.introNarration,
+          onComplete: () => setS4IntroShown(true),
+        }
+      );
+    }, 0);
+
+    return () => clearTimeout(timeout);
+  }, [currentRoomId, s4IntroShown, modalContent]);
+
+  useEffect(() => {
+    if (modalContent) return undefined;
+
+    const nextHotspot = visibleHotspots.find(
+      (hotspot) => !hotspot.objective || !isComplete(hotspot.objective)
+    );
+
+    if (!nextHotspot) return undefined;
+
+    const timeout = setTimeout(() => {
+      setIdleHint({
+        hotspotId: nextHotspot.id,
+        text: `I should inspect the ${nextHotspot.label.toLowerCase()}.`,
+      });
+    }, 20000);
+
+    return () => clearTimeout(timeout);
+  }, [modalContent, visibleHotspots, isComplete]);
 
   const handleMove = useCallback(
     (nextRoomId) => {
@@ -137,128 +269,130 @@ export default function App() {
       const nextRoom = rooms[nextRoomId];
       if (!nextRoom) return;
       if (!isUnlocked(nextRoom)) return;
+      setIdleHint(null);
       setCurrentRoomId(nextRoomId);
     },
     [isUnlocked]
   );
 
-  const openDrawingPuzzle = useCallback(() => {
-    setModalContent({
-      ...stage1.drawingPuzzle,
-      image: drawingImg,
-      onSolve: () => {
-        learn(stage1.drawingPuzzle.morphemesLearned);
-        complete(stage1.drawingPuzzle.completionObjective);
+  const applyContentOutcome = useCallback(
+    (hotspot, content) => {
+      const objectiveId = getCompletionId(hotspot, content);
+      const alreadyComplete = objectiveId ? isComplete(objectiveId) : false;
+      const learnedIds = getLearnedIds(hotspot, content);
+
+      if (learnedIds.length) learn(learnedIds);
+      if (objectiveId) markObjectiveComplete(objectiveId, alreadyComplete);
+      if (content.healAmount && !alreadyComplete) heal(content.healAmount);
+
+      if (content.afterSolve) {
         setTimeout(() => {
-          setModalContent({ ...stage1.solvedNarration });
-        }, 700);
-      },
-    });
-  }, [learn, complete]);
-
-  const openDoorPuzzle = useCallback(() => {
-    setModalContent({
-      ...stage2.doorPuzzle,
-      onSolve: () => {
-        learn(stage2.doorPuzzle.morphemesLearned);
-        complete(stage2.doorPuzzle.objective);
+          setModalContent({ ...content.afterSolve });
+        }, 350);
+      } else {
         setModalContent(null);
-      },
-    });
-  }, [learn, complete]);
-
-  const openTeachClue = useCallback(
-    (clue) => {
-      const wasComplete = clue.objective ? isComplete(clue.objective) : false;
-      if (clue.morphemesLearned) learn(clue.morphemesLearned);
-      if (clue.objective) complete(clue.objective);
-      if (!wasComplete && clue.objective === 'clinic-bottles') {
-        heal(0.25);
       }
-      setModalContent({
-        type: 'clue',
-        title: clue.title,
-        body: clue.body,
-        note: clue.note,
-      });
     },
-    [learn, complete, isComplete, heal]
+    [learn, markObjectiveComplete, heal, isComplete]
   );
 
-  const openSequencePuzzle = useCallback(() => {
-    setModalContent({
-      ...stage3.sequencePuzzle,
-      onSolve: () => {
-        complete(stage3.sequencePuzzle.objective);
-        setModalContent(null);
-      },
-    });
-  }, [complete]);
+  const openContent = useCallback(
+    (hotspot) => {
+      const content = hotspot.content;
+      if (!content) return;
+
+      if (INTERACTIVE_TYPES.has(content.type)) {
+        setModalContent({
+          ...content,
+          stationLabel: hotspot.label,
+          onSolve: () => applyContentOutcome(hotspot, content),
+        });
+        return;
+      }
+
+      const objectiveId = getCompletionId(hotspot, content);
+      const alreadyComplete = objectiveId ? isComplete(objectiveId) : false;
+      const learnedIds = getLearnedIds(hotspot, content);
+
+      if (learnedIds.length) learn(learnedIds);
+      if (objectiveId) markObjectiveComplete(objectiveId, alreadyComplete);
+      if (content.healAmount && !alreadyComplete) heal(content.healAmount);
+
+      setModalContent({ ...content, stationLabel: hotspot.label });
+    },
+    [applyContentOutcome, markObjectiveComplete, heal, isComplete, learn]
+  );
 
   const handleInteract = useCallback(
     (hotspot) => {
-      const ctype = hotspot.content?.type;
-
-      if (ctype === 'stage1-drawing') {
-        openDrawingPuzzle();
-        return;
-      }
-      if (ctype === 'stage2-door') {
-        openDoorPuzzle();
-        return;
-      }
-      if (ctype === 'stage2-photos') {
-        openTeachClue(stage2.photosClue);
-        return;
-      }
-      if (ctype === 'stage2-bottles') {
-        openTeachClue(stage2.bottlesClue);
-        return;
-      }
-      if (ctype === 'stage2-refill') {
-        openTeachClue(stage2.refillClue);
-        return;
-      }
-      if (ctype === 'stage3-chamber') {
-        openTeachClue(stage3.chamberClue);
-        return;
-      }
-      if (ctype === 'stage3-logs') {
-        openTeachClue(stage3.logsClue);
-        return;
-      }
-      if (ctype === 'stage3-sequence') {
-        openSequencePuzzle();
-        return;
-      }
-
-      if (hotspot.objective) {
-        complete(hotspot.objective);
-      }
-      if (hotspot.morphemesToLearn) {
-        learn(hotspot.morphemesToLearn);
-      }
-
-      setModalContent(hotspot.content);
+      setIdleHint(null);
+      openContent(hotspot);
     },
-    [complete, learn, openDrawingPuzzle, openDoorPuzzle, openTeachClue, openSequencePuzzle]
+    [openContent]
   );
+
+  const toggleSound = useCallback(() => {
+    setSoundMutedState((current) => {
+      const next = !current;
+      setSoundMuted(next);
+      if (!next) playTone('success');
+      return next;
+    });
+  }, []);
 
   return (
     <>
       <div className="game">
-        <Room key={currentRoomId} room={room} onInteract={handleInteract}>
-          <Minimap currentRoomId={currentRoomId} />
-          <NavArrows room={room} onMove={handleMove} />
-          <div className="hud">
-            <HealthBar />
-            <MorphemeInventory />
-          </div>
-          <div
-            className="health-warning"
-            style={{ opacity: healthWarningOpacity }}
+        <div className="game-layout">
+          <Room
+            key={currentRoomId}
+            room={room}
+            activeHotspotId={idleHint?.hotspotId}
+            completedPulseObjective={completedPulseObjective}
+            onInteract={handleInteract}
+          >
+            <Minimap currentRoomId={currentRoomId} />
+            <NavArrows
+              room={room}
+              onMove={handleMove}
+              unlockedPulseRoomId={unlockedPulseRoomId}
+            />
+            <div className="hud">
+              <HealthBar />
+              <MorphemeInventory />
+            </div>
+            <button
+              className={`sound-toggle ${soundMuted ? 'muted' : 'enabled'}`}
+              onClick={toggleSound}
+              aria-label={soundMuted ? 'Enable sound' : 'Mute sound'}
+            >
+              Sound {soundMuted ? 'Off' : 'On'}
+            </button>
+            {idleHint && !modalContent && (
+              <div className="idle-hint">{idleHint.text}</div>
+            )}
+            {wordToast && (
+              <div className="word-toast" aria-live="polite">
+                {wordToast}
+              </div>
+            )}
+            {unlockedPulseRoomId && (
+              <div className="room-event" aria-live="polite">
+                {rooms[unlockedPulseRoomId]?.name ?? 'New room'} unlocked
+              </div>
+            )}
+            <div
+              className="health-warning"
+              style={{ opacity: healthWarningOpacity }}
+            />
+          </Room>
+          <RoomStationPanel
+            room={room}
+            activeHotspotId={idleHint?.hotspotId}
+            completedPulseObjective={completedPulseObjective}
+            onInteract={handleInteract}
           />
-        </Room>
+        </div>
       </div>
       {modalContent && (
         <Modal onClose={() => setModalContent(null)}>{modalContent}</Modal>

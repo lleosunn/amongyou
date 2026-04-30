@@ -3,13 +3,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
   min-width: 0;
   min-height: 0;
 }
 
 .room {
   aspect-ratio: 3 / 2;
+  width: 100%;
   max-width: 100%;
   max-height: 100%;
   border: 2px solid var(--room-accent, #555);
@@ -17,6 +17,7 @@
   position: relative;
   overflow: hidden;
   background: #111;
+  animation: room-enter 0.28s ease;
 }
 
 .room-bg {
@@ -48,44 +49,204 @@
   border: 1px solid var(--room-accent);
 }
 
-.hotspot {
+.station-marker {
   position: absolute;
-  background: transparent;
-  border: 2px solid transparent;
-  border-radius: 6px;
-  cursor: pointer;
   z-index: 3;
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: min(210px, 28%);
+  transform: translate(-50%, -50%);
+  background: rgba(10, 13, 22, 0.76);
+  border: 1.5px solid rgba(170, 190, 230, 0.42);
+  border-radius: 999px;
+  color: #f2f6ff;
+  cursor: pointer;
+  padding: 5px 8px 5px 5px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(8px);
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.16s ease,
+    opacity 0.16s ease;
 }
 
-.hotspot:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+.station-marker:hover:not(:disabled),
+.station-marker:focus-visible:not(:disabled) {
+  background: rgba(24, 33, 56, 0.92);
+  border-color: rgba(220, 235, 255, 0.72);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
+  outline: none;
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
-.hotspot-done {
-  opacity: 0.5;
+.station-marker:disabled {
+  cursor: default;
 }
 
-.hotspot-done:hover {
+.station-marker-dot {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(130, 170, 255, 0.18);
+  border: 1px solid rgba(150, 185, 255, 0.55);
+  color: #cfe0ff;
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.station-marker-label {
+  overflow: hidden;
+  color: #eff4ff;
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.4px;
+  line-height: 1.1;
+  text-align: left;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.station-marker-status {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  transform: translateX(-50%);
+  background: rgba(10, 13, 22, 0.9);
+  border: 1px solid rgba(170, 190, 230, 0.34);
+  border-radius: 999px;
+  color: #cbd6f7;
+  font-size: 0.56rem;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+  line-height: 1;
+  opacity: 0;
+  padding: 4px 7px;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: opacity 0.14s ease;
+}
+
+.station-marker:hover .station-marker-status,
+.station-marker:focus-visible .station-marker-status,
+.hotspot-suggested .station-marker-status {
   opacity: 1;
 }
 
-.hotspot-highlight {
-  border-color: rgba(255, 220, 100, 0.7);
-  background: rgba(255, 220, 100, 0.12);
+.station-marker-available {
+  border-color: rgba(145, 185, 255, 0.62);
+}
+
+.station-marker-available .station-marker-dot {
+  background: rgba(90, 145, 255, 0.28);
+  color: #edf4ff;
+}
+
+.station-marker-done {
+  border-color: rgba(138, 255, 154, 0.5);
+}
+
+.station-marker-done .station-marker-dot {
+  background: rgba(90, 190, 110, 0.2);
+  border-color: rgba(138, 255, 154, 0.6);
+  color: #c7ffd1;
+}
+
+.station-marker-done .station-marker-status {
+  color: #c7ffd1;
+}
+
+.station-marker-locked {
+  opacity: 0.42;
+}
+
+.station-marker-locked .station-marker-dot {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(190, 195, 215, 0.22);
+  color: #b2b8ca;
+}
+
+.hotspot-suggested {
+  border-color: rgba(255, 220, 100, 0.75);
+  box-shadow: 0 0 0 0 rgba(255, 220, 100, 0.5);
   animation: hotspot-pulse 1.8s ease-in-out infinite;
 }
 
-@keyframes hotspot-pulse {
+.hotspot-just-completed {
+  animation: hotspot-complete 1.2s ease;
+}
 
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 220, 100, 0.5);
+@keyframes hotspot-pulse {
+  50% {
+    box-shadow: 0 0 0 12px rgba(255, 220, 100, 0);
+  }
+}
+
+@keyframes hotspot-complete {
+  0% {
+    background: rgba(138, 255, 154, 0.24);
+    box-shadow: 0 0 0 0 rgba(138, 255, 154, 0.55);
   }
 
-  50% {
-    box-shadow: 0 0 0 10px rgba(255, 220, 100, 0);
+  100% {
+    background: rgba(10, 13, 22, 0.76);
+    box-shadow: 0 0 0 18px rgba(138, 255, 154, 0);
+  }
+}
+
+@keyframes room-enter {
+  from {
+    opacity: 0.78;
+    transform: scale(0.992);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .room-wrapper {
+    width: 100%;
+  }
+
+  .station-marker {
+    max-width: 34%;
+  }
+
+  .station-marker-label {
+    max-width: 14ch;
+  }
+}
+
+@media (max-width: 560px) {
+  .station-marker {
+    min-width: 34px;
+    padding-right: 5px;
+  }
+
+  .station-marker-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room,
+  .station-marker,
+  .hotspot-suggested,
+  .hotspot-just-completed,
+  .station-marker-status {
+    animation: none;
+    transition: none;
   }
 }

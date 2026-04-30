@@ -122,6 +122,10 @@
   text-transform: uppercase;
 }
 
+.morpheme-kind-pronoun {
+  background: rgba(255, 235, 130, 0.95);
+}
+
 .morpheme-kind-prefix {
   background: rgba(255, 179, 126, 0.9);
 }
@@ -134,12 +138,33 @@
   background: rgba(126, 255, 179, 0.9);
 }
 
+.morpheme-kind-word {
+  background: rgba(190, 150, 255, 0.95);
+}
+
+.morpheme-kind-unknown {
+  background: rgba(170, 170, 180, 0.9);
+}
+
+.morpheme-pronoun .morpheme-blah {
+  color: #ffe982;
+}
+
 .morpheme-prefix .morpheme-blah {
   color: #ffb37e;
 }
 
 .morpheme-suffix .morpheme-blah {
   color: #7effb3;
+}
+
+.morpheme-word .morpheme-blah {
+  color: #c6a2ff;
+}
+
+.morpheme-unknown .morpheme-blah,
+.morpheme-unknown .morpheme-english {
+  color: #aaa;
 }
 
 @keyframes morpheme-flash {

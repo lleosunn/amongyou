@@ -9,7 +9,7 @@ const arrows = [
   { dir: 'down', label: '▼' },
 ];
 
-export default function NavArrows({ room, onMove }) {
+export default function NavArrows({ room, onMove, unlockedPulseRoomId }) {
   const { isUnlocked } = useGameState();
 
   return (
@@ -21,11 +21,14 @@ export default function NavArrows({ room, onMove }) {
         const unlocked = targetRoom ? isUnlocked(targetRoom) : false;
         const canMove = hasTarget && unlocked;
         const locked = hasTarget && !unlocked;
+        const justUnlocked = canMove && targetId === unlockedPulseRoomId;
 
         return (
           <button
             key={dir}
-            className={`nav-btn nav-${dir} ${locked ? 'nav-locked' : ''}`}
+            className={`nav-btn nav-${dir} ${locked ? 'nav-locked' : ''} ${
+              justUnlocked ? 'nav-just-unlocked' : ''
+            }`}
             disabled={!canMove}
             onClick={() => canMove && onMove(targetId)}
             aria-label={`Move ${dir}${locked ? ' (locked)' : ''}`}

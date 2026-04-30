@@ -1,0 +1,157 @@
+.choice-puzzle {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(100%, 620px);
+}
+
+.choice-title {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #aaa;
+}
+
+.choice-instructions {
+  margin: 0;
+  color: #bbb;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.choice-panel {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid #333950;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.choice-body {
+  color: #cfe2ff;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.choice-question {
+  margin: 14px 0 0;
+  color: #e5e5f5;
+  font-size: 1rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.choice-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.choice-option {
+  min-height: 44px;
+  background: #282842;
+  border: 1.5px solid #474766;
+  border-radius: 8px;
+  color: #e8e8f4;
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.25;
+  padding: 10px 12px;
+  transition: all 0.15s ease;
+}
+
+.choice-option:hover:not(:disabled) {
+  background: #343450;
+  border-color: #7f91c8;
+  color: #fff;
+}
+
+.choice-option.wrong {
+  background: rgba(255, 155, 80, 0.18);
+  border-color: #ffad70;
+  color: #ffd0ad;
+  animation: choice-shake 0.26s ease;
+}
+
+.choice-option.success,
+.choice-option.correct-answer {
+  background: rgba(100, 230, 140, 0.16);
+  border-color: #8aff9a;
+  color: #dcffe4;
+}
+
+.choice-option:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.choice-feedback {
+  margin: 0;
+  font-size: 0.88rem;
+  text-align: center;
+  animation: choice-feedback-in 0.18s ease;
+}
+
+.choice-feedback-wrong {
+  color: #ffad70;
+}
+
+.choice-feedback-success {
+  color: #8aff9a;
+  font-weight: 700;
+}
+
+.choice-progress {
+  align-self: center;
+  color: #777;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+}
+
+@keyframes choice-feedback-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes choice-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  30% {
+    transform: translateX(-4px);
+  }
+
+  70% {
+    transform: translateX(4px);
+  }
+}
+
+@media (max-width: 560px) {
+  .choice-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .choice-option,
+  .choice-feedback {
+    animation: none;
+    transition: none;
+  }
+}

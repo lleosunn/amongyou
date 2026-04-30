@@ -50,7 +50,33 @@
   border-style: dashed;
 }
 
+.nav-btn.nav-just-unlocked {
+  border-color: #8aff9a;
+  box-shadow: 0 0 0 0 rgba(138, 255, 154, 0.55);
+  animation: nav-unlocked-pulse 1.4s ease-out infinite;
+}
+
 .nav-up    { grid-area: up; }
 .nav-left  { grid-area: left; }
 .nav-right { grid-area: right; }
 .nav-down  { grid-area: down; }
+
+@keyframes nav-unlocked-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(138, 255, 154, 0.55);
+  }
+
+  100% {
+    box-shadow: 0 0 0 16px rgba(138, 255, 154, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-btn {
+    transition: none;
+  }
+
+  .nav-btn.nav-just-unlocked {
+    animation: none;
+  }
+}

@@ -1,88 +1,164 @@
+const commandTiles = [
+  { id: 'moll', label: 'moll' },
+  { id: 'yamoll', label: 'yamoll' },
+  { id: 'puacarda', label: 'puacarda' },
+  { id: 'doda', label: 'doda' },
+  { id: 'rom', label: 'rom' },
+  { id: 'gane', label: 'gane' },
+];
+
+const speechTiles = [
+  { id: 'il', label: 'il' },
+  { id: 'al', label: 'al' },
+  { id: 'kume', label: 'kume' },
+  { id: 'ramde', label: 'ramde' },
+  { id: 'derbe', label: 'derbe' },
+];
+
 export const stage3 = {
   id: 'stage3',
-  name: 'Stage 3 — Lab',
+  name: 'Stage 3 - Lab',
   room: 'lab',
 
   introNarration: {
     type: 'narration',
-    title: 'The lab...',
+    title: 'The Lab',
     lines: [
-      "Something terrible happened here.",
-      "One of the containment chambers is shattered. Biohazard warnings everywhere.",
-      "There's a console still running — system logs. If I can read them, I'll know what happened.",
-      "Everything in this room ends in '-uk'. Past tense. This all already happened.",
+      'A damaged lab. Warning lights. Empty bottle racks.',
+      'This is where the medicine was made, and something here went wrong.',
+      'I need enough puacarda for Earth, and I need the words to tell the aliens where to send it.',
     ],
   },
 
-  chamberClue: {
-    type: 'clue',
-    title: 'Broken Containment Chamber',
-    body: 'escape-uk',
-    note: "The glass is shattered outward. Whatever was in here broke free. The label on the base reads 'escape-uk' — something escaped. The '-uk' must mean it already happened.",
-    objective: 'lab-chamber',
+  signChoice: {
+    type: 'choice',
+    title: 'Lab Sign',
+    body: 'crutamar\n\nA warning sign marks this whole room.',
+    question: 'You know "-mar" marks a place. What does "cruta" probably mean?',
+    options: [
+      { id: 'science', label: 'science / lab work' },
+      { id: 'fly', label: 'fly / go' },
+      { id: 'water', label: 'water' },
+      { id: 'lock', label: 'lock' },
+    ],
+    correctOptionId: 'science',
+    morphemesLearned: ['cruta', 'crutamar'],
+    objective: 'lab-sign',
   },
 
-  logsClue: {
-    type: 'clue',
-    title: 'System Event Log',
-    body: '> op-gane-uk    [14:02]\n> escape-uk     [14:03]\n> gane-uk       [14:05]',
-    note: "Three log entries, each ending in '-uk'. Actions that already happened: something was unlocked, something escaped, something was locked. The '-uk' suffix marks past tense — like English '-ed'.",
-    morphemesLearned: ['-uk'],
-    objective: 'lab-logs',
-  },
-
-  sequencePuzzle: {
+  logsSequence: {
     type: 'sequence',
-    title: 'Reconstruct the Sequence',
+    title: 'System Logs',
     instructions:
-      'The system can replay events — but only in the right order. Arrange the log entries in the sequence they actually happened.',
+      'Arrange the event log in the order it happened. The -uk ending means each action is already complete.',
     entries: [
       {
         id: 'opganeuk',
-        blah: 'op-gane-uk',
-        hint: 'un-lock-ed',
+        blah: 'opgane-uk',
+        hint: 'unlock-ed',
       },
       {
-        id: 'escapeuk',
-        blah: 'escape-uk',
+        id: 'ferouk',
+        blah: 'fero-uk',
         hint: 'escape-d',
       },
       {
-        id: 'ganeuk',
-        blah: 'gane-uk',
-        hint: 'lock-ed',
+        id: 'junkeuk',
+        blah: 'junke-uk',
+        hint: 'fail-ed / broke down',
       },
     ],
-    correctOrder: ['opganeuk', 'escapeuk', 'ganeuk'],
+    correctOrder: ['opganeuk', 'ferouk', 'junkeuk'],
     replaySteps: [
       {
-        icon: '🔓',
-        text: 'Chamber op-gane-uk (unlocked). Containment disengaged.',
+        icon: '1',
+        text: 'Containment opgane-uk. Something was unlocked.',
       },
       {
-        icon: '💨',
-        text: 'Virus escape-uk (escaped). Breach detected.',
+        icon: '2',
+        text: 'Virus fero-uk. The hazard escaped.',
       },
       {
-        icon: '🔒',
-        text: 'System gane-uk (locked). Emergency seal — too late.',
+        icon: '3',
+        text: 'Factory junke-uk. The system failed and stopped production.',
       },
     ],
-    objective: 'lab-sequence',
+    morphemesLearned: ['fero', 'junke'],
+    objective: 'lab-logs',
   },
 
-  allObjectives: ['lab-chamber', 'lab-logs', 'lab-sequence'],
+  machineBuilder: {
+    type: 'builder',
+    title: 'Manufacturing Machine',
+    instructions:
+      'Use known BLAH words as commands. Build the phrases the machine accepts.',
+    steps: [
+      {
+        prompt: 'Start one batch of antiviral medicine.',
+        slotCount: 2,
+        availableTiles: commandTiles,
+        correctSequence: ['moll', 'puacarda'],
+        wrongMessage: 'The vat stays empty.',
+        successMessage: 'Accepted. The first bottles fill with puacarda.',
+      },
+      {
+        prompt: 'Repeat the filling process for the cargo rack.',
+        slotCount: 2,
+        availableTiles: commandTiles,
+        correctSequence: ['yamoll', 'puacarda'],
+        wrongMessage: 'The cargo rack does not engage.',
+        successMessage: 'Accepted. Bulk puacarda is ready.',
+      },
+    ],
+    objective: 'lab-machine',
+  },
+
+  destinationBuilder: {
+    type: 'builder',
+    title: 'Destination Map',
+    instructions:
+      'The star map highlights a blue world. Build the BLAH compound for Earth.',
+    prompt: 'Blue world: [ water ] + [ planet ]',
+    slotCount: 2,
+    availableTiles: commandTiles,
+    correctSequence: ['doda', 'rom'],
+    wrongMessage: 'The map cannot lock that destination.',
+    successMessage: 'Destination locked: dodarom.',
+    morphemesLearned: ['dodarom'],
+    objective: 'lab-destination',
+  },
+
+  commsBuilder: {
+    type: 'builder',
+    title: 'Communication Door',
+    instructions:
+      'The screen flashes "al kume?" The alien is asking whether you speak.',
+    prompt: 'Respond in BLAH.',
+    slotCount: 2,
+    availableTiles: speechTiles,
+    correctSequence: ['il', 'kume'],
+    wrongMessage: 'The door waits for a clearer response.',
+    successMessage: 'il kume. I speak.',
+    morphemesLearned: ['kume'],
+    objective: 'lab-comms',
+  },
+
+  allObjectives: [
+    'lab-sign',
+    'lab-logs',
+    'lab-machine',
+    'lab-destination',
+    'lab-comms',
+  ],
   completionObjective: 'stage3-complete',
 
   completionNarration: {
     type: 'narration',
-    title: 'Now I understand.',
+    title: 'Ready To Speak',
     lines: [
-      "The chamber was unlocked. The virus escaped. The system locked down — but too late.",
-      "Mom and dad... they were trying to contain it. They couldn't.",
-      "'-uk' marks the past. Things that already happened. Actions completed.",
-      "op-gane-uk. escape-uk. gane-uk. Unlocked. Escaped. Locked.",
-      "The comms room — if there's any way to call for help, it has to be there.",
+      'The cargo rack is full of puacarda.',
+      'Earth is dodarom: the water planet.',
+      'I can speak enough BLAH to ask for help. The Bridge is open.',
     ],
   },
 };

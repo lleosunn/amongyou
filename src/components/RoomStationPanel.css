@@ -1,0 +1,219 @@
+.station-panel {
+  width: clamp(230px, 22vw, 292px);
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: center;
+  background: rgba(12, 16, 28, 0.86);
+  border: 1px solid rgba(145, 165, 205, 0.38);
+  border-radius: 10px;
+  color: #e8edf8;
+  padding: 14px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.station-panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.station-panel-kicker,
+.station-panel-progress,
+.station-panel-footer {
+  color: rgba(220, 230, 255, 0.58);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.station-panel h2 {
+  margin: 0;
+  color: #f3f6ff;
+  font-size: 1rem;
+  letter-spacing: 0.4px;
+}
+
+.station-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.station-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(145, 165, 205, 0.24);
+  border-radius: 8px;
+  color: #e8edf8;
+  cursor: pointer;
+  padding: 10px;
+  text-align: left;
+  transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
+}
+
+.station-row:hover:not(:disabled),
+.station-row:focus-visible:not(:disabled) {
+  background: rgba(76, 108, 180, 0.18);
+  border-color: rgba(165, 190, 255, 0.65);
+  outline: none;
+  transform: translateX(-2px);
+}
+
+.station-row:disabled {
+  cursor: default;
+}
+
+.station-index {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(145, 165, 205, 0.24);
+  border-radius: 8px;
+  color: #9fb4e5;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.station-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.station-name {
+  overflow: hidden;
+  color: #f3f6ff;
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.station-subtext {
+  overflow: hidden;
+  color: rgba(220, 230, 255, 0.52);
+  font-size: 0.68rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.station-state {
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+  line-height: 1;
+  padding: 5px 7px;
+  text-transform: uppercase;
+}
+
+.station-new .station-state {
+  background: rgba(120, 170, 255, 0.15);
+  border: 1px solid rgba(145, 185, 255, 0.45);
+  color: #bed3ff;
+}
+
+.station-done {
+  border-color: rgba(138, 255, 154, 0.28);
+}
+
+.station-done .station-index,
+.station-done .station-state {
+  border-color: rgba(138, 255, 154, 0.45);
+  color: #c7ffd1;
+}
+
+.station-done .station-state {
+  background: rgba(80, 180, 105, 0.14);
+}
+
+.station-locked {
+  opacity: 0.52;
+}
+
+.station-locked .station-state {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(180, 185, 205, 0.22);
+  color: #a8adbf;
+}
+
+.station-suggested {
+  border-color: rgba(255, 220, 100, 0.7);
+  box-shadow: 0 0 0 0 rgba(255, 220, 100, 0.42);
+  animation: station-suggest 1.8s ease-in-out infinite;
+}
+
+.station-just-completed {
+  animation: station-complete 1.2s ease;
+}
+
+.station-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.station-list::-webkit-scrollbar-thumb {
+  background: rgba(150, 170, 210, 0.35);
+  border-radius: 999px;
+}
+
+@keyframes station-suggest {
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 220, 100, 0);
+  }
+}
+
+@keyframes station-complete {
+  0% {
+    background: rgba(138, 255, 154, 0.22);
+  }
+
+  100% {
+    background: rgba(255, 255, 255, 0.035);
+  }
+}
+
+@media (max-width: 900px) {
+  .station-panel {
+    width: 100%;
+    max-height: 178px;
+    align-self: stretch;
+  }
+
+  .station-list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(196px, 1fr);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 0 4px;
+  }
+
+  .station-row {
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .station-row,
+  .station-suggested,
+  .station-just-completed {
+    animation: none;
+    transition: none;
+  }
+}

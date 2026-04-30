@@ -1,17 +1,66 @@
-# React + Vite
+# Among You
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Among You is a React/Vite educational escape-room game based on the local
+`game_design_docs/room_design.pdf` and `game_design_docs/storyline.pdf` design
+documents.
 
-Currently, two official plugins are available:
+The player is an astronaut who wakes up aboard a benevolent alien ship on
+Planet 999. Earth is infected with zadotitis, and the astronaut must decode the
+BLAH language to find antiviral medicine, manufacture more of it, and ask the
+aliens to send the medicine home.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Design Alignment
 
-## React Compiler
+The current game implements the main four-room arc described in the PDFs:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Pilot's Cabin** - learn basic BLAH words, pronouns, roots, the `-nu`
+   suffix, and unlock the first door by building `opgane`.
+2. **Clinic** - identify `derbemar`, learn treatment and medicine vocabulary,
+   choose `puacarda`, heal the player, and learn `yamoll`.
+3. **Lab / Factory** - decode logs, manufacture bulk `puacarda`, build
+   `dodarom` for Earth, and prepare to speak with `il kume`.
+4. **Bridge / Comms** - complete the final commander conversation to prove
+   treatment, explain the Earth mission, request transport, and trigger the
+   ending.
 
-## Expanding the ESLint configuration
+Core systems from the room design are also represented:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# amongyou
+- A health bar starts near 60%, drains gently, never becomes a fail state, and
+  rises when the correct medicine is taken.
+- A word inventory tracks learned BLAH morphemes by pronoun, prefix, root,
+  suffix, full word, and unresolved clue.
+- Clickable room hotspots expose vocabulary through choice, sequence, builder,
+  and conversation interactions.
+- Locked room progression follows the PDF goals: cabin -> clinic -> lab ->
+  bridge/comms.
+- The ending reveals that BLAH word parts map to English morphology.
+
+## Intentional Scope Notes
+
+The implementation follows the revised four-stage structure in the PDFs rather
+than treating Stage 5 as a separate room. The bridge/comms room contains the
+final conversation and homeward ending.
+
+Some lower-priority or alternate PDF ideas are not currently part of the main
+playable path, including a rendered intro cinematic, the child drawing with
+`ema`/`eba`, a full `-plum` payoff puzzle, drag-line matching, and more detailed
+idle hint timing. These are polish or expansion opportunities, not blockers for
+the current PDF-aligned playable arc.
+
+## Run Locally
+
+```bash
+npm install
+npm run dev
+```
+
+## Checks
+
+```bash
+npm run validate:data
+npm run lint
+npm run build
+```
+
+`validate:data` checks stage content, objectives, learned morphemes, and puzzle
+tile references.

@@ -2,208 +2,23 @@ import pilotCabinImg from './assets/rooms/pilot_cabin.png';
 import clinicImg from './assets/rooms/clinic.png';
 import labImg from './assets/rooms/lab.png';
 import commsRoomImg from './assets/rooms/comms_room.png';
+import { roomConfigs, startingRoom } from './roomData';
 
-export const rooms = {
-  pilotCabin: {
-    id: 'pilotCabin',
-    name: "Pilot's Cabin",
-    color: '#6aa8ff',
-    image: pilotCabinImg,
-    left: null,
-    right: 'clinic',
-    up: null,
-    down: null,
-    gridPos: { col: 0, row: 0 },
-    stage: 1,
-    hotspots: [
-      {
-        id: 'pilot-console',
-        label: 'Control console',
-        x: '42%',
-        y: '43%',
-        w: '20%',
-        h: '24%',
-        objective: 'explore-console',
-        content: {
-          type: 'clue',
-          title: 'Pilot Console',
-          body: 'GAN-DERBE  OP-KUME\nRAMDE-NU: ???',
-          note: "Flickering alien script scrolls across the main display. You recognize nothing — yet.",
-        },
-      },
-      {
-        id: 'pilot-stickies',
-        label: 'Sticky notes',
-        x: '7%',
-        y: '45%',
-        w: '21%',
-        h: '21%',
-        objective: 'explore-stickies',
-        content: {
-          type: 'clue',
-          title: 'Sticky Notes',
-          body: 'ya-moll\nopa-kume-plum\nil ramde-uk',
-          note: 'Hand-scribbled alien notes stuck to the console. The same one keeps reappearing: "il ramde-uk".',
-        },
-      },
-      {
-        id: 'pilot-journal',
-        label: 'Open journal',
-        x: '8%',
-        y: '68%',
-        w: '31%',
-        h: '26%',
-        objective: 'explore-journal',
-        content: {
-          type: 'clue',
-          title: "Someone's Journal",
-          body: '...ell ramde-uk. il derbe al. il ema. il eba...',
-          note: 'The handwriting is shaky. Whoever wrote this was in a hurry, or scared.',
-        },
-      },
-      {
-        id: 'pilot-drawing',
-        label: "Child's drawing",
-        x: '3%',
-        y: '9%',
-        w: '27%',
-        h: '39%',
-        requiresObjectives: ['explore-console', 'explore-stickies', 'explore-journal'],
-        content: {
-          type: 'stage1-drawing',
-        },
-      },
-    ],
-  },
-  clinic: {
-    id: 'clinic',
-    name: 'Clinic',
-    color: '#9effc8',
-    image: clinicImg,
-    left: 'pilotCabin',
-    right: 'lab',
-    up: null,
-    down: null,
-    gridPos: { col: 1, row: 0 },
-    stage: 2,
-    unlockedBy: 'stage1-complete',
-    hotspots: [
-      {
-        id: 'clinic-door',
-        label: 'Locked service door',
-        x: '1%',
-        y: '6%',
-        w: '27%',
-        h: '88%',
-        objective: 'clinic-door',
-        content: {
-          type: 'stage2-door',
-        },
-      },
-      {
-        id: 'clinic-photos',
-        label: 'Before / after photos',
-        x: '30%',
-        y: '2%',
-        w: '43%',
-        h: '56%',
-        objective: 'clinic-photos',
-        content: {
-          type: 'stage2-photos',
-        },
-      },
-      {
-        id: 'clinic-bottles',
-        label: 'Full medicine bottles',
-        x: '34%',
-        y: '58%',
-        w: '32%',
-        h: '24%',
-        objective: 'clinic-bottles',
-        content: {
-          type: 'stage2-bottles',
-        },
-      },
-      {
-        id: 'clinic-refill',
-        label: 'Med Refill machine',
-        x: '80%',
-        y: '10%',
-        w: '19%',
-        h: '55%',
-        objective: 'clinic-refill',
-        content: {
-          type: 'stage2-refill',
-        },
-      },
-    ],
-  },
-  lab: {
-    id: 'lab',
-    name: 'Lab',
-    color: '#e8e85a',
-    image: labImg,
-    left: 'clinic',
-    right: 'commsRoom',
-    up: null,
-    down: null,
-    gridPos: { col: 2, row: 0 },
-    stage: 3,
-    unlockedBy: 'stage2-complete',
-    hotspots: [
-      {
-        id: 'lab-chamber',
-        label: 'Broken containment chamber',
-        x: '2%',
-        y: '8%',
-        w: '22%',
-        h: '70%',
-        objective: 'lab-chamber',
-        content: {
-          type: 'stage3-chamber',
-        },
-      },
-      {
-        id: 'lab-logs',
-        label: 'System warning display',
-        x: '62%',
-        y: '4%',
-        w: '32%',
-        h: '38%',
-        objective: 'lab-logs',
-        content: {
-          type: 'stage3-logs',
-        },
-      },
-      {
-        id: 'lab-sequence',
-        label: 'Central console',
-        x: '28%',
-        y: '42%',
-        w: '34%',
-        h: '34%',
-        requiresObjectives: ['lab-chamber', 'lab-logs'],
-        objective: 'lab-sequence',
-        content: {
-          type: 'stage3-sequence',
-        },
-      },
-    ],
-  },
-  commsRoom: {
-    id: 'commsRoom',
-    name: 'Comms Room',
-    color: '#c77dff',
-    image: commsRoomImg,
-    left: 'lab',
-    right: null,
-    up: null,
-    down: null,
-    gridPos: { col: 3, row: 0 },
-    stage: 4,
-    unlockedBy: 'stage3-complete',
-    hotspots: [],
-  },
+const roomImages = {
+  pilotCabin: pilotCabinImg,
+  clinic: clinicImg,
+  lab: labImg,
+  commsRoom: commsRoomImg,
 };
 
-export const startingRoom = 'pilotCabin';
+export const rooms = Object.fromEntries(
+  Object.entries(roomConfigs).map(([id, room]) => [
+    id,
+    {
+      ...room,
+      image: roomImages[room.imageKey],
+    },
+  ])
+);
+
+export { startingRoom };

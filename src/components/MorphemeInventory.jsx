@@ -1,23 +1,46 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGameState } from '../gameContext';
-import { allMorphemes, getMorpheme } from '../languageData';
+import { discoverableMorphemeCount } from '../discoverableMorphemes';
+import { getMorpheme } from '../languageData';
 import './MorphemeInventory.css';
 
-const KIND_ORDER = { prefix: 0, root: 1, suffix: 2 };
+const KIND_ORDER = {
+  pronoun: 0,
+  prefix: 1,
+  root: 2,
+  suffix: 3,
+  word: 4,
+  unknown: 5,
+};
+
+const KIND_LABELS = {
+  pronoun: 'Pronouns',
+  prefix: 'Prefixes',
+  root: 'Roots',
+  suffix: 'Suffixes',
+  word: 'Full Words',
+  unknown: 'Unresolved',
+};
 
 export default function MorphemeInventory() {
   const { learnedMorphemes } = useGameState();
   const [open, setOpen] = useState(false);
   const [recentIds, setRecentIds] = useState(new Set());
   const prevIdsRef = useRef(new Set());
-  const totalCount = Object.keys(allMorphemes).length;
 
-  const items = [...learnedMorphemes]
+  const rawItems = [...learnedMorphemes]
     .map((id) => {
       const morpheme = getMorpheme(id);
       return morpheme ? { id, ...morpheme } : null;
     })
-    .filter(Boolean)
+    .filter(Boolean);
+
+  const resolvedBlahs = new Set(
+    rawItems.filter((item) => item.kind !== 'unknown').map((item) => item.blah)
+  );
+
+  const items = rawItems
+    .filter((item) => item.kind !== 'unknown' || !resolvedBlahs.has(item.blah))
     .sort((a, b) => {
       const ka = KIND_ORDER[a.kind] ?? 99;
       const kb = KIND_ORDER[b.kind] ?? 99;
@@ -33,10 +56,19 @@ export default function MorphemeInventory() {
           acc[item.kind].push(item);
           return acc;
         },
-        { prefix: [], root: [], suffix: [] }
+        {
+          pronoun: [],
+          prefix: [],
+          root: [],
+          suffix: [],
+          word: [],
+          unknown: [],
+        }
       ),
     [items]
   );
+
+  const learnedCount = items.filter((item) => item.kind !== 'unknown').length;
 
   useEffect(() => {
     const prev = prevIdsRef.current;
@@ -58,7 +90,7 @@ export default function MorphemeInventory() {
         aria-label={open ? 'Collapse word list' : 'Expand word list'}
       >
         <span className="morpheme-title">
-          Words: {items.length}/{totalCount}
+          Words: {learnedCount}/{discoverableMorphemeCount}
         </span>
         <span className="morpheme-chevron">{open ? '▾' : '▸'}</span>
       </button>
@@ -72,13 +104,14 @@ export default function MorphemeInventory() {
               .map(([kind, list]) => (
                 <div key={kind} className="morpheme-group">
                   <div className="morpheme-group-title">
-                    {kind.charAt(0).toUpperCase() + kind.slice(1)}s
+                    {KIND_LABELS[kind] ?? kind}
                   </div>
                   {list.map((m) => (
                     <div
                       key={m.id}
-                      className={`morpheme-row morpheme-${m.kind} ${recentIds.has(m.id) ? 'is-new' : ''
-                        }`}
+                      className={`morpheme-row morpheme-${m.kind} ${
+                        recentIds.has(m.id) ? 'is-new' : ''
+                      }`}
                     >
                       <span
                         className={`morpheme-kind morpheme-kind-${m.kind}`}

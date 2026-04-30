@@ -1,11 +1,18 @@
 .game {
   width: 100vw;
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: #0e0e1a;
   overflow: hidden;
+}
+
+.game-layout {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px;
 }
 
 .hud {
@@ -31,4 +38,114 @@
   z-index: 4;
   pointer-events: none;
   transition: opacity 0.6s ease;
+}
+
+.idle-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  z-index: 7;
+  max-width: min(520px, calc(100% - 32px));
+  transform: translateX(-50%);
+  background: rgba(14, 18, 28, 0.88);
+  border: 1px solid rgba(150, 170, 210, 0.45);
+  border-radius: 8px;
+  color: #dbe4ff;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  padding: 10px 14px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.sound-toggle {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 7;
+  background: rgba(14, 18, 28, 0.82);
+  border: 1px solid rgba(150, 170, 210, 0.42);
+  border-radius: 999px;
+  color: #dbe4ff;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 8px 11px;
+  text-transform: uppercase;
+}
+
+.sound-toggle:hover,
+.sound-toggle:focus-visible {
+  background: rgba(30, 38, 58, 0.92);
+  border-color: rgba(210, 225, 255, 0.7);
+  outline: none;
+}
+
+.sound-toggle.enabled {
+  border-color: rgba(138, 255, 154, 0.5);
+  color: #dfffe5;
+}
+
+.word-toast,
+.room-event {
+  position: fixed;
+  left: 50%;
+  z-index: 150;
+  max-width: min(520px, calc(100% - 32px));
+  transform: translateX(-50%);
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.35;
+  padding: 9px 13px;
+  pointer-events: none;
+  text-align: center;
+  animation: toast-in 0.24s ease;
+}
+
+.word-toast {
+  top: 76px;
+  background: rgba(27, 40, 66, 0.92);
+  border: 1px solid rgba(145, 185, 255, 0.55);
+  color: #dfe9ff;
+}
+
+.room-event {
+  top: 116px;
+  background: rgba(22, 50, 34, 0.92);
+  border: 1px solid rgba(138, 255, 154, 0.55);
+  color: #dcffe4;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .health-warning,
+  .idle-hint,
+  .sound-toggle,
+  .word-toast,
+  .room-event {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .game-layout {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
 }
