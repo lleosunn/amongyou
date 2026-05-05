@@ -29,7 +29,6 @@ const INTERACTIVE_TYPES = new Set([
 
 const DEV_ROOM_LOCK_OVERRIDE_KEY = 'amongyou.devRoomLocksBypassed';
 const INTRO_BED_LABEL_HOTSPOT_ID = 'pilot-bed-label';
-const isDevMode = import.meta.env.DEV;
 
 function getCompletionId(hotspot, content) {
   return content?.objective ?? content?.completionObjective ?? hotspot.objective;
@@ -57,7 +56,7 @@ export default function App() {
   const [unlockedPulseRoomId, setUnlockedPulseRoomId] = useState(null);
   const [wordToast, setWordToast] = useState(null);
   const [roomLocksBypassed, setRoomLocksBypassed] = useState(() => {
-    if (!isDevMode || typeof window === 'undefined') return false;
+    if (typeof window === 'undefined') return false;
     return window.localStorage.getItem(DEV_ROOM_LOCK_OVERRIDE_KEY) === 'true';
   });
   const learnedRef = useRef(new Set());
@@ -110,7 +109,7 @@ export default function App() {
   );
 
   useEffect(() => {
-    if (!isDevMode || typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return;
     window.localStorage.setItem(
       DEV_ROOM_LOCK_OVERRIDE_KEY,
       String(roomLocksBypassed)
@@ -368,7 +367,7 @@ export default function App() {
       if (content.afterSolve) {
         setTimeout(() => {
           setModalContent({ ...content.afterSolve });
-        }, 350);
+        }, content.healAmount ? 1800 : 350);
       } else {
         setModalContent(null);
       }
@@ -445,17 +444,15 @@ export default function App() {
               <HealthBar />
               <MorphemeInventory />
             </div>
-            {isDevMode && (
-              <button
-                className={`dev-lock-toggle ${
-                  roomLocksBypassed ? 'enabled' : ''
-                }`}
-                onClick={() => setRoomLocksBypassed((current) => !current)}
-                aria-pressed={roomLocksBypassed}
-              >
-                Dev Locks {roomLocksBypassed ? 'Off' : 'On'}
-              </button>
-            )}
+            <button
+              className={`dev-lock-toggle ${
+                roomLocksBypassed ? 'enabled' : ''
+              }`}
+              onClick={() => setRoomLocksBypassed((current) => !current)}
+              aria-pressed={roomLocksBypassed}
+            >
+              Dev Locks {roomLocksBypassed ? 'Off' : 'On'}
+            </button>
             {idleHint && !modalContent && (
               <div className="idle-hint">{idleHint.text}</div>
             )}

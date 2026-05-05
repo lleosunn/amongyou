@@ -4,29 +4,93 @@ import './HealthBar.css';
 
 export default function HealthBar() {
   const { health } = useGameState();
-  const [flash, setFlash] = useState(false);
+  const [healing, setHealing] = useState(false);
+  const [dropping, setDropping] = useState(false);
   const previousHealthRef = useRef(health);
+  const healingStartTimeoutRef = useRef(null);
+  const healingTimeoutRef = useRef(null);
+  const droppingResetTimeoutRef = useRef(null);
+  const droppingStartTimeoutRef = useRef(null);
+  const droppingEndTimeoutRef = useRef(null);
   const percent = health * 100;
   const displayPercent = percent.toFixed(1);
+  const isLow = health <= 0.35;
+
+  useEffect(
+    () => () => {
+      if (healingStartTimeoutRef.current) {
+        clearTimeout(healingStartTimeoutRef.current);
+      }
+      if (healingTimeoutRef.current) clearTimeout(healingTimeoutRef.current);
+      if (droppingResetTimeoutRef.current) {
+        clearTimeout(droppingResetTimeoutRef.current);
+      }
+      if (droppingStartTimeoutRef.current) {
+        clearTimeout(droppingStartTimeoutRef.current);
+      }
+      if (droppingEndTimeoutRef.current) {
+        clearTimeout(droppingEndTimeoutRef.current);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    if (health > previousHealthRef.current + 0.01) {
+    const previousHealth = previousHealthRef.current;
+
+    if (health > previousHealth + 0.01) {
       previousHealthRef.current = health;
-      const showTimeout = setTimeout(() => setFlash(true), 0);
-      const hideTimeout = setTimeout(() => setFlash(false), 900);
-      return () => {
-        clearTimeout(showTimeout);
-        clearTimeout(hideTimeout);
-      };
+
+      if (healingStartTimeoutRef.current) {
+        clearTimeout(healingStartTimeoutRef.current);
+      }
+      if (healingTimeoutRef.current) clearTimeout(healingTimeoutRef.current);
+      if (droppingResetTimeoutRef.current) {
+        clearTimeout(droppingResetTimeoutRef.current);
+      }
+      if (droppingStartTimeoutRef.current) {
+        clearTimeout(droppingStartTimeoutRef.current);
+      }
+      if (droppingEndTimeoutRef.current) {
+        clearTimeout(droppingEndTimeoutRef.current);
+      }
+
+      healingStartTimeoutRef.current = setTimeout(() => {
+        setDropping(false);
+        setHealing(true);
+      }, 0);
+      healingTimeoutRef.current = setTimeout(() => setHealing(false), 4200);
+      return undefined;
+    }
+
+    if (health < previousHealth - 0.0001 && !healing) {
+      previousHealthRef.current = health;
+
+      if (droppingResetTimeoutRef.current) {
+        clearTimeout(droppingResetTimeoutRef.current);
+      }
+      if (droppingStartTimeoutRef.current) {
+        clearTimeout(droppingStartTimeoutRef.current);
+      }
+      if (droppingEndTimeoutRef.current) {
+        clearTimeout(droppingEndTimeoutRef.current);
+      }
+
+      droppingResetTimeoutRef.current = setTimeout(() => setDropping(false), 0);
+      droppingStartTimeoutRef.current = setTimeout(() => setDropping(true), 20);
+      droppingEndTimeoutRef.current = setTimeout(() => setDropping(false), 520);
+      return undefined;
     }
 
     previousHealthRef.current = health;
     return undefined;
-  }, [health]);
+  }, [health, healing]);
 
   return (
     <div
-      className={`health-bar ${flash ? 'health-flash' : ''}`}
+      className={`health-bar ${healing ? 'health-healing' : ''} ${
+        dropping ? 'health-dropping' : ''
+      } ${isLow ? 'health-low' : ''}`}
       aria-label={`Health ${displayPercent}%`}
       title={`Health ${displayPercent}%`}
     >

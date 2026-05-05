@@ -18,7 +18,7 @@ export const stage2 = {
     title: 'Clinic Sign',
     body: 'derbemar\n\nThe sign hangs above the medical room doors.',
     question:
-      'You know "derbe" means cure / heal. What does "-mar" probably mean?',
+      'The root is familiar from the crew roster. What does "-mar" probably add?',
     options: [
       { id: 'person', label: 'person' },
       { id: 'place', label: 'place' },
@@ -98,19 +98,34 @@ export const stage2 = {
     type: 'builder',
     title: 'Medicine Shelf',
     instructions:
-      'Use the bed-label clue and the hazard-marked bottles to build the medicine label.',
+      'Use the specimen labels and the bed-label clue to identify the medicine.',
     steps: [
       {
         prompt:
-          'The crossed-out virus symbol appears beside pua-. Build the antiviral label from word parts.',
+          'Specimen cards show doda under clear liquid, rom under a planet, and carda under a spiky germ. Select the germ label.',
+        slotCount: 1,
+        availableTiles: [
+          { id: 'carda', label: 'carda' },
+          { id: 'doda', label: 'doda' },
+          { id: 'rom', label: 'rom' },
+          { id: 'moll', label: 'moll' },
+        ],
+        correctSequence: ['carda'],
+        wrongMessage:
+          'That label belongs to a different specimen. Look for the spiky germ.',
+        successMessage: 'carda labels the virus.',
+      },
+      {
+        prompt:
+          'The medicine bottle adds pua- before the virus root. Build the antiviral label from word parts.',
         slotCount: 2,
         availableTiles: [
           { id: 'pua-', label: 'pua-' },
           { id: 'carda', label: 'carda' },
           { id: 'lomi', label: 'lomi' },
           { id: 'fleck', label: 'fleck' },
-          { id: 'derbe', label: 'derbe' },
-          { id: 'yamoll', label: 'yamoll' },
+          { id: 'doda', label: 'doda' },
+          { id: 'moll', label: 'moll' },
         ],
         correctSequence: ['pua-', 'carda'],
         wrongMessage: 'That label does not match the bed clue or the virus symbol.',
@@ -118,8 +133,16 @@ export const stage2 = {
       },
     ],
     morphemesLearned: ['pua-', 'carda', 'puacarda', 'plumSeen'],
-    healAmount: 0.25,
+    healAmount: 0.35,
     objective: 'clinic-medicine',
+    afterSolve: {
+      type: 'narration',
+      title: 'Medicine Taken',
+      lines: [
+        'You take the puacarda. The suit monitor brightens green.',
+        'carda is virus. pua- works against it. puacarda is the antiviral medicine.',
+      ],
+    },
   },
 
   refillChoice: {

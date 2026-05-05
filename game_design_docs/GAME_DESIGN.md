@@ -99,7 +99,9 @@ Key interactions:
 - Clinic sign teaches `-mar` and `derbemar`.
 - Medic screen teaches `il` and `-uk`.
 - Treatment wall teaches `a-`, `me-`, and `sondy`.
-- Medicine shelf teaches `pua-`, `carda`, resolves `puacarda` by building `[pua-] [carda]`, and heals the player.
+- Medicine shelf first scaffolds `carda = virus` from a germ specimen, then
+  teaches `pua-`, resolves `puacarda` by building `[pua-] [carda]`, and heals
+  the player with a visible green health-bar response.
 - Refill machine teaches `ya-`, `moll`, and `yamoll`.
 
 Completion unlocks the Lab.
