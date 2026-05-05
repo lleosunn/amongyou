@@ -1,0 +1,52 @@
+.puzzle-clue-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.puzzle-clue-card {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(120, 135, 170, 0.34);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.puzzle-clue-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  object-fit: contain;
+  background: #060a15;
+}
+
+.puzzle-clue-copy {
+  display: grid;
+  gap: 4px;
+  text-align: center;
+}
+
+.puzzle-clue-copy h3 {
+  margin: 0;
+  color: #f0f4ff;
+  font-size: 0.86rem;
+  line-height: 1.2;
+}
+
+.puzzle-clue-copy p {
+  margin: 0;
+  color: rgba(220, 230, 255, 0.65);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 620px) {
+  .puzzle-clue-cards {
+    grid-template-columns: 1fr;
+  }
+}

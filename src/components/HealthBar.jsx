@@ -15,6 +15,7 @@ export default function HealthBar() {
   const percent = health * 100;
   const displayPercent = percent.toFixed(1);
   const isLow = health <= 0.35;
+  const isCritical = health <= 0.21;
 
   useEffect(
     () => () => {
@@ -90,7 +91,9 @@ export default function HealthBar() {
     <div
       className={`health-bar ${healing ? 'health-healing' : ''} ${
         dropping ? 'health-dropping' : ''
-      } ${isLow ? 'health-low' : ''}`}
+      } ${isLow ? 'health-low' : ''} ${
+        isCritical ? 'health-critical' : ''
+      }`}
       aria-label={`Health ${displayPercent}%`}
       title={`Health ${displayPercent}%`}
     >

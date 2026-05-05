@@ -10,14 +10,17 @@ export function GameProvider({ children, initialStage = 1 }) {
   const [completedObjectives, setCompletedObjectives] = useState(() => new Set());
   const [currentStage, setCurrentStage] = useState(initialStage);
   const [health, setHealth] = useState(HEALTH_START);
+  const [healthStabilized, setHealthStabilized] = useState(false);
 
   useEffect(() => {
+    if (healthStabilized) return undefined;
+
     const interval = setInterval(() => {
       setHealth((prev) => Math.max(HEALTH_MIN, prev - HEALTH_DRAIN_PER_SEC));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [healthStabilized]);
 
   const learn = useCallback((...morphemeIds) => {
     setLearnedMorphemes((prev) => {
@@ -76,6 +79,7 @@ export function GameProvider({ children, initialStage = 1 }) {
   );
 
   const heal = useCallback((amount) => {
+    setHealthStabilized(true);
     setHealth((prev) => Math.min(1, Math.max(HEALTH_MIN, prev + amount)));
   }, []);
 

@@ -15,7 +15,7 @@ Each stage follows the same pattern:
 3. A language interaction that teaches usable word parts.
 4. A puzzle that uses those word parts to change the world.
 
-The health bar starts near 60%, slowly drains to a safe floor, and rises when the player chooses the correct medicine. The word inventory tracks learned alien-language items by type and keeps unresolved clues visible until they are solved.
+The health bar starts near 60%, slowly drains to a safe floor, flashes at critical health, and stabilizes once the player chooses the correct medicine. The word inventory tracks learned alien-language items by type and keeps unresolved clues visible until they are solved.
 
 ## Alien Language Map
 
@@ -34,7 +34,7 @@ The health bar starts near 60%, slowly drains to a safe floor, and rises when th
 | `doda` | water |
 | `carda` | virus |
 | `ramde` | fly / go |
-| `derbe` | cure / heal |
+| `derbe` | heal / cure |
 | `gane` | lock |
 | `moll` | fill |
 | `sondy` | surgery / treatment |
@@ -53,7 +53,6 @@ The health bar starts near 60%, slowly drains to a safe floor, and rises when th
 | `-nu` | -er / person who does |
 | `-uk` | -ed / already happened |
 | `-mar` | -ery / place |
-| `-plum` | unresolved seed for -able |
 
 ### Constructed Words
 
@@ -76,12 +75,12 @@ Goal: figure out where you are and unlock the cabin door.
 
 Key interactions:
 
-- Message screen teaches `al = you`.
+- Message screen uses avatar gesture cards to teach `al = you`.
 - Planet posters use illustrated `dodarom` and `fannarom` cards to teach
   `rom = planet` through the repeated label part.
 - Crew roster uses illustrated job cards to teach `-nu`, `ramde`, `derbe`,
   `ramdenu`, and `derbenu`.
-- Liquid dispenser teaches `doda = water` through button testing.
+- Liquid dispenser teaches `doda = water` through visual button testing.
 - Bed label is visible from the start, changes its readable detail as `al` and
   `rom` are learned, and becomes a small translation check for `al: rom?`. It
   flashes after the opening narration so players inspect it first, and it also
@@ -96,13 +95,17 @@ Goal: find and take the correct antiviral medicine.
 
 Key interactions:
 
-- Clinic sign teaches `-mar` and `derbemar`.
-- Medic screen teaches `il` and `-uk`.
-- Treatment wall teaches `a-`, `me-`, and `sondy`.
+- Clinic sign teaches `-mar` and `derbemar` by comparing the `derbemar`
+  clinic sign with a second room sign, `ramdemar`.
+- Medic screen teaches `il` and `-uk` through avatar gesture and completed
+  treatment-log visuals.
+- Treatment wall teaches `a-`, `me-`, and `sondy` by comparing before and
+  after treatment cards labeled `a-sondy` and `me-sondy`.
 - Medicine shelf first scaffolds `carda = virus` from a germ specimen, then
   teaches `pua-`, resolves `puacarda` by building `[pua-] [carda]`, and heals
   the player with a visible green health-bar response.
-- Refill machine teaches `ya-`, `moll`, and `yamoll`.
+- Refill machine teaches `ya-`, `moll`, and `yamoll` by using a machine-state
+  clue to build the refill command.
 
 Completion unlocks the Lab.
 
@@ -112,10 +115,13 @@ Goal: make medicine in bulk and prepare to speak to the aliens.
 
 Key interactions:
 
-- Lab sign teaches `cruta` and `crutamar`.
-- Manufacturing machine requires `moll puacarda`, then `yamoll puacarda`.
-- Destination map requires `doda rom`, forming `dodarom`.
-- Communication door introduces `kume` and requires `il kume`.
+- Lab sign teaches `cruta` and `crutamar` by comparing the known `derbemar`
+  room sign with the production-lab sign.
+- Manufacturing machine requires `moll puacarda`, then `ya- moll puacarda`.
+- Destination map uses a blue-ocean-world clue panel and requires `doda rom`,
+  forming `dodarom`.
+- Communication door introduces `kume` with the `al kume?` screen clue and
+  requires `il kume`.
 - Vocabulary review prompts the player to look over learned words before entering the Bridge.
 
 Completion unlocks the vocabulary review; finishing or dismissing the review unlocks the Bridge / Comms room.
@@ -130,6 +136,9 @@ Final commander conversation:
 - Explain the mission: `il ya- ramde derbe doda rom`.
 - Ask for transport: `al ramde pua- carda doda rom`.
 
+Each bridge step includes a visual clue panel: scanner status, Earth route with
+cargo, and the commander's transport request.
+
 The ending reveals the lesson: alien-language word parts map to English morphology, so the player has been learning how English words are built.
 
 ## Implementation Status
@@ -138,9 +147,14 @@ Implemented:
 
 - React + Vite app.
 - Four-room linear layout with locked room gating.
-- Minimap, directional arrows, health bar, and vocabulary inventory.
+- Minimap, directional arrows, health bar, vocabulary inventory, and room
+  mission log.
 - Hotspot system with objective requirements and highlighting.
-- Modal content types for clue, narration, matching, prefix wheel, sequence, choice, experiment, builder, vocabulary review, and conversation.
+- Modal content types for clue, narration, matching, prefix wheel, sequence,
+  choice, experiment, visual discovery, builder, vocabulary review, and
+  conversation.
+- Shared AI-generated clue assets for discovery, builder, and conversation
+  puzzles, with alien labels rendered as DOM text.
 - PDF-aligned stages 1-4 with a playable full arc.
 
 Pending polish:

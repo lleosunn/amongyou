@@ -9,6 +9,7 @@ import ExperimentPuzzle from './ExperimentPuzzle';
 import VocabularyReview from './VocabularyReview';
 import TranslationCheckPuzzle from './TranslationCheckPuzzle';
 import VisualDiscoveryPuzzle from './VisualDiscoveryPuzzle';
+import MorphemeInventory from './MorphemeInventory';
 import './Modal.css';
 
 function ClueContent({ title, body, note }) {
@@ -24,6 +25,7 @@ function ClueContent({ title, body, note }) {
 function NarrationContent({ title, lines = [], onAdvance }) {
   const [index, setIndex] = useState(0);
   const isLast = index >= lines.length - 1;
+  const isFirst = index <= 0;
 
   const advance = () => {
     if (isLast) {
@@ -33,13 +35,26 @@ function NarrationContent({ title, lines = [], onAdvance }) {
     }
   };
 
+  const goBack = () => {
+    setIndex((i) => Math.max(0, i - 1));
+  };
+
   return (
     <div className="narration-content">
       {title && <h2>{title}</h2>}
       <p className="narration-line">{lines[index]}</p>
-      <button className="narration-next" onClick={advance}>
-        {isLast ? 'Close' : 'Next'}
-      </button>
+      <div className="narration-actions">
+        <button
+          className="narration-next narration-back"
+          onClick={goBack}
+          disabled={isFirst}
+        >
+          Back
+        </button>
+        <button className="narration-next" onClick={advance}>
+          {isLast ? 'Close' : 'Next'}
+        </button>
+      </div>
       {lines.length > 1 && (
         <div className="narration-dots">
           {lines.map((_, i) => (
@@ -140,6 +155,7 @@ export default function Modal({ children, onClose }) {
             correctSequence={content.correctSequence}
             slotCount={content.slotCount}
             steps={content.steps}
+            clues={content.clues}
             wrongMessage={content.wrongMessage}
             successMessage={content.successMessage}
             onSolve={() => {
@@ -195,6 +211,7 @@ export default function Modal({ children, onClose }) {
             wrongMessage={content.wrongMessage}
             successMessage={content.successMessage}
             acceptedKeywordGroups={content.acceptedKeywordGroups}
+            showDecode={content.showDecode}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -260,6 +277,9 @@ export default function Modal({ children, onClose }) {
       }}
       role="presentation"
     >
+      <div className="modal-word-bank" onClick={(e) => e.stopPropagation()}>
+        <MorphemeInventory />
+      </div>
       <div
         className={`modal-content ${isWide ? 'modal-wide' : ''}`}
         onClick={(e) => e.stopPropagation()}

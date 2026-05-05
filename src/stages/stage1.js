@@ -24,19 +24,39 @@ export const stage1 = {
   },
 
   chatChoice: {
-    type: 'choice',
+    type: 'visual-discovery',
     title: 'Message Screen',
-    instructions: 'Use the visual clue to infer the alien word.',
-    body: 'ALIEN: al\n\nThe alien avatar waves and points toward you.',
-    question: 'What might "al" mean?',
-    options: [
-      { id: 'il', label: 'I / me' },
-      { id: 'al', label: 'you' },
-      { id: 'kume', label: 'hello' },
-      { id: 'derbe', label: 'help' },
+    instructions:
+      'Compare the avatar gestures on the message screen. Click the tag aimed at the person in front of the screen.',
+    steps: [
+      {
+        prompt:
+          'One tag appears when the avatar taps its chest. The other appears when it points outward. Click the outward-pointing tag.',
+        cards: [
+          {
+            id: 'message-self-card',
+            title: 'Screen Tag A',
+            visual: 'message-self',
+            imageKey: 'messageSelf',
+            label: 'il',
+            labelParts: [{ id: 'message-self-il', text: 'il' }],
+          },
+          {
+            id: 'message-you-card',
+            title: 'Screen Tag B',
+            visual: 'message-you',
+            imageKey: 'messageYou',
+            label: 'al',
+            labelParts: [{ id: 'message-you-al', text: 'al' }],
+          },
+        ],
+        correctPartIds: ['message-you-al'],
+        wrongMessage:
+          'That tag is paired with the avatar pointing to itself. Look for the outward gesture.',
+        successMessage:
+          'The outward gesture marks the person in front of the screen. al means you.',
+      },
     ],
-    correctOptionId: 'al',
-    correctMessage: 'The alien is talking to you.',
     morphemesLearned: ['al'],
     objective: 'pilot-chat',
   },
@@ -182,7 +202,7 @@ export const stage1 = {
           {
             id: 'medic-card',
             title: 'Medical Crew',
-            caption: 'Medical coat, scanner, and kit point to curing or healing.',
+            caption: 'Medical coat, scanner, and kit point to healing.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -196,7 +216,7 @@ export const stage1 = {
         wrongMessage:
           'The medical picture points to the root, not the person ending.',
         successMessage:
-          'derbe points to cure or heal. derbenu is a doctor or medic.',
+          'derbe points to healing. derbenu is a doctor or medic.',
       },
     ],
     morphemesLearned: ['-nu', 'ramde', 'derbe', 'ramdenu', 'derbenu'],
@@ -212,19 +232,19 @@ export const stage1 = {
       {
         id: 'tito',
         label: 'tito',
-        result: 'A purple slush pours into the cup.',
+        result: 'The cup fills.',
         color: '#8f4dff',
       },
       {
         id: 'bibi',
         label: 'bibi',
-        result: 'A thick green liquid drips out.',
+        result: 'The cup fills.',
         color: '#70d86c',
       },
       {
         id: 'doda',
         label: 'doda',
-        result: 'Clear water fills the cup.',
+        result: 'The cup fills.',
         color: '#7ec7ff',
       },
     ],
@@ -242,11 +262,11 @@ export const stage1 = {
     labelLines: ['al: rom?', 'puacarda x 2'],
     requiredMorphemes: ['al', 'rom'],
     prompt: 'What do you think the first line means?',
-    placeholder: 'Example: you planet',
+    placeholder: 'Type your translation',
     lockedMessage:
       'The label matters, but the words are still just marks. Look around for al and rom, then check it again.',
     readyMessage:
-      'You know the key word parts now. Try translating the first line yourself.',
+      'The first line is readable now. Type what the label is asking.',
     wrongMessage:
       'Not quite. Use the two word parts you have learned from the message screen and the planet posters.',
     successMessage:
@@ -255,6 +275,7 @@ export const stage1 = {
       ['you', 'your'],
       ['planet', 'world'],
     ],
+    showDecode: false,
     morphemesLearned: ['puacardaSeen'],
     objective: 'pilot-bed-label',
   },

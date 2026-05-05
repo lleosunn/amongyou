@@ -32,6 +32,7 @@ export default function TranslationCheckPuzzle({
   wrongMessage = 'That does not match the word parts yet.',
   successMessage = 'That translation fits.',
   acceptedKeywordGroups = [],
+  showDecode = true,
   onSolve,
 }) {
   const { hasLearned } = useGameState();
@@ -79,26 +80,28 @@ export default function TranslationCheckPuzzle({
         ))}
       </div>
 
-      <div className="translation-decode">
-        {requiredMorphemes.map((id) => {
-          const morpheme = getMorpheme(id);
-          const learned = hasLearned(id);
+      {showDecode && (
+        <div className="translation-decode">
+          {requiredMorphemes.map((id) => {
+            const morpheme = getMorpheme(id);
+            const learned = hasLearned(id);
 
-          return (
-            <div
-              key={id}
-              className={`translation-token ${learned ? 'known' : 'unknown'}`}
-            >
-              <span className="translation-token-word">
-                {morpheme?.blah ?? id}
-              </span>
-              <span className="translation-token-meaning">
-                {learned ? morpheme?.english : '???'}
-              </span>
-            </div>
-          );
-        })}
-      </div>
+            return (
+              <div
+                key={id}
+                className={`translation-token ${learned ? 'known' : 'unknown'}`}
+              >
+                <span className="translation-token-word">
+                  {morpheme?.blah ?? id}
+                </span>
+                <span className="translation-token-meaning">
+                  {learned ? morpheme?.english : '???'}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <p className="translation-status">
         {ready ? readyMessage : lockedMessage}

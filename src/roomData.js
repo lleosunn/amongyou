@@ -15,6 +15,9 @@ export const roomConfigs = {
     down: null,
     gridPos: { col: 0, row: 0 },
     stage: 1,
+    missionLog: {
+      goal: 'Decode the cabin clues and open the door.',
+    },
     hotspots: [
       {
         id: 'pilot-bed-label',
@@ -97,6 +100,9 @@ export const roomConfigs = {
     gridPos: { col: 1, row: 0 },
     stage: 2,
     unlockedBy: 'stage1-complete',
+    missionLog: {
+      goal: 'Identify puacarda and stabilize your suit.',
+    },
     hotspots: [
       {
         id: 'clinic-sign',
@@ -135,6 +141,7 @@ export const roomConfigs = {
         y: '28%',
         w: '2%',
         h: '2%',
+        requiresObjectives: ['clinic-sign', 'clinic-medic', 'clinic-photos'],
         objective: 'clinic-medicine',
         content: stage2.medicineChoice,
       },
@@ -162,6 +169,9 @@ export const roomConfigs = {
     gridPos: { col: 2, row: 0 },
     stage: 3,
     unlockedBy: 'stage2-complete',
+    missionLog: {
+      goal: 'Make medicine in bulk and lock a destination.',
+    },
     hotspots: [
       {
         id: 'lab-sign',
@@ -220,6 +230,9 @@ export const roomConfigs = {
     gridPos: { col: 3, row: 0 },
     stage: 4,
     unlockedBy: 'vocab-review-complete',
+    missionLog: {
+      goal: 'Convince the commander to send medicine to Earth.',
+    },
     hotspots: [
       {
         id: 'bridge-commander',

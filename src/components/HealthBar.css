@@ -72,6 +72,15 @@
   background: linear-gradient(90deg, #f34242 0%, #ff9d4d 100%);
 }
 
+.health-critical:not(.health-healing) {
+  animation: health-critical-pulse 0.9s ease-in-out infinite;
+  border-color: rgba(255, 70, 82, 0.95);
+}
+
+.health-critical:not(.health-healing) .health-fill {
+  background: linear-gradient(90deg, #dc1f35 0%, #ff4f5e 100%);
+}
+
 .health-healing {
   animation: health-heal-flash 4.2s ease;
   background: rgba(12, 42, 30, 0.9);
@@ -128,10 +137,24 @@
   }
 }
 
+@keyframes health-critical-pulse {
+  0%,
+  100% {
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 3px rgba(255, 60, 70, 0.16),
+      0 0 24px rgba(255, 60, 70, 0.45);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .health-fill,
   .health-dropping,
-  .health-healing {
+  .health-healing,
+  .health-critical {
     animation: none;
     transition: none;
   }

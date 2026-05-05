@@ -467,7 +467,9 @@ export default function App() {
               </div>
             )}
             <div
-              className="health-warning"
+              className={`health-warning ${
+                health <= 0.21 ? 'health-warning-critical' : ''
+              }`}
               style={{ opacity: healthWarningOpacity }}
             />
           </Room>

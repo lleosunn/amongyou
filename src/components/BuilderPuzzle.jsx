@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import PuzzleClueCards from './PuzzleClueCards';
 import './BuilderPuzzle.css';
 
 function normalizeTile(tile) {
@@ -15,6 +16,7 @@ function makeStep({
   slotCount,
   successMessage,
   wrongMessage,
+  clues,
 }) {
   return {
     title,
@@ -25,6 +27,7 @@ function makeStep({
     slotCount,
     successMessage,
     wrongMessage,
+    clues,
   };
 }
 
@@ -44,6 +47,7 @@ export default function BuilderPuzzle(props) {
   const usedIds = new Set(placements.filter(Boolean).map((tile) => tile.id));
   const title = step.title ?? props.title;
   const instructions = step.instructions ?? props.instructions;
+  const clues = step.clues ?? props.clues ?? [];
   const isLast = stepIndex >= stepList.length - 1;
   const phrase = Array.from({ length: slotCount }, (_, i) => placements[i]?.label)
     .filter(Boolean)
@@ -139,6 +143,7 @@ export default function BuilderPuzzle(props) {
       {title && <h2 className="builder-title">{title}</h2>}
       {instructions && <p className="builder-instructions">{instructions}</p>}
       {step.prompt && <p className="builder-prompt">{step.prompt}</p>}
+      <PuzzleClueCards clues={clues} />
 
       <div className="builder-slots" style={{ '--slot-count': slotCount }}>
         {Array.from({ length: slotCount }, (_, index) => {

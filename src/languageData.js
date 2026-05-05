@@ -16,7 +16,7 @@ export const roots = {
   eba: { blah: 'eba', english: 'dad' },
   kume: { blah: 'kume', english: 'speak / say' },
   ramde: { blah: 'ramde', english: 'fly / go' },
-  derbe: { blah: 'derbe', english: 'cure / heal' },
+  derbe: { blah: 'derbe', english: 'heal / cure' },
   gane: { blah: 'gane', english: 'lock' },
   moll: { blah: 'moll', english: 'fill' },
   sondy: { blah: 'sondy', english: 'surgery / treatment' },
@@ -35,7 +35,6 @@ export const prefixes = {
 };
 
 export const suffixes = {
-  '-plum': { blah: '-plum', english: '-able' },
   '-nu': { blah: '-nu', english: '-er (person who does ___)' },
   '-uk': { blah: '-uk', english: '-ed / already happened' },
   '-mar': { blah: '-mar', english: '-ery / place' },
@@ -54,7 +53,6 @@ export const fullWords = {
 
 export const unknownWords = {
   puacardaSeen: { blah: 'puacarda', english: '???' },
-  plumSeen: { blah: '-plum', english: '???' },
 };
 
 function withKind(items, kind) {

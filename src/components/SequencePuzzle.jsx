@@ -102,7 +102,7 @@ export default function SequencePuzzle({
       return;
     }
 
-    setFeedback({ type: 'success', text: 'Sequence verified. Initiating replay...' });
+    setFeedback({ type: 'success', text: 'Sequence accepted. Initiating replay...' });
     setReplaying(true);
     setReplayIndex(0);
 

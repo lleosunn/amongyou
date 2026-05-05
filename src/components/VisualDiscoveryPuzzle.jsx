@@ -1,16 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import planetDodaromImg from '../assets/discovery/planet-dodarom.png';
-import planetFannaromImg from '../assets/discovery/planet-fannarom.png';
-import crewPilotImg from '../assets/discovery/crew-pilot.png';
-import crewMedicImg from '../assets/discovery/crew-medic.png';
+import { getPuzzleAsset } from '../puzzleAssets';
 import './VisualDiscoveryPuzzle.css';
-
-const imageByKey = {
-  planetDodarom: planetDodaromImg,
-  planetFannarom: planetFannaromImg,
-  crewPilot: crewPilotImg,
-  crewMedic: crewMedicImg,
-};
 
 function sameSelection(selectedIds, correctIds) {
   if (selectedIds.length !== correctIds.length) return false;
@@ -97,7 +87,7 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
 
       <div className="visual-card-grid">
         {(step.cards ?? []).map((card) => {
-          const image = imageByKey[card.imageKey];
+          const image = getPuzzleAsset(card.imageKey);
 
           return (
             <article key={card.id} className="visual-card">

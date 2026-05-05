@@ -20,12 +20,23 @@ export default function RoomStationPanel({
 }) {
   const { isComplete } = useGameState();
   const stations = room.hotspots ?? [];
+  const stationStates = stations.map((station) => ({
+    station,
+    status: stationStatus(station, isComplete),
+  }));
   const openCount = stations.filter(
     (station) => stationStatus(station, isComplete) !== 'locked'
   ).length;
   const doneCount = stations.filter(
     (station) => stationStatus(station, isComplete) === 'done'
   ).length;
+  const unresolvedCount = stationStates.filter(
+    ({ status }) => status !== 'done'
+  ).length;
+  const nextEntry =
+    stationStates.find(({ status }) => status === 'new') ??
+    stationStates.find(({ status }) => status === 'locked');
+  const nextLabel = nextEntry?.station.label ?? 'All room objectives complete';
 
   return (
     <aside className="station-panel" aria-label={`${room.name} stations`}>
@@ -37,9 +48,17 @@ export default function RoomStationPanel({
         </span>
       </div>
 
+      <div className="mission-log" aria-label="Mission log">
+        <span className="mission-log-kicker">Mission</span>
+        <p className="mission-log-goal">{room.missionLog?.goal}</p>
+        <p className="mission-log-next">Next: {nextLabel}</p>
+        <p className="mission-log-count">
+          {unresolvedCount} unresolved station{unresolvedCount === 1 ? '' : 's'}
+        </p>
+      </div>
+
       <div className="station-list">
-        {stations.map((station, index) => {
-          const status = stationStatus(station, isComplete);
+        {stationStates.map(({ station, status }, index) => {
           const disabled = status === 'locked';
           const suggested = activeHotspotId === station.id && status !== 'done';
           const justCompleted =

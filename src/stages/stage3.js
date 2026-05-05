@@ -1,6 +1,6 @@
 const commandTiles = [
   { id: 'moll', label: 'moll' },
-  { id: 'yamoll', label: 'yamoll' },
+  { id: 'ya-', label: 'ya-' },
   { id: 'puacarda', label: 'puacarda' },
   { id: 'doda', label: 'doda' },
   { id: 'rom', label: 'rom' },
@@ -31,17 +31,77 @@ export const stage3 = {
   },
 
   signChoice: {
-    type: 'choice',
+    type: 'visual-discovery',
     title: 'Lab Sign',
-    body: 'crutamar\n\nA room sign marks the production lab.',
-    question: 'You know "-mar" marks a place. What does "cruta" probably mean?',
-    options: [
-      { id: 'science', label: 'science / lab work' },
-      { id: 'fly', label: 'fly / go' },
-      { id: 'water', label: 'water' },
-      { id: 'lock', label: 'lock' },
+    instructions: 'Compare room signs from the clinic and lab.',
+    steps: [
+      {
+        prompt: 'Both are room signs. Click the shared ending on both labels.',
+        cards: [
+          {
+            id: 'lab-compare-clinic',
+            title: 'Clinic Door',
+            caption: 'The known clinic sign from the medical room.',
+            visual: 'clinic-sign',
+            imageKey: 'clueClinicSign',
+            label: 'derbemar',
+            labelParts: [
+              { id: 'lab-compare-clinic-derbe', text: 'derbe' },
+              { id: 'lab-compare-clinic-mar', text: 'mar' },
+            ],
+          },
+          {
+            id: 'lab-sign-card',
+            title: 'Production Lab',
+            caption: 'A bench room with vats, racks, and analysis screens.',
+            visual: 'lab-sign',
+            imageKey: 'clueLabSign',
+            label: 'crutamar',
+            labelParts: [
+              { id: 'lab-sign-cruta', text: 'cruta' },
+              { id: 'lab-sign-mar', text: 'mar' },
+            ],
+          },
+        ],
+        correctPartIds: ['lab-compare-clinic-mar', 'lab-sign-mar'],
+        wrongMessage:
+          'The matching ending is shared by both room signs.',
+        successMessage: 'The lab sign uses the same room ending: -mar.',
+      },
+      {
+        prompt: 'Now focus on the production lab picture. Click the part that names lab work.',
+        cards: [
+          {
+            id: 'lab-compare-clinic',
+            title: 'Clinic Door',
+            caption: 'This sign names the healing room.',
+            visual: 'clinic-sign',
+            imageKey: 'clueClinicSign',
+            label: 'derbemar',
+            labelParts: [
+              { id: 'lab-compare-clinic-derbe-2', text: 'derbe' },
+              { id: 'lab-compare-clinic-mar-2', text: 'mar' },
+            ],
+          },
+          {
+            id: 'lab-sign-card',
+            title: 'Production Lab',
+            caption: 'The room is full of lab equipment and production vats.',
+            visual: 'lab-sign',
+            imageKey: 'clueLabSign',
+            label: 'crutamar',
+            labelParts: [
+              { id: 'lab-sign-cruta-2', text: 'cruta' },
+              { id: 'lab-sign-mar-2', text: 'mar' },
+            ],
+          },
+        ],
+        correctPartIds: ['lab-sign-cruta-2'],
+        wrongMessage:
+          'The room ending is already known. The lab-specific root is the other part.',
+        successMessage: 'cruta points to lab work. crutamar is the lab.',
+      },
     ],
-    correctOptionId: 'science',
     morphemesLearned: ['cruta', 'crutamar'],
     objective: 'lab-sign',
   },
@@ -50,10 +110,10 @@ export const stage3 = {
     type: 'builder',
     title: 'Manufacturing Machine',
     instructions:
-      'Use known alien-language words as commands. Build the phrases the machine accepts.',
+      'Use known alien-language words as commands for the production vat.',
     steps: [
       {
-        prompt: 'Start one batch of antiviral medicine.',
+        prompt: 'The empty vat needs one batch of antiviral medicine.',
         slotCount: 2,
         availableTiles: commandTiles,
         correctSequence: ['moll', 'puacarda'],
@@ -61,12 +121,20 @@ export const stage3 = {
         successMessage: 'Accepted. The first bottles fill with puacarda.',
       },
       {
-        prompt: 'Repeat the filling process for the cargo rack.',
-        slotCount: 2,
+        prompt: 'The cargo rack needs the same filling action again.',
+        clues: [
+          {
+            id: 'lab-refill-cycle',
+            title: 'Rack Cycle',
+            caption: 'The rack returns empty bottles, then fills them again.',
+            imageKey: 'clueRefillMachine',
+          },
+        ],
+        slotCount: 3,
         availableTiles: commandTiles,
-        correctSequence: ['yamoll', 'puacarda'],
+        correctSequence: ['ya-', 'moll', 'puacarda'],
         wrongMessage: 'The cargo rack does not engage.',
-        successMessage: 'Accepted. Bulk puacarda is ready.',
+        successMessage: 'Accepted. The cargo rack refills with puacarda.',
       },
     ],
     objective: 'lab-machine',
@@ -76,8 +144,16 @@ export const stage3 = {
     type: 'builder',
     title: 'Destination Map',
     instructions:
-      'The star map highlights a blue world. Build the alien-language compound for Earth.',
-    prompt: 'Blue world: [ water ] + [ planet ]',
+      'The star map highlights the blue ocean world from the cabin posters.',
+    prompt: 'The star map needs the highlighted destination label.',
+    clues: [
+      {
+        id: 'blue-ocean-world',
+        title: 'Blue Ocean World',
+        caption: 'The highlighted world matches the cabin poster and dispenser clues.',
+        imageKey: 'clueDestinationMap',
+      },
+    ],
     slotCount: 2,
     availableTiles: commandTiles,
     correctSequence: ['doda', 'rom'],
@@ -91,8 +167,16 @@ export const stage3 = {
     type: 'builder',
     title: 'Communication Door',
     instructions:
-      'The screen flashes "al kume?" The alien is asking whether you speak.',
-    prompt: 'Respond in the alien language.',
+      'The door screen flashes: al kume?',
+    prompt: 'The door waits for a reply from this side.',
+    clues: [
+      {
+        id: 'door-reply-screen',
+        title: 'Door Screen',
+        caption: 'The screen points the question toward you.',
+        imageKey: 'messageYou',
+      },
+    ],
     slotCount: 2,
     availableTiles: speechTiles,
     correctSequence: ['il', 'kume'],

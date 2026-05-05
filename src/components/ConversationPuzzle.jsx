@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import PuzzleClueCards from './PuzzleClueCards';
 import './ConversationPuzzle.css';
 
 function normalizeTile(tile) {
@@ -21,6 +22,18 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
   const slotCount = step?.slotCount ?? correctSequence.length;
   const usedIds = new Set(placements.filter(Boolean).map((tile) => tile.id));
   const isLast = stepIndex >= steps.length - 1;
+  const clues =
+    step?.clues ??
+    (step?.sceneImageKey
+      ? [
+          {
+            id: step.sceneImageKey,
+            title: step.sceneTitle,
+            caption: step.sceneCaption,
+            imageKey: step.sceneImageKey,
+          },
+        ]
+      : []);
   const phrase = Array.from({ length: slotCount }, (_, i) => placements[i]?.label)
     .filter(Boolean)
     .join(' ');
@@ -158,6 +171,7 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
 
       {!solved && (
         <>
+          <PuzzleClueCards clues={clues} />
           {step.prompt && <p className="conversation-prompt">{step.prompt}</p>}
 
           <div className="conversation-slots" style={{ '--slot-count': slotCount }}>
