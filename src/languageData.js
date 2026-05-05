@@ -21,8 +21,6 @@ export const roots = {
   moll: { blah: 'moll', english: 'fill' },
   sondy: { blah: 'sondy', english: 'surgery / treatment' },
   cruta: { blah: 'cruta', english: 'science / lab work' },
-  fero: { blah: 'fero', english: 'escape' },
-  junke: { blah: 'junke', english: 'fail / break down' },
 };
 
 export const prefixes = {

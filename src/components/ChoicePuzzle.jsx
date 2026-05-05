@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { playTone } from '../sound';
 import './ChoicePuzzle.css';
 
 function normalizeOption(option) {
@@ -44,7 +43,6 @@ export default function ChoicePuzzle({
     setSelectedOptionId(option.id);
 
     if (option.id !== correctId) {
-      playTone('wrong');
       setFeedback({
         type: 'wrong',
         text: step.wrongMessage ?? 'That does not fit the clue. Try again.',
@@ -52,7 +50,6 @@ export default function ChoicePuzzle({
       return;
     }
 
-    playTone('success');
     setLocked(true);
     setFeedback({
       type: 'success',

@@ -59,12 +59,12 @@
   pointer-events: none;
 }
 
-.sound-toggle {
+.dev-lock-toggle {
   position: absolute;
   left: 14px;
   bottom: 14px;
   z-index: 7;
-  background: rgba(14, 18, 28, 0.82);
+  background: rgba(14, 18, 28, 0.86);
   border: 1px solid rgba(150, 170, 210, 0.42);
   border-radius: 999px;
   color: #dbe4ff;
@@ -76,15 +76,15 @@
   text-transform: uppercase;
 }
 
-.sound-toggle:hover,
-.sound-toggle:focus-visible {
-  background: rgba(30, 38, 58, 0.92);
+.dev-lock-toggle:hover,
+.dev-lock-toggle:focus-visible {
+  background: rgba(30, 38, 58, 0.94);
   border-color: rgba(210, 225, 255, 0.7);
   outline: none;
 }
 
-.sound-toggle.enabled {
-  border-color: rgba(138, 255, 154, 0.5);
+.dev-lock-toggle.enabled {
+  border-color: rgba(138, 255, 154, 0.56);
   color: #dfffe5;
 }
 
@@ -134,7 +134,7 @@
 @media (prefers-reduced-motion: reduce) {
   .health-warning,
   .idle-hint,
-  .sound-toggle,
+  .dev-lock-toggle,
   .word-toast,
   .room-event {
     animation: none;

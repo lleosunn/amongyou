@@ -24,8 +24,8 @@ export const stage3 = {
     type: 'narration',
     title: 'The Lab',
     lines: [
-      'A damaged lab. Warning lights. Empty bottle racks.',
-      'This is where the medicine was made, and something here went wrong.',
+      'A production lab. Bottle racks, mixing vats, and a star map glow across the room.',
+      'This is where the medicine can be made in bulk.',
       'I need enough puacarda for Earth, and I need the words to tell the aliens where to send it.',
     ],
   },
@@ -33,7 +33,7 @@ export const stage3 = {
   signChoice: {
     type: 'choice',
     title: 'Lab Sign',
-    body: 'crutamar\n\nA warning sign marks this whole room.',
+    body: 'crutamar\n\nA room sign marks the production lab.',
     question: 'You know "-mar" marks a place. What does "cruta" probably mean?',
     options: [
       { id: 'science', label: 'science / lab work' },
@@ -46,52 +46,11 @@ export const stage3 = {
     objective: 'lab-sign',
   },
 
-  logsSequence: {
-    type: 'sequence',
-    title: 'System Logs',
-    instructions:
-      'Arrange the event log in the order it happened. The -uk ending means each action is already complete.',
-    entries: [
-      {
-        id: 'opganeuk',
-        blah: 'opgane-uk',
-        hint: 'unlock-ed',
-      },
-      {
-        id: 'ferouk',
-        blah: 'fero-uk',
-        hint: 'escape-d',
-      },
-      {
-        id: 'junkeuk',
-        blah: 'junke-uk',
-        hint: 'fail-ed / broke down',
-      },
-    ],
-    correctOrder: ['opganeuk', 'ferouk', 'junkeuk'],
-    replaySteps: [
-      {
-        icon: '1',
-        text: 'Containment opgane-uk. Something was unlocked.',
-      },
-      {
-        icon: '2',
-        text: 'Virus fero-uk. The hazard escaped.',
-      },
-      {
-        icon: '3',
-        text: 'Factory junke-uk. The system failed and stopped production.',
-      },
-    ],
-    morphemesLearned: ['fero', 'junke'],
-    objective: 'lab-logs',
-  },
-
   machineBuilder: {
     type: 'builder',
     title: 'Manufacturing Machine',
     instructions:
-      'Use known BLAH words as commands. Build the phrases the machine accepts.',
+      'Use known alien-language words as commands. Build the phrases the machine accepts.',
     steps: [
       {
         prompt: 'Start one batch of antiviral medicine.',
@@ -117,7 +76,7 @@ export const stage3 = {
     type: 'builder',
     title: 'Destination Map',
     instructions:
-      'The star map highlights a blue world. Build the BLAH compound for Earth.',
+      'The star map highlights a blue world. Build the alien-language compound for Earth.',
     prompt: 'Blue world: [ water ] + [ planet ]',
     slotCount: 2,
     availableTiles: commandTiles,
@@ -133,7 +92,7 @@ export const stage3 = {
     title: 'Communication Door',
     instructions:
       'The screen flashes "al kume?" The alien is asking whether you speak.',
-    prompt: 'Respond in BLAH.',
+    prompt: 'Respond in the alien language.',
     slotCount: 2,
     availableTiles: speechTiles,
     correctSequence: ['il', 'kume'],
@@ -145,7 +104,6 @@ export const stage3 = {
 
   allObjectives: [
     'lab-sign',
-    'lab-logs',
     'lab-machine',
     'lab-destination',
     'lab-comms',
@@ -158,7 +116,15 @@ export const stage3 = {
     lines: [
       'The cargo rack is full of puacarda.',
       'Earth is dodarom: the water planet.',
-      'I can speak enough BLAH to ask for help. The Bridge is open.',
+      'I can speak enough of the alien language to ask for help.',
     ],
+  },
+
+  vocabularyReview: {
+    type: 'vocabulary-review',
+    title: 'Words Before The Bridge',
+    message:
+      'Before going in to speak to the alien, I can take a moment to look at the words I have uncovered so far.',
+    objective: 'vocab-review-complete',
   },
 };

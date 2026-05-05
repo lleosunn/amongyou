@@ -175,23 +175,13 @@ export const roomConfigs = {
         content: stage3.signChoice,
       },
       {
-        id: 'lab-logs',
-        label: 'System logs',
-        x: '35%',
-        y: '34%',
-        w: '2%',
-        h: '2%',
-        objective: 'lab-logs',
-        content: stage3.logsSequence,
-      },
-      {
         id: 'lab-machine',
         label: 'Manufacturing machine',
         x: '52%',
         y: '48%',
         w: '2%',
         h: '2%',
-        requiresObjectives: ['lab-sign', 'lab-logs'],
+        requiresObjectives: ['lab-sign'],
         objective: 'lab-machine',
         content: stage3.machineBuilder,
       },
@@ -230,7 +220,7 @@ export const roomConfigs = {
     down: null,
     gridPos: { col: 3, row: 0 },
     stage: 4,
-    unlockedBy: 'stage3-complete',
+    unlockedBy: 'vocab-review-complete',
     hotspots: [
       {
         id: 'bridge-commander',

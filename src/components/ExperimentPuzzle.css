@@ -1,0 +1,183 @@
+.experiment-puzzle {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(100%, 680px);
+}
+
+.experiment-title {
+  margin: 0;
+  color: #aaa;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.experiment-instructions {
+  margin: 0;
+  color: #bbb;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.experiment-console {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.8fr) minmax(220px, 1.2fr);
+  gap: 14px;
+}
+
+.experiment-buttons,
+.experiment-output {
+  background: rgba(0, 0, 0, 0.26);
+  border: 1px solid rgba(120, 135, 170, 0.35);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.experiment-buttons {
+  display: grid;
+  gap: 10px;
+}
+
+.experiment-button {
+  background: #25253e;
+  border: 1.5px solid #4a4a68;
+  border-radius: 8px;
+  color: #e8e8f4;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  min-height: 44px;
+  padding: 8px 12px;
+}
+
+.experiment-button:hover:not(:disabled),
+.experiment-button.active {
+  background: #343450;
+  border-color: #8fa2ff;
+}
+
+.experiment-button.tested:not(.active) {
+  border-color: rgba(150, 170, 210, 0.55);
+}
+
+.experiment-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.experiment-output {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 190px;
+  text-align: center;
+}
+
+.experiment-output p {
+  color: #d8d8f0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  margin: 12px 0 0;
+}
+
+.experiment-cup {
+  align-items: end;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.08)
+  );
+  border: 2px solid rgba(210, 225, 255, 0.5);
+  border-top: none;
+  border-radius: 0 0 18px 18px;
+  display: flex;
+  height: 98px;
+  overflow: hidden;
+  position: relative;
+  width: 72px;
+}
+
+.experiment-cup::before {
+  border-top: 2px solid rgba(210, 225, 255, 0.55);
+  content: '';
+  left: -7px;
+  position: absolute;
+  right: -7px;
+  top: 0;
+}
+
+.experiment-liquid {
+  animation: liquid-rise 0.35s ease;
+  box-shadow: inset 0 10px 14px rgba(255, 255, 255, 0.24);
+  display: block;
+  height: 62%;
+  opacity: 0.82;
+  width: 100%;
+}
+
+.experiment-resolution {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.experiment-resolution p {
+  color: #8aff9a;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.experiment-resolution button {
+  background: #4a6aff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  min-width: 110px;
+  padding: 9px 16px;
+  text-transform: uppercase;
+}
+
+.experiment-resolution button:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.experiment-resolution button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+@keyframes liquid-rise {
+  from {
+    height: 0;
+  }
+
+  to {
+    height: 62%;
+  }
+}
+
+@media (max-width: 620px) {
+  .experiment-console {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .experiment-liquid {
+    animation: none;
+  }
+}

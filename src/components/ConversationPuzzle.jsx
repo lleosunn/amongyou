@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { playTone } from '../sound';
 import './ConversationPuzzle.css';
 
 function normalizeTile(tile) {
@@ -80,7 +79,6 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
       actual.every((id, i) => id === correctSequence[i]);
 
     if (!correct) {
-      playTone('wrong');
       setFeedback({
         type: 'wrong',
         text: step.wrongMessage ?? 'The commander waits. That did not land.',
@@ -88,7 +86,6 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
       return;
     }
 
-    playTone('success');
     const phrase = placements
       .filter(Boolean)
       .map((tile) => tile.label)
@@ -103,7 +100,7 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
 
     setFeedback({
       type: 'success',
-      text: step.successMessage ?? 'Understood.',
+      text: step.successMessage ?? 'Message accepted.',
     });
 
     if (isLast) {

@@ -6,7 +6,8 @@ export default function HealthBar() {
   const { health } = useGameState();
   const [flash, setFlash] = useState(false);
   const previousHealthRef = useRef(health);
-  const percent = Math.round(health * 100);
+  const percent = health * 100;
+  const displayPercent = percent.toFixed(1);
 
   useEffect(() => {
     if (health > previousHealthRef.current + 0.01) {
@@ -26,8 +27,8 @@ export default function HealthBar() {
   return (
     <div
       className={`health-bar ${flash ? 'health-flash' : ''}`}
-      aria-label={`Health ${percent}%`}
-      title={`Health ${percent}%`}
+      aria-label={`Health ${displayPercent}%`}
+      title={`Health ${displayPercent}%`}
     >
       <div className="health-icon" aria-hidden="true">
         <svg
@@ -47,7 +48,7 @@ export default function HealthBar() {
           style={{ width: `${Math.max(8, percent)}%` }}
         />
       </div>
-      <span className="health-percent">{percent}%</span>
+      <span className="health-percent">{displayPercent}%</span>
     </div>
   );
 }

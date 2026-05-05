@@ -17,7 +17,8 @@ export const stage2 = {
     type: 'choice',
     title: 'Clinic Sign',
     body: 'derbemar\n\nThe sign hangs above the medical room doors.',
-    question: 'You know "derbe" means heal. What does "-mar" probably mean?',
+    question:
+      'You know "derbe" means cure / heal. What does "-mar" probably mean?',
     options: [
       { id: 'person', label: 'person' },
       { id: 'place', label: 'place' },
@@ -94,32 +95,26 @@ export const stage2 = {
   },
 
   medicineChoice: {
-    type: 'choice',
+    type: 'builder',
     title: 'Medicine Shelf',
-    instructions: 'Use the bed-label clue to choose the right bottle.',
+    instructions:
+      'Use the bed-label clue and the hazard-marked bottles to build the medicine label.',
     steps: [
       {
-        body: 'pua-carda\npua-lomi\npua-fleck\n\nEach pua bottle has a crossed-out hazard image.',
-        question: 'What does "pua-" probably mean?',
-        options: [
-          { id: 'anti', label: 'anti- / against' },
-          { id: 'again', label: 're- / again' },
-          { id: 'before', label: 'pre- / before' },
-          { id: 'place', label: 'place' },
+        prompt:
+          'The crossed-out virus symbol appears beside pua-. Build the antiviral label from word parts.',
+        slotCount: 2,
+        availableTiles: [
+          { id: 'pua-', label: 'pua-' },
+          { id: 'carda', label: 'carda' },
+          { id: 'lomi', label: 'lomi' },
+          { id: 'fleck', label: 'fleck' },
+          { id: 'derbe', label: 'derbe' },
+          { id: 'yamoll', label: 'yamoll' },
         ],
-        correctOptionId: 'anti',
-      },
-      {
-        body: 'Bottle labels:\npuacarda\npualomi\npuafleck\nderbeplum\nyamollcarda\n\nThe bed label said: puacarda x 2.',
-        question: 'Which bottle should you take?',
-        options: [
-          { id: 'puacarda', label: 'puacarda' },
-          { id: 'pualomi', label: 'pualomi' },
-          { id: 'derbeplum', label: 'derbeplum' },
-          { id: 'yamollcarda', label: 'yamollcarda' },
-        ],
-        correctOptionId: 'puacarda',
-        correctMessage: 'Correct. This is the antiviral medicine.',
+        correctSequence: ['pua-', 'carda'],
+        wrongMessage: 'That label does not match the bed clue or the virus symbol.',
+        successMessage: 'puacarda assembled. This is the antiviral medicine.',
       },
     ],
     morphemesLearned: ['pua-', 'carda', 'puacarda', 'plumSeen'],

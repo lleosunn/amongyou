@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './SequencePuzzle.css';
 
 const REPLAY_STEP_MS = 1800;
@@ -35,6 +35,14 @@ export default function SequencePuzzle({
   const [replaying, setReplaying] = useState(false);
   const [replayIndex, setReplayIndex] = useState(-1);
   const [solved, setSolved] = useState(false);
+  const timeoutRefs = useRef([]);
+
+  const clearReplayTimeouts = useCallback(() => {
+    timeoutRefs.current.forEach((timeout) => clearTimeout(timeout));
+    timeoutRefs.current = [];
+  }, []);
+
+  useEffect(() => clearReplayTimeouts, [clearReplayTimeouts]);
 
   const swap = useCallback(
     (i) => {
@@ -83,6 +91,7 @@ export default function SequencePuzzle({
 
   const handleSubmit = () => {
     if (solved || replaying) return;
+    clearReplayTimeouts();
     const isCorrect = order.every((id, i) => id === correctOrder[i]);
 
     if (!isCorrect) {
@@ -98,16 +107,19 @@ export default function SequencePuzzle({
     setReplayIndex(0);
 
     replaySteps.forEach((_, i) => {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setReplayIndex(i);
       }, i * REPLAY_STEP_MS);
+      timeoutRefs.current.push(timeout);
     });
 
-    setTimeout(() => {
+    const solveTimeout = setTimeout(() => {
       setSolved(true);
       setReplaying(false);
-      setTimeout(() => onSolve?.(), 600);
+      const closeTimeout = setTimeout(() => onSolve?.(), 600);
+      timeoutRefs.current.push(closeTimeout);
     }, replaySteps.length * REPLAY_STEP_MS);
+    timeoutRefs.current.push(solveTimeout);
   };
 
   const entryMap = Object.fromEntries(entries.map((e) => [e.id, e]));

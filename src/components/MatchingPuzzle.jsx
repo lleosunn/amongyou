@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './MatchingPuzzle.css';
 
 export default function MatchingPuzzle({
@@ -13,6 +13,8 @@ export default function MatchingPuzzle({
   const [selectedChip, setSelectedChip] = useState(null);
   const [wrongPulse, setWrongPulse] = useState(null);
   const [solved, setSolved] = useState(false);
+  const wrongPulseTimeoutRef = useRef(null);
+  const solveTimeoutRef = useRef(null);
 
   const placedChipIds = useMemo(
     () => new Set(Object.values(placements).flat()),
@@ -20,6 +22,16 @@ export default function MatchingPuzzle({
   );
 
   const availableChips = chips.filter((c) => !placedChipIds.has(c.id));
+
+  useEffect(
+    () => () => {
+      if (wrongPulseTimeoutRef.current) {
+        clearTimeout(wrongPulseTimeoutRef.current);
+      }
+      if (solveTimeoutRef.current) clearTimeout(solveTimeoutRef.current);
+    },
+    []
+  );
 
   const handleTargetClick = (target) => {
     if (solved) return;
@@ -41,7 +53,7 @@ export default function MatchingPuzzle({
 
         if (allSolved) {
           setSolved(true);
-          setTimeout(() => onSolve?.(), 600);
+          solveTimeoutRef.current = setTimeout(() => onSolve?.(), 600);
         }
 
         return next;
@@ -49,7 +61,10 @@ export default function MatchingPuzzle({
       setSelectedChip(null);
     } else {
       setWrongPulse(target.id);
-      setTimeout(() => setWrongPulse(null), 400);
+      if (wrongPulseTimeoutRef.current) {
+        clearTimeout(wrongPulseTimeoutRef.current);
+      }
+      wrongPulseTimeoutRef.current = setTimeout(() => setWrongPulse(null), 400);
     }
   };
 

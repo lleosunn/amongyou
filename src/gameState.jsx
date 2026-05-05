@@ -3,7 +3,7 @@ import { GameContext } from './gameContext';
 
 const HEALTH_START = 0.6;
 const HEALTH_MIN = 0.2;
-const HEALTH_DRAIN_PER_SEC = 0.00035;
+const HEALTH_DRAIN_PER_SEC = 0.001;
 
 export function GameProvider({ children, initialStage = 1 }) {
   const [learnedMorphemes, setLearnedMorphemes] = useState(() => new Set());
@@ -22,7 +22,16 @@ export function GameProvider({ children, initialStage = 1 }) {
   const learn = useCallback((...morphemeIds) => {
     setLearnedMorphemes((prev) => {
       const next = new Set(prev);
-      for (const id of morphemeIds.flat()) next.add(id);
+      let changed = false;
+
+      for (const id of morphemeIds.flat()) {
+        if (!id) continue;
+        if (next.has(id)) continue;
+        next.add(id);
+        changed = true;
+      }
+
+      if (!changed) return prev;
       return next;
     });
   }, []);
@@ -35,7 +44,16 @@ export function GameProvider({ children, initialStage = 1 }) {
   const complete = useCallback((...objectiveIds) => {
     setCompletedObjectives((prev) => {
       const next = new Set(prev);
-      for (const id of objectiveIds.flat()) next.add(id);
+      let changed = false;
+
+      for (const id of objectiveIds.flat()) {
+        if (!id) continue;
+        if (next.has(id)) continue;
+        next.add(id);
+        changed = true;
+      }
+
+      if (!changed) return prev;
       return next;
     });
   }, []);

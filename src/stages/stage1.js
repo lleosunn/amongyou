@@ -15,10 +15,11 @@ export const stage1 = {
     type: 'narration',
     title: 'Waking up...',
     lines: [
-      'Metal walls. A ship ceiling. My head feels split open.',
-      'There is a handwritten card in my pocket: "Bring home the antiviral medicine to cure zadotitis."',
-      'I remember alarms, low fuel, a crash, and hands carrying me somewhere safe.',
-      'Everything here works, but every label is in BLAH. I need words before I can get home.',
+      'Ouch. My head hurts. Where am I?',
+      'I see metal walls, strange technology, and stars outside the window. It seems I am on an alien spaceship.',
+      'There is a message in my pocket. I must have carried it from Earth: "We are all counting on you to bring home the antiviral medicine to cure zadotitis."',
+      'All the writing in this spaceship is in an unfamiliar language. I need to learn enough words to find the cure, then tell the aliens I need to go back to Earth.',
+      'Time to gather some clues from the words around me.',
     ],
   },
 
@@ -77,7 +78,7 @@ export const stage1 = {
         body: 'ramdenu\n\nThe crewmate wears a flight helmet and stands beside a ship diagram.',
         question: 'What does "ramde" probably mean?',
         options: [
-          { id: 'cure', label: 'cure' },
+          { id: 'cure', label: 'cure / heal' },
           { id: 'fly', label: 'fly / go' },
           { id: 'lock', label: 'lock' },
           { id: 'fill', label: 'fill' },
@@ -101,18 +102,32 @@ export const stage1 = {
   },
 
   dispenserChoice: {
-    type: 'choice',
+    type: 'experiment',
     title: 'Liquid Dispenser',
-    instructions: 'Test the buttons and connect the label to the result.',
-    body: 'tito: purple slush\nbibi: green slush\ndoda: clear liquid',
-    question: 'The "doda" button made clear water. What does "doda" mean?',
-    options: [
-      { id: 'juice', label: 'juice' },
-      { id: 'water', label: 'water' },
-      { id: 'milk', label: 'milk' },
-      { id: 'air', label: 'air' },
+    instructions:
+      'Press the alien-labeled buttons and watch what each one dispenses.',
+    samples: [
+      {
+        id: 'tito',
+        label: 'tito',
+        result: 'A purple slush pours into the cup.',
+        color: '#8f4dff',
+      },
+      {
+        id: 'bibi',
+        label: 'bibi',
+        result: 'A thick green liquid drips out.',
+        color: '#70d86c',
+      },
+      {
+        id: 'doda',
+        label: 'doda',
+        result: 'Clear water fills the cup.',
+        color: '#7ec7ff',
+      },
     ],
-    correctOptionId: 'water',
+    correctSampleId: 'doda',
+    successMessage: 'doda dispenses water.',
     morphemesLearned: ['doda'],
     objective: 'pilot-dispenser',
   },

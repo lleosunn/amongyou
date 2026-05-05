@@ -5,6 +5,8 @@ import SequencePuzzle from './SequencePuzzle';
 import ChoicePuzzle from './ChoicePuzzle';
 import BuilderPuzzle from './BuilderPuzzle';
 import ConversationPuzzle from './ConversationPuzzle';
+import ExperimentPuzzle from './ExperimentPuzzle';
+import VocabularyReview from './VocabularyReview';
 import './Modal.css';
 
 function ClueContent({ title, body, note }) {
@@ -59,8 +61,10 @@ export default function Modal({ children, onClose }) {
     content?.type === 'choice' ||
     content?.type === 'builder' ||
     content?.type === 'conversation' ||
+    content?.type === 'experiment' ||
     content?.type === 'prefix-wheel' ||
     content?.type === 'sequence';
+  const isReview = content?.type === 'vocabulary-review';
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -139,6 +143,19 @@ export default function Modal({ children, onClose }) {
             }}
           />
         );
+      case 'experiment':
+        return (
+          <ExperimentPuzzle
+            title={content.title}
+            instructions={content.instructions}
+            samples={content.samples}
+            correctSampleId={content.correctSampleId}
+            successMessage={content.successMessage}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
       case 'conversation':
         return (
           <ConversationPuzzle
@@ -147,6 +164,16 @@ export default function Modal({ children, onClose }) {
             steps={content.steps}
             onSolve={() => {
               content.onSolve?.();
+            }}
+          />
+        );
+      case 'vocabulary-review':
+        return (
+          <VocabularyReview
+            title={content.title}
+            message={content.message}
+            onComplete={() => {
+              content.onComplete?.();
             }}
           />
         );
@@ -184,8 +211,12 @@ export default function Modal({ children, onClose }) {
     }
   };
 
-  const isWide = isInteractive;
-  const closeLabel = isInteractive ? 'Close and reset puzzle' : 'Close modal';
+  const isWide = isInteractive || isReview;
+  const closeLabel = isReview
+    ? 'Close vocabulary review'
+    : isInteractive
+      ? 'Close and reset puzzle'
+      : 'Close modal';
 
   return (
     <div

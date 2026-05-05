@@ -9,7 +9,12 @@ const arrows = [
   { dir: 'down', label: '▼' },
 ];
 
-export default function NavArrows({ room, onMove, unlockedPulseRoomId }) {
+export default function NavArrows({
+  room,
+  onMove,
+  unlockedPulseRoomId,
+  roomLocksBypassed = false,
+}) {
   const { isUnlocked } = useGameState();
 
   return (
@@ -18,9 +23,11 @@ export default function NavArrows({ room, onMove, unlockedPulseRoomId }) {
         const targetId = room[dir];
         const hasTarget = targetId !== null && targetId !== undefined;
         const targetRoom = hasTarget ? rooms[targetId] : null;
-        const unlocked = targetRoom ? isUnlocked(targetRoom) : false;
+        const unlocked = targetRoom
+          ? roomLocksBypassed || isUnlocked(targetRoom)
+          : false;
         const canMove = hasTarget && unlocked;
-        const locked = hasTarget && !unlocked;
+        const locked = hasTarget && !unlocked && !roomLocksBypassed;
         const justUnlocked = canMove && targetId === unlockedPulseRoomId;
 
         return (
@@ -32,7 +39,13 @@ export default function NavArrows({ room, onMove, unlockedPulseRoomId }) {
             disabled={!canMove}
             onClick={() => canMove && onMove(targetId)}
             aria-label={`Move ${dir}${locked ? ' (locked)' : ''}`}
-            title={locked ? 'Locked' : undefined}
+            title={
+              roomLocksBypassed && hasTarget
+                ? 'Dev lock bypass active'
+                : locked
+                  ? 'Locked'
+                  : undefined
+            }
           >
             {locked ? '🔒' : label}
           </button>

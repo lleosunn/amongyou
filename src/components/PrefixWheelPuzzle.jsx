@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './PrefixWheelPuzzle.css';
 
 export default function PrefixWheelPuzzle({
@@ -15,9 +15,17 @@ export default function PrefixWheelPuzzle({
   const [index, setIndex] = useState(0);
   const [feedback, setFeedback] = useState(null);
   const [solved, setSolved] = useState(false);
+  const solveTimeoutRef = useRef(null);
 
   const current = prefixes[index] ?? { id: '', blah: '' };
   const needsPrefixSeparator = current.blah && !current.blah.endsWith('-');
+
+  useEffect(
+    () => () => {
+      if (solveTimeoutRef.current) clearTimeout(solveTimeoutRef.current);
+    },
+    []
+  );
 
   const cycle = (dir) => {
     if (solved || prefixes.length === 0) return;
@@ -30,7 +38,7 @@ export default function PrefixWheelPuzzle({
     if (current.id === correctPrefixId) {
       setSolved(true);
       setFeedback({ type: 'success', text: successMessage });
-      setTimeout(() => onSolve?.(), 1400);
+      solveTimeoutRef.current = setTimeout(() => onSolve?.(), 1400);
     } else {
       setFeedback({ type: 'wrong', text: wrongMessage });
     }

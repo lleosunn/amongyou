@@ -9,7 +9,6 @@ import Modal from './components/Modal';
 import MorphemeInventory from './components/MorphemeInventory';
 import HealthBar from './components/HealthBar';
 import RoomStationPanel from './components/RoomStationPanel';
-import { isSoundMuted, playTone, setSoundMuted } from './sound';
 import { stage1 } from './stages/stage1';
 import { stage2 } from './stages/stage2';
 import { stage3 } from './stages/stage3';
@@ -20,10 +19,14 @@ const INTERACTIVE_TYPES = new Set([
   'choice',
   'builder',
   'conversation',
+  'experiment',
   'matching',
   'prefix-wheel',
   'sequence',
 ]);
+
+const DEV_ROOM_LOCK_OVERRIDE_KEY = 'amongyou.devRoomLocksBypassed';
+const isDevMode = import.meta.env.DEV;
 
 function getCompletionId(hotspot, content) {
   return content?.objective ?? content?.completionObjective ?? hotspot.objective;
@@ -50,7 +53,10 @@ export default function App() {
   const [completedPulseObjective, setCompletedPulseObjective] = useState(null);
   const [unlockedPulseRoomId, setUnlockedPulseRoomId] = useState(null);
   const [wordToast, setWordToast] = useState(null);
-  const [soundMuted, setSoundMutedState] = useState(() => isSoundMuted());
+  const [roomLocksBypassed, setRoomLocksBypassed] = useState(() => {
+    if (!isDevMode || typeof window === 'undefined') return false;
+    return window.localStorage.getItem(DEV_ROOM_LOCK_OVERRIDE_KEY) === 'true';
+  });
   const learnedRef = useRef(new Set());
   const pulseTimeoutRef = useRef(null);
   const unlockTimeoutRef = useRef(null);
@@ -59,6 +65,7 @@ export default function App() {
   const [s2IntroShown, setS2IntroShown] = useState(false);
   const [s3IntroShown, setS3IntroShown] = useState(false);
   const [s4IntroShown, setS4IntroShown] = useState(false);
+  const [pendingVocabularyReview, setPendingVocabularyReview] = useState(false);
 
   const {
     learn,
@@ -93,6 +100,14 @@ export default function App() {
     },
     []
   );
+
+  useEffect(() => {
+    if (!isDevMode || typeof window === 'undefined') return;
+    window.localStorage.setItem(
+      DEV_ROOM_LOCK_OVERRIDE_KEY,
+      String(roomLocksBypassed)
+    );
+  }, [roomLocksBypassed]);
 
   useEffect(() => {
     const previous = learnedRef.current;
@@ -144,20 +159,25 @@ export default function App() {
     [complete]
   );
 
-  useEffect(() => {
-    if (!s1IntroShown && currentRoomId === stage1.room) {
-      const timeout = setTimeout(() => {
-        setModalContent((current) =>
-          current ?? {
-            ...stage1.introNarration,
-            onComplete: () => setS1IntroShown(true),
-          }
-        );
-      }, 0);
+  const completeVocabularyReview = useCallback(() => {
+    const objectiveId = stage3.vocabularyReview.objective;
+    markObjectiveComplete(objectiveId, isComplete(objectiveId));
+    setPendingVocabularyReview(false);
+    setModalContent(null);
+  }, [isComplete, markObjectiveComplete]);
 
-      return () => clearTimeout(timeout);
-    }
-  }, [s1IntroShown, currentRoomId]);
+  useEffect(() => {
+    if (currentRoomId !== stage1.room) return undefined;
+    if (s1IntroShown) return undefined;
+    if (modalContent) return undefined;
+
+    const timeout = setTimeout(() => {
+      setS1IntroShown(true);
+      setModalContent((current) => current ?? { ...stage1.introNarration });
+    }, 0);
+
+    return () => clearTimeout(timeout);
+  }, [s1IntroShown, currentRoomId, modalContent]);
 
   useEffect(() => {
     if (currentRoomId !== stage2.room) return;
@@ -165,12 +185,8 @@ export default function App() {
     if (modalContent) return;
 
     const timeout = setTimeout(() => {
-      setModalContent((current) =>
-        current ?? {
-          ...stage2.introNarration,
-          onComplete: () => setS2IntroShown(true),
-        }
-      );
+      setS2IntroShown(true);
+      setModalContent((current) => current ?? { ...stage2.introNarration });
     }, 0);
 
     return () => clearTimeout(timeout);
@@ -199,12 +215,8 @@ export default function App() {
     if (modalContent) return;
 
     const timeout = setTimeout(() => {
-      setModalContent((current) =>
-        current ?? {
-          ...stage3.introNarration,
-          onComplete: () => setS3IntroShown(true),
-        }
-      );
+      setS3IntroShown(true);
+      setModalContent((current) => current ?? { ...stage3.introNarration });
     }, 0);
 
     return () => clearTimeout(timeout);
@@ -219,6 +231,7 @@ export default function App() {
 
     const timeout = setTimeout(() => {
       markObjectiveComplete(stage3.completionObjective);
+      setPendingVocabularyReview(true);
       setModalContent((current) =>
         current ?? { ...stage3.completionNarration }
       );
@@ -228,17 +241,38 @@ export default function App() {
   }, [modalContent, isComplete, markObjectiveComplete, completedObjectives]);
 
   useEffect(() => {
+    if (!pendingVocabularyReview) return undefined;
+    if (modalContent) return undefined;
+    if (isComplete(stage3.vocabularyReview.objective)) {
+      const timeout = setTimeout(() => setPendingVocabularyReview(false), 0);
+      return () => clearTimeout(timeout);
+    }
+
+    const timeout = setTimeout(() => {
+      setModalContent((current) =>
+        current ?? {
+          ...stage3.vocabularyReview,
+          onComplete: completeVocabularyReview,
+        }
+      );
+    }, 250);
+
+    return () => clearTimeout(timeout);
+  }, [
+    pendingVocabularyReview,
+    modalContent,
+    isComplete,
+    completeVocabularyReview,
+  ]);
+
+  useEffect(() => {
     if (currentRoomId !== stage4.room) return;
     if (s4IntroShown) return;
     if (modalContent) return;
 
     const timeout = setTimeout(() => {
-      setModalContent((current) =>
-        current ?? {
-          ...stage4.introNarration,
-          onComplete: () => setS4IntroShown(true),
-        }
-      );
+      setS4IntroShown(true);
+      setModalContent((current) => current ?? { ...stage4.introNarration });
     }, 0);
 
     return () => clearTimeout(timeout);
@@ -268,11 +302,11 @@ export default function App() {
       if (!nextRoomId) return;
       const nextRoom = rooms[nextRoomId];
       if (!nextRoom) return;
-      if (!isUnlocked(nextRoom)) return;
+      if (!roomLocksBypassed && !isUnlocked(nextRoom)) return;
       setIdleHint(null);
       setCurrentRoomId(nextRoomId);
     },
-    [isUnlocked]
+    [isUnlocked, roomLocksBypassed]
   );
 
   const applyContentOutcome = useCallback(
@@ -331,14 +365,14 @@ export default function App() {
     [openContent]
   );
 
-  const toggleSound = useCallback(() => {
-    setSoundMutedState((current) => {
-      const next = !current;
-      setSoundMuted(next);
-      if (!next) playTone('success');
-      return next;
-    });
-  }, []);
+  const handleModalClose = useCallback(() => {
+    if (modalContent?.type === 'vocabulary-review') {
+      completeVocabularyReview();
+      return;
+    }
+
+    setModalContent(null);
+  }, [completeVocabularyReview, modalContent]);
 
   return (
     <>
@@ -351,23 +385,31 @@ export default function App() {
             completedPulseObjective={completedPulseObjective}
             onInteract={handleInteract}
           >
-            <Minimap currentRoomId={currentRoomId} />
+            <Minimap
+              currentRoomId={currentRoomId}
+              roomLocksBypassed={roomLocksBypassed}
+            />
             <NavArrows
               room={room}
               onMove={handleMove}
               unlockedPulseRoomId={unlockedPulseRoomId}
+              roomLocksBypassed={roomLocksBypassed}
             />
             <div className="hud">
               <HealthBar />
               <MorphemeInventory />
             </div>
-            <button
-              className={`sound-toggle ${soundMuted ? 'muted' : 'enabled'}`}
-              onClick={toggleSound}
-              aria-label={soundMuted ? 'Enable sound' : 'Mute sound'}
-            >
-              Sound {soundMuted ? 'Off' : 'On'}
-            </button>
+            {isDevMode && (
+              <button
+                className={`dev-lock-toggle ${
+                  roomLocksBypassed ? 'enabled' : ''
+                }`}
+                onClick={() => setRoomLocksBypassed((current) => !current)}
+                aria-pressed={roomLocksBypassed}
+              >
+                Dev Locks {roomLocksBypassed ? 'Off' : 'On'}
+              </button>
+            )}
             {idleHint && !modalContent && (
               <div className="idle-hint">{idleHint.text}</div>
             )}
@@ -395,7 +437,7 @@ export default function App() {
         </div>
       </div>
       {modalContent && (
-        <Modal onClose={() => setModalContent(null)}>{modalContent}</Modal>
+        <Modal onClose={handleModalClose}>{modalContent}</Modal>
       )}
     </>
   );

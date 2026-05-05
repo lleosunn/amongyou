@@ -49,7 +49,7 @@ function posToPixel(col, row) {
 const svgW = cols * CELL + (cols - 1) * GAP;
 const svgH = rows * CELL + (rows - 1) * GAP;
 
-export default function Minimap({ currentRoomId }) {
+export default function Minimap({ currentRoomId, roomLocksBypassed = false }) {
   const { isUnlocked } = useGameState();
 
   return (
@@ -58,7 +58,9 @@ export default function Minimap({ currentRoomId }) {
         {connections.map(({ from, to, fromId, toId }, i) => {
           const a = posToPixel(from.col, from.row);
           const b = posToPixel(to.col, to.row);
-          const bothUnlocked = isUnlocked(rooms[fromId]) && isUnlocked(rooms[toId]);
+          const bothUnlocked =
+            roomLocksBypassed ||
+            (isUnlocked(rooms[fromId]) && isUnlocked(rooms[toId]));
           return (
             <line
               key={i}
@@ -78,7 +80,7 @@ export default function Minimap({ currentRoomId }) {
           const x = (col - minCol) * (CELL + GAP);
           const y = (row - minRow) * (CELL + GAP);
           const isCurrent = room.id === currentRoomId;
-          const unlocked = isUnlocked(room);
+          const unlocked = roomLocksBypassed || isUnlocked(room);
           return (
             <g key={room.id}>
               <rect

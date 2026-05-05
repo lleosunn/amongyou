@@ -6,19 +6,22 @@ documents.
 
 The player is an astronaut who wakes up aboard a benevolent alien ship on
 Planet 999. Earth is infected with zadotitis, and the astronaut must decode the
-BLAH language to find antiviral medicine, manufacture more of it, and ask the
+alien language to find antiviral medicine, manufacture more of it, and ask the
 aliens to send the medicine home.
 
 ## Design Alignment
 
 The current game implements the main four-room arc described in the PDFs:
 
-1. **Pilot's Cabin** - learn basic BLAH words, pronouns, roots, the `-nu`
-   suffix, and unlock the first door by building `opgane`.
+1. **Pilot's Cabin** - learn basic alien-language words, pronouns, roots, the
+   `-nu` suffix, test the liquid dispenser, and unlock the first door by
+   building `opgane`.
 2. **Clinic** - identify `derbemar`, learn treatment and medicine vocabulary,
-   choose `puacarda`, heal the player, and learn `yamoll`.
-3. **Lab / Factory** - decode logs, manufacture bulk `puacarda`, build
-   `dodarom` for Earth, and prepare to speak with `il kume`.
+   build `pua- carda` to identify `puacarda`, heal the player, and learn
+   `yamoll`.
+3. **Lab / Factory** - manufacture bulk `puacarda`, build `dodarom` for Earth,
+   prepare to speak with `il kume`, and review collected vocabulary before the
+   Bridge.
 4. **Bridge / Comms** - complete the final commander conversation to prove
    treatment, explain the Earth mission, request transport, and trigger the
    ending.
@@ -27,13 +30,13 @@ Core systems from the room design are also represented:
 
 - A health bar starts near 60%, drains gently, never becomes a fail state, and
   rises when the correct medicine is taken.
-- A word inventory tracks learned BLAH morphemes by pronoun, prefix, root,
+- A word inventory tracks learned alien-language morphemes by pronoun, prefix, root,
   suffix, full word, and unresolved clue.
-- Clickable room hotspots expose vocabulary through choice, sequence, builder,
-  and conversation interactions.
+- Clickable room hotspots expose vocabulary through choice, experiment,
+  builder, vocabulary-review, and conversation interactions.
 - Locked room progression follows the PDF goals: cabin -> clinic -> lab ->
   bridge/comms.
-- The ending reveals that BLAH word parts map to English morphology.
+- The ending reveals that alien-language word parts map to English morphology.
 
 ## Intentional Scope Notes
 

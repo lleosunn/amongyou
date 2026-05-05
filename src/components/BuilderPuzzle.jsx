@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { playTone } from '../sound';
 import './BuilderPuzzle.css';
 
 function normalizeTile(tile) {
@@ -99,7 +98,6 @@ export default function BuilderPuzzle(props) {
       actual.every((id, i) => id === correctSequence[i]);
 
     if (!correct) {
-      playTone('wrong');
       setFeedback({
         type: 'wrong',
         text: step.wrongMessage ?? 'The machine rejects that phrase.',
@@ -107,7 +105,6 @@ export default function BuilderPuzzle(props) {
       return;
     }
 
-    playTone('success');
     setFeedback({
       type: 'success',
       text: step.successMessage ?? 'Accepted.',

@@ -1,26 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGameState } from '../gameContext';
 import { discoverableMorphemeCount } from '../discoverableMorphemes';
-import { getMorpheme } from '../languageData';
+import {
+  getVisibleMorphemeItems,
+  groupMorphemeItems,
+  KIND_LABELS,
+} from '../morphemeDisplay';
 import './MorphemeInventory.css';
-
-const KIND_ORDER = {
-  pronoun: 0,
-  prefix: 1,
-  root: 2,
-  suffix: 3,
-  word: 4,
-  unknown: 5,
-};
-
-const KIND_LABELS = {
-  pronoun: 'Pronouns',
-  prefix: 'Prefixes',
-  root: 'Roots',
-  suffix: 'Suffixes',
-  word: 'Full Words',
-  unknown: 'Unresolved',
-};
 
 export default function MorphemeInventory() {
   const { learnedMorphemes } = useGameState();
@@ -28,43 +14,10 @@ export default function MorphemeInventory() {
   const [recentIds, setRecentIds] = useState(new Set());
   const prevIdsRef = useRef(new Set());
 
-  const rawItems = [...learnedMorphemes]
-    .map((id) => {
-      const morpheme = getMorpheme(id);
-      return morpheme ? { id, ...morpheme } : null;
-    })
-    .filter(Boolean);
-
-  const resolvedBlahs = new Set(
-    rawItems.filter((item) => item.kind !== 'unknown').map((item) => item.blah)
-  );
-
-  const items = rawItems
-    .filter((item) => item.kind !== 'unknown' || !resolvedBlahs.has(item.blah))
-    .sort((a, b) => {
-      const ka = KIND_ORDER[a.kind] ?? 99;
-      const kb = KIND_ORDER[b.kind] ?? 99;
-      if (ka !== kb) return ka - kb;
-      return a.blah.localeCompare(b.blah);
-    });
+  const items = getVisibleMorphemeItems(learnedMorphemes);
 
   const grouped = useMemo(
-    () =>
-      items.reduce(
-        (acc, item) => {
-          acc[item.kind] = acc[item.kind] ?? [];
-          acc[item.kind].push(item);
-          return acc;
-        },
-        {
-          pronoun: [],
-          prefix: [],
-          root: [],
-          suffix: [],
-          word: [],
-          unknown: [],
-        }
-      ),
+    () => groupMorphemeItems(items),
     [items]
   );
 
