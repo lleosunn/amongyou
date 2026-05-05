@@ -17,6 +17,7 @@ const allowedContentTypes = new Set([
   'prefix-wheel',
   'sequence',
   'translation-check',
+  'visual-discovery',
   'vocabulary-review',
 ]);
 
@@ -160,6 +161,32 @@ function validateContent(content, path) {
 
     if (!(content.acceptedKeywordGroups ?? []).length) {
       addError(`${path}: translation check needs acceptedKeywordGroups`);
+    }
+  }
+
+  if (content.type === 'visual-discovery') {
+    const steps = content.steps ?? [];
+    if (!steps.length) {
+      addError(`${path}: visual discovery needs at least one step`);
+    }
+
+    for (const [index, step] of steps.entries()) {
+      const partIds = new Set(
+        (step.cards ?? []).flatMap((card) =>
+          (card.labelParts ?? []).map((part) => part.id)
+        )
+      );
+      const stepPath = `${path}.steps[${index}]`;
+
+      if (!(step.cards ?? []).length) {
+        addError(`${stepPath}: visual discovery step needs cards`);
+      }
+
+      for (const id of step.correctPartIds ?? []) {
+        if (!partIds.has(id)) {
+          addError(`${stepPath}: correct part "${id}" is not in card label parts`);
+        }
+      }
     }
   }
 }

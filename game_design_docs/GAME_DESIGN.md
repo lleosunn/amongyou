@@ -77,8 +77,10 @@ Goal: figure out where you are and unlock the cabin door.
 Key interactions:
 
 - Message screen teaches `al = you`.
-- Planet posters teach `rom = planet`.
-- Crew roster teaches `-nu`, `ramde`, `derbe`, `ramdenu`, and `derbenu`.
+- Planet posters use illustrated `dodarom` and `fannarom` cards to teach
+  `rom = planet` through the repeated label part.
+- Crew roster uses illustrated job cards to teach `-nu`, `ramde`, `derbe`,
+  `ramdenu`, and `derbenu`.
 - Liquid dispenser teaches `doda = water` through button testing.
 - Bed label is visible from the start, changes its readable detail as `al` and
   `rom` are learned, and becomes a small translation check for `al: rom?`. It

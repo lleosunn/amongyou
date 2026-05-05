@@ -24,6 +24,7 @@ const INTERACTIVE_TYPES = new Set([
   'prefix-wheel',
   'sequence',
   'translation-check',
+  'visual-discovery',
 ]);
 
 const DEV_ROOM_LOCK_OVERRIDE_KEY = 'amongyou.devRoomLocksBypassed';

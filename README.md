@@ -33,8 +33,9 @@ Core systems from the room design are also represented:
   rises when the correct medicine is taken.
 - A word inventory tracks learned alien-language morphemes by pronoun, prefix, root,
   suffix, full word, and unresolved clue.
-- Clickable room hotspots expose vocabulary through choice, experiment,
-  translation-check, builder, vocabulary-review, and conversation interactions.
+- Clickable room hotspots expose vocabulary through choice, visual-discovery,
+  experiment, translation-check, builder, vocabulary-review, and conversation
+  interactions.
 - Locked room progression follows the PDF goals: cabin -> clinic -> lab ->
   bridge/comms.
 - The ending reveals that alien-language word parts map to English morphology.

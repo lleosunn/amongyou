@@ -8,6 +8,7 @@ import ConversationPuzzle from './ConversationPuzzle';
 import ExperimentPuzzle from './ExperimentPuzzle';
 import VocabularyReview from './VocabularyReview';
 import TranslationCheckPuzzle from './TranslationCheckPuzzle';
+import VisualDiscoveryPuzzle from './VisualDiscoveryPuzzle';
 import './Modal.css';
 
 function ClueContent({ title, body, note }) {
@@ -65,7 +66,8 @@ export default function Modal({ children, onClose }) {
     content?.type === 'experiment' ||
     content?.type === 'prefix-wheel' ||
     content?.type === 'sequence' ||
-    content?.type === 'translation-check';
+    content?.type === 'translation-check' ||
+    content?.type === 'visual-discovery';
   const isReview = content?.type === 'vocabulary-review';
 
   useEffect(() => {
@@ -193,6 +195,17 @@ export default function Modal({ children, onClose }) {
             wrongMessage={content.wrongMessage}
             successMessage={content.successMessage}
             acceptedKeywordGroups={content.acceptedKeywordGroups}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
+      case 'visual-discovery':
+        return (
+          <VisualDiscoveryPuzzle
+            title={content.title}
+            instructions={content.instructions}
+            steps={content.steps}
             onSolve={() => {
               content.onSolve?.();
             }}

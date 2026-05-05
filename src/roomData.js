@@ -44,7 +44,7 @@ export const roomConfigs = {
         w: '2%',
         h: '2%',
         objective: 'pilot-planets',
-        content: stage1.planetChoice,
+        content: stage1.planetDiscovery,
       },
       {
         id: 'pilot-roster',
@@ -54,7 +54,7 @@ export const roomConfigs = {
         w: '2%',
         h: '2%',
         objective: 'pilot-roster',
-        content: stage1.rosterChoice,
+        content: stage1.rosterDiscovery,
       },
       {
         id: 'pilot-dispenser',

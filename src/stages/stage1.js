@@ -41,60 +41,162 @@ export const stage1 = {
     objective: 'pilot-chat',
   },
 
-  planetChoice: {
-    type: 'choice',
+  planetDiscovery: {
+    type: 'visual-discovery',
     title: 'Planet Posters',
-    instructions: 'The same ending appears on both labels.',
-    body: 'fannarom\n\n   desarom\n\nTwo different worlds. One shared ending: rom.',
-    question: 'What does "rom" probably mean?',
-    options: [
-      { id: 'star', label: 'star' },
-      { id: 'planet', label: 'planet' },
-      { id: 'red', label: 'red' },
-      { id: 'big', label: 'big' },
+    instructions:
+      'Compare the alien labels with the pictures. Click the word part that repeats on both planet posters.',
+    steps: [
+      {
+        prompt:
+          'Both posters show worlds, but only one word part is shared. Click the shared part on both labels.',
+        cards: [
+          {
+            id: 'dodarom-poster',
+            title: 'Blue Water World',
+            caption: 'The poster shows a blue planet with oceans.',
+            visual: 'earth',
+            imageKey: 'planetDodarom',
+            label: 'dodarom',
+            labelParts: [
+              { id: 'dodarom-doda', text: 'doda' },
+              { id: 'dodarom-rom', text: 'rom' },
+            ],
+          },
+          {
+            id: 'fannarom-poster',
+            title: 'Ringed Amber World',
+            caption: 'The poster shows another planet with rings.',
+            visual: 'amber',
+            imageKey: 'planetFannarom',
+            label: 'fannarom',
+            labelParts: [
+              { id: 'fannarom-fanna', text: 'fanna' },
+              { id: 'fannarom-rom', text: 'rom' },
+            ],
+          },
+        ],
+        correctPartIds: ['dodarom-rom', 'fannarom-rom'],
+        wrongMessage:
+          'Look for the part that appears on both labels and matches what both pictures have in common.',
+        successMessage:
+          'Both pictures are planets, and both labels end with rom. rom means planet.',
+      },
     ],
-    correctOptionId: 'planet',
     morphemesLearned: ['rom'],
     objective: 'pilot-planets',
   },
 
-  rosterChoice: {
-    type: 'choice',
+  rosterDiscovery: {
+    type: 'visual-discovery',
     title: 'Crew Roster',
-    instructions: 'Decode the job labels from uniforms and repeated word parts.',
+    instructions:
+      'Use the crew pictures and nameplates to discover the job words.',
     steps: [
       {
-        body: 'ramdenu     derbenu\n\nBoth crew titles end with nu.',
-        question: 'What does "-nu" seem to mark?',
-        options: [
-          { id: 'person', label: 'person / doer' },
-          { id: 'place', label: 'place' },
-          { id: 'thing', label: 'thing' },
-          { id: 'past', label: 'past action' },
+        prompt:
+          'Both roster entries show crew members with jobs. Click the repeated ending on both nameplates.',
+        cards: [
+          {
+            id: 'pilot-card',
+            title: 'Flight Crew',
+            caption: 'This crewmate wears a flight helmet beside a route map.',
+            visual: 'pilot',
+            imageKey: 'crewPilot',
+            label: 'ramdenu',
+            labelParts: [
+              { id: 'pilot-ramde', text: 'ramde' },
+              { id: 'pilot-nu', text: 'nu' },
+            ],
+          },
+          {
+            id: 'medic-card',
+            title: 'Medical Crew',
+            caption: 'This crewmate wears a medical coat and holds a scanner.',
+            visual: 'medic',
+            imageKey: 'crewMedic',
+            label: 'derbenu',
+            labelParts: [
+              { id: 'medic-derbe', text: 'derbe' },
+              { id: 'medic-nu', text: 'nu' },
+            ],
+          },
         ],
-        correctOptionId: 'person',
+        correctPartIds: ['pilot-nu', 'medic-nu'],
+        wrongMessage:
+          'The shared part is the same ending on both crew job labels.',
+        successMessage:
+          'Both labels end with nu, and both pictures show people with jobs. -nu marks a person or doer.',
       },
       {
-        body: 'ramdenu\n\nThe crewmate wears a flight helmet and stands beside a ship diagram.',
-        question: 'What does "ramde" probably mean?',
-        options: [
-          { id: 'cure', label: 'cure / heal' },
-          { id: 'fly', label: 'fly / go' },
-          { id: 'lock', label: 'lock' },
-          { id: 'fill', label: 'fill' },
+        prompt:
+          'Now focus on the flight crew picture. Click the part that names the flight action.',
+        cards: [
+          {
+            id: 'pilot-card',
+            title: 'Flight Crew',
+            caption: 'Helmet, route map, and ship controls point to flying or going.',
+            visual: 'pilot',
+            imageKey: 'crewPilot',
+            label: 'ramdenu',
+            labelParts: [
+              { id: 'pilot-ramde', text: 'ramde' },
+              { id: 'pilot-nu', text: 'nu' },
+            ],
+          },
+          {
+            id: 'medic-card',
+            title: 'Medical Crew',
+            caption: 'The second card is a different job.',
+            visual: 'medic',
+            imageKey: 'crewMedic',
+            label: 'derbenu',
+            labelParts: [
+              { id: 'medic-derbe', text: 'derbe' },
+              { id: 'medic-nu', text: 'nu' },
+            ],
+          },
         ],
-        correctOptionId: 'fly',
+        correctPartIds: ['pilot-ramde'],
+        wrongMessage:
+          'The ending marks the person. The other part on the flight card names the action.',
+        successMessage:
+          'ramde points to fly or go. ramdenu is a pilot.',
       },
       {
-        body: 'derbenu\n\nThe crewmate wears a medical coat and holds a scanner.',
-        question: 'What does "derbe" probably mean?',
-        options: [
-          { id: 'cure', label: 'cure / heal' },
-          { id: 'fly', label: 'fly / go' },
-          { id: 'planet', label: 'planet' },
-          { id: 'water', label: 'water' },
+        prompt:
+          'Now focus on the medical crew picture. Click the part that names healing.',
+        cards: [
+          {
+            id: 'pilot-card',
+            title: 'Flight Crew',
+            caption: 'The first card is the flight job.',
+            visual: 'pilot',
+            imageKey: 'crewPilot',
+            label: 'ramdenu',
+            labelParts: [
+              { id: 'pilot-ramde', text: 'ramde' },
+              { id: 'pilot-nu', text: 'nu' },
+            ],
+          },
+          {
+            id: 'medic-card',
+            title: 'Medical Crew',
+            caption: 'Medical coat, scanner, and kit point to curing or healing.',
+            visual: 'medic',
+            imageKey: 'crewMedic',
+            label: 'derbenu',
+            labelParts: [
+              { id: 'medic-derbe', text: 'derbe' },
+              { id: 'medic-nu', text: 'nu' },
+            ],
+          },
         ],
-        correctOptionId: 'cure',
+        correctPartIds: ['medic-derbe'],
+        wrongMessage:
+          'The medical picture points to the root, not the person ending.',
+        successMessage:
+          'derbe points to cure or heal. derbenu is a doctor or medic.',
       },
     ],
     morphemesLearned: ['-nu', 'ramde', 'derbe', 'ramdenu', 'derbenu'],
