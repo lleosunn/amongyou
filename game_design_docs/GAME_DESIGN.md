@@ -80,7 +80,10 @@ Key interactions:
 - Planet posters teach `rom = planet`.
 - Crew roster teaches `-nu`, `ramde`, `derbe`, `ramdenu`, and `derbenu`.
 - Liquid dispenser teaches `doda = water` through button testing.
-- Bed label uses known words in `al: rom?` and introduces unresolved `puacarda`.
+- Bed label is visible from the start, changes its readable detail as `al` and
+  `rom` are learned, and becomes a small translation check for `al: rom?`. It
+  flashes after the opening narration so players inspect it first, and it also
+  introduces unresolved `puacarda`.
 - Door builder teaches `gane`, `op-`, and `opgane` by building `[op-] [gane]`.
 
 Completion unlocks the Clinic.

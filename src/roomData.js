@@ -17,6 +17,16 @@ export const roomConfigs = {
     stage: 1,
     hotspots: [
       {
+        id: 'pilot-bed-label',
+        label: 'Bed label',
+        x: '61%',
+        y: '74%',
+        w: '2%',
+        h: '2%',
+        objective: 'pilot-bed-label',
+        content: stage1.bedLabelCheck,
+      },
+      {
         id: 'pilot-chat',
         label: 'Message screen',
         x: '18%',
@@ -55,17 +65,6 @@ export const roomConfigs = {
         h: '2%',
         objective: 'pilot-dispenser',
         content: stage1.dispenserChoice,
-      },
-      {
-        id: 'pilot-bed-label',
-        label: 'Bed label',
-        x: '61%',
-        y: '74%',
-        w: '2%',
-        h: '2%',
-        requiresObjectives: ['pilot-chat', 'pilot-planets'],
-        objective: 'pilot-bed-label',
-        content: stage1.bedLabelClue,
       },
       {
         id: 'pilot-door',

@@ -3,10 +3,8 @@ import { useGameState } from '../gameContext';
 import './NavArrows.css';
 
 const arrows = [
-  { dir: 'up', label: '▲' },
   { dir: 'left', label: '◀' },
   { dir: 'right', label: '▶' },
-  { dir: 'down', label: '▼' },
 ];
 
 export default function NavArrows({

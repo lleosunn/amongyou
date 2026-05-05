@@ -16,6 +16,7 @@ const allowedContentTypes = new Set([
   'narration',
   'prefix-wheel',
   'sequence',
+  'translation-check',
   'vocabulary-review',
 ]);
 
@@ -143,6 +144,22 @@ function validateContent(content, path) {
 
     if (!samples.has(content.correctSampleId)) {
       addError(`${path}: correct sample is not in samples`);
+    }
+  }
+
+  if (content.type === 'translation-check') {
+    for (const id of content.requiredMorphemes ?? []) {
+      if (!allMorphemes[id]) {
+        addError(`${path}: unknown required morpheme id "${id}"`);
+      }
+    }
+
+    if (!(content.labelLines ?? []).length) {
+      addError(`${path}: translation check needs labelLines`);
+    }
+
+    if (!(content.acceptedKeywordGroups ?? []).length) {
+      addError(`${path}: translation check needs acceptedKeywordGroups`);
     }
   }
 }

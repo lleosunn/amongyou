@@ -1,0 +1,158 @@
+.translation-check {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(100%, 720px);
+}
+
+.translation-title {
+  margin: 0;
+  color: #aaa;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.translation-instructions,
+.translation-status,
+.translation-prompt {
+  margin: 0;
+  color: #bbb;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.translation-label {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid #333950;
+  border-radius: 8px;
+  color: #cfe2ff;
+  display: grid;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1.5;
+  padding: 18px;
+  text-align: center;
+}
+
+.translation-label-line {
+  overflow-wrap: anywhere;
+}
+
+.translation-decode {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.translation-token {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(145, 165, 205, 0.24);
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  min-height: 66px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.translation-token-word {
+  color: #a8c0ff;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.translation-token-meaning {
+  color: rgba(220, 230, 255, 0.58);
+  font-size: 0.82rem;
+}
+
+.translation-token.known {
+  border-color: rgba(138, 255, 154, 0.4);
+}
+
+.translation-token.known .translation-token-meaning {
+  color: #c7ffd1;
+  font-weight: 700;
+}
+
+.translation-form {
+  display: grid;
+  gap: 10px;
+}
+
+.translation-input {
+  background: rgba(0, 0, 0, 0.42);
+  border: 1.5px solid #5b6488;
+  border-radius: 8px;
+  color: #e8e8f4;
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.35;
+  min-height: 46px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.translation-input:focus {
+  border-color: #8fa2ff;
+  outline: none;
+}
+
+.translation-input:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.translation-submit {
+  justify-self: center;
+  background: #4a6aff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  min-width: 110px;
+  padding: 9px 16px;
+  text-transform: uppercase;
+}
+
+.translation-submit:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.translation-submit:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.translation-feedback {
+  margin: 0;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.translation-feedback-wrong {
+  color: #ffad70;
+}
+
+.translation-feedback-success {
+  color: #8aff9a;
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .translation-decode {
+    grid-template-columns: 1fr;
+  }
+}

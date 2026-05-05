@@ -7,6 +7,7 @@ import BuilderPuzzle from './BuilderPuzzle';
 import ConversationPuzzle from './ConversationPuzzle';
 import ExperimentPuzzle from './ExperimentPuzzle';
 import VocabularyReview from './VocabularyReview';
+import TranslationCheckPuzzle from './TranslationCheckPuzzle';
 import './Modal.css';
 
 function ClueContent({ title, body, note }) {
@@ -63,7 +64,8 @@ export default function Modal({ children, onClose }) {
     content?.type === 'conversation' ||
     content?.type === 'experiment' ||
     content?.type === 'prefix-wheel' ||
-    content?.type === 'sequence';
+    content?.type === 'sequence' ||
+    content?.type === 'translation-check';
   const isReview = content?.type === 'vocabulary-review';
 
   useEffect(() => {
@@ -177,6 +179,25 @@ export default function Modal({ children, onClose }) {
             }}
           />
         );
+      case 'translation-check':
+        return (
+          <TranslationCheckPuzzle
+            title={content.title}
+            instructions={content.instructions}
+            labelLines={content.labelLines}
+            requiredMorphemes={content.requiredMorphemes}
+            prompt={content.prompt}
+            placeholder={content.placeholder}
+            lockedMessage={content.lockedMessage}
+            readyMessage={content.readyMessage}
+            wrongMessage={content.wrongMessage}
+            successMessage={content.successMessage}
+            acceptedKeywordGroups={content.acceptedKeywordGroups}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
       case 'prefix-wheel':
         return (
           <PrefixWheelPuzzle
@@ -241,7 +262,7 @@ export default function Modal({ children, onClose }) {
             Inspecting: {content.stationLabel}
           </div>
         )}
-        {renderContent()}
+        <div className="modal-body">{renderContent()}</div>
         {isInteractive && (
           <p className="modal-close-note">Closing resets this interaction.</p>
         )}

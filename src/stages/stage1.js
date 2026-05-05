@@ -132,11 +132,27 @@ export const stage1 = {
     objective: 'pilot-dispenser',
   },
 
-  bedLabelClue: {
-    type: 'clue',
+  bedLabelCheck: {
+    type: 'translation-check',
     title: 'Bed Label',
-    body: 'al: rom?\npuacarda x 2',
-    note: 'Now some of it is readable: "you: planet?" The aliens did not know where you came from. They have also been giving you something called puacarda.',
+    instructions:
+      'The label is visible right away. Come back once enough word parts are readable.',
+    labelLines: ['al: rom?', 'puacarda x 2'],
+    requiredMorphemes: ['al', 'rom'],
+    prompt: 'What do you think the first line means?',
+    placeholder: 'Example: you planet',
+    lockedMessage:
+      'The label matters, but the words are still just marks. Look around for al and rom, then check it again.',
+    readyMessage:
+      'You know the key word parts now. Try translating the first line yourself.',
+    wrongMessage:
+      'Not quite. Use the two word parts you have learned from the message screen and the planet posters.',
+    successMessage:
+      'Yes. It reads like "you: planet?" The aliens were trying to identify where you came from. puacarda is still unresolved.',
+    acceptedKeywordGroups: [
+      ['you', 'your'],
+      ['planet', 'world'],
+    ],
     morphemesLearned: ['puacardaSeen'],
     objective: 'pilot-bed-label',
   },

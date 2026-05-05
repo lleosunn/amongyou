@@ -1,12 +1,9 @@
 .nav-arrows {
   display: grid;
-  grid-template-areas:
-    '.    up   .'
-    'left .    right'
-    '.    down .';
-  grid-template-columns: repeat(3, 48px);
-  grid-template-rows: repeat(3, 48px);
-  gap: 4px;
+  grid-template-areas: 'left right';
+  grid-template-columns: repeat(2, 48px);
+  grid-template-rows: 48px;
+  gap: 8px;
   position: absolute;
   bottom: 16px;
   left: 50%;
@@ -56,10 +53,8 @@
   animation: nav-unlocked-pulse 1.4s ease-out infinite;
 }
 
-.nav-up    { grid-area: up; }
 .nav-left  { grid-area: left; }
 .nav-right { grid-area: right; }
-.nav-down  { grid-area: down; }
 
 @keyframes nav-unlocked-pulse {
   0% {

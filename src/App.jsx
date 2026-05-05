@@ -23,9 +23,11 @@ const INTERACTIVE_TYPES = new Set([
   'matching',
   'prefix-wheel',
   'sequence',
+  'translation-check',
 ]);
 
 const DEV_ROOM_LOCK_OVERRIDE_KEY = 'amongyou.devRoomLocksBypassed';
+const INTRO_BED_LABEL_HOTSPOT_ID = 'pilot-bed-label';
 const isDevMode = import.meta.env.DEV;
 
 function getCompletionId(hotspot, content) {
@@ -60,12 +62,14 @@ export default function App() {
   const learnedRef = useRef(new Set());
   const pulseTimeoutRef = useRef(null);
   const unlockTimeoutRef = useRef(null);
+  const introHintTimeoutRef = useRef(null);
 
   const [s1IntroShown, setS1IntroShown] = useState(false);
   const [s2IntroShown, setS2IntroShown] = useState(false);
   const [s3IntroShown, setS3IntroShown] = useState(false);
   const [s4IntroShown, setS4IntroShown] = useState(false);
   const [pendingVocabularyReview, setPendingVocabularyReview] = useState(false);
+  const [bedLabelIntroPulseShown, setBedLabelIntroPulseShown] = useState(false);
 
   const {
     learn,
@@ -97,6 +101,9 @@ export default function App() {
     () => () => {
       if (pulseTimeoutRef.current) clearTimeout(pulseTimeoutRef.current);
       if (unlockTimeoutRef.current) clearTimeout(unlockTimeoutRef.current);
+      if (introHintTimeoutRef.current) {
+        clearTimeout(introHintTimeoutRef.current);
+      }
     },
     []
   );
@@ -191,6 +198,44 @@ export default function App() {
 
     return () => clearTimeout(timeout);
   }, [currentRoomId, s2IntroShown, modalContent]);
+
+  useEffect(() => {
+    if (bedLabelIntroPulseShown) return undefined;
+    if (currentRoomId !== stage1.room) return undefined;
+    if (!s1IntroShown) return undefined;
+    if (modalContent) return undefined;
+
+    if (isComplete(INTRO_BED_LABEL_HOTSPOT_ID)) {
+      const timeout = setTimeout(() => setBedLabelIntroPulseShown(true), 0);
+      return () => clearTimeout(timeout);
+    }
+
+    const timeout = setTimeout(() => {
+      setBedLabelIntroPulseShown(true);
+      setIdleHint({
+        hotspotId: INTRO_BED_LABEL_HOTSPOT_ID,
+        text: 'I should inspect the bed label first.',
+      });
+
+      if (introHintTimeoutRef.current) {
+        clearTimeout(introHintTimeoutRef.current);
+      }
+
+      introHintTimeoutRef.current = setTimeout(() => {
+        setIdleHint((current) =>
+          current?.hotspotId === INTRO_BED_LABEL_HOTSPOT_ID ? null : current
+        );
+      }, 9000);
+    }, 250);
+
+    return () => clearTimeout(timeout);
+  }, [
+    bedLabelIntroPulseShown,
+    currentRoomId,
+    s1IntroShown,
+    modalContent,
+    isComplete,
+  ]);
 
   useEffect(() => {
     if (isComplete(stage2.completionObjective)) return;

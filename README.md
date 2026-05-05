@@ -13,9 +13,10 @@ aliens to send the medicine home.
 
 The current game implements the main four-room arc described in the PDFs:
 
-1. **Pilot's Cabin** - learn basic alien-language words, pronouns, roots, the
-   `-nu` suffix, test the liquid dispenser, and unlock the first door by
-   building `opgane`.
+1. **Pilot's Cabin** - inspect the bed label before it is readable, learn basic
+   alien-language words, pronouns, roots, the `-nu` suffix, test the liquid
+   dispenser, revisit the bed label as a translation check, and unlock the
+   first door by building `opgane`.
 2. **Clinic** - identify `derbemar`, learn treatment and medicine vocabulary,
    build `pua- carda` to identify `puacarda`, heal the player, and learn
    `yamoll`.
@@ -33,7 +34,7 @@ Core systems from the room design are also represented:
 - A word inventory tracks learned alien-language morphemes by pronoun, prefix, root,
   suffix, full word, and unresolved clue.
 - Clickable room hotspots expose vocabulary through choice, experiment,
-  builder, vocabulary-review, and conversation interactions.
+  translation-check, builder, vocabulary-review, and conversation interactions.
 - Locked room progression follows the PDF goals: cabin -> clinic -> lab ->
   bridge/comms.
 - The ending reveals that alien-language word parts map to English morphology.
