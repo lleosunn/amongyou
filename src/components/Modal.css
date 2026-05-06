@@ -25,7 +25,12 @@
   position: relative;
   top: auto;
   right: auto;
-  max-width: min(320px, calc(100vw - 36px));
+  width: min(420px, calc(100vw - 36px));
+  max-width: min(420px, calc(100vw - 36px));
+}
+
+.modal-word-bank .morpheme-list {
+  max-height: min(64vh, 560px);
 }
 
 @keyframes overlay-in {

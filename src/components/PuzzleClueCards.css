@@ -2,6 +2,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 12px;
+  justify-items: center;
+  margin: 0 auto;
+  max-width: min(100%, 520px);
   width: 100%;
 }
 
@@ -13,7 +16,9 @@
   background: rgba(0, 0, 0, 0.24);
   border: 1px solid rgba(120, 135, 170, 0.34);
   border-radius: 8px;
+  max-width: 460px;
   padding: 10px;
+  width: 100%;
 }
 
 .puzzle-clue-image {

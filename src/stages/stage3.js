@@ -110,7 +110,7 @@ export const stage3 = {
     type: 'builder',
     title: 'Manufacturing Machine',
     instructions:
-      'Use known alien-language words as commands for the production vat.',
+      'Use known alien-language words as production commands.',
     steps: [
       {
         prompt: 'The empty vat needs one batch of antiviral medicine.',
@@ -144,8 +144,8 @@ export const stage3 = {
     type: 'builder',
     title: 'Destination Map',
     instructions:
-      'The star map highlights the blue ocean world from the cabin posters.',
-    prompt: 'The star map needs the highlighted destination label.',
+      'The star map highlights the cabin poster world and needs its destination label.',
+    prompt: 'Build the highlighted destination.',
     clues: [
       {
         id: 'blue-ocean-world',
@@ -167,13 +167,13 @@ export const stage3 = {
     type: 'builder',
     title: 'Communication Door',
     instructions:
-      'The door screen flashes: al kume?',
-    prompt: 'The door waits for a reply from this side.',
+      'The door screen marks kume as speaking and asks who will speak.',
+    prompt: 'Reply from this side.',
     clues: [
       {
         id: 'door-reply-screen',
         title: 'Door Screen',
-        caption: 'The screen points the question toward you.',
+        caption: 'The screen points the speaking question toward you.',
         imageKey: 'messageYou',
       },
     ],

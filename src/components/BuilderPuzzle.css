@@ -101,6 +101,16 @@
   transition: all 0.15s ease;
 }
 
+.builder-slot[draggable='true'],
+.builder-tile[draggable='true'] {
+  cursor: grab;
+}
+
+.builder-slot[draggable='true']:active,
+.builder-tile[draggable='true']:active {
+  cursor: grabbing;
+}
+
 .builder-tile:hover:not(:disabled) {
   background: #343450;
   border-color: #8fa2ff;

@@ -146,6 +146,16 @@
   padding: 8px 12px;
 }
 
+.conversation-slot[draggable='true'],
+.conversation-tile[draggable='true'] {
+  cursor: grab;
+}
+
+.conversation-slot[draggable='true']:active,
+.conversation-tile[draggable='true']:active {
+  cursor: grabbing;
+}
+
 .conversation-tile:hover:not(:disabled) {
   background: #343450;
   border-color: #8fa2ff;

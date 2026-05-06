@@ -8,6 +8,10 @@ function sameSelection(selectedIds, correctIds) {
   return correctIds.every((id) => selected.has(id));
 }
 
+function combineCopy(...parts) {
+  return parts.filter(Boolean).join(' ');
+}
+
 export default function VisualDiscoveryPuzzle({ title, instructions, steps = [], onSolve }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -19,6 +23,7 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
   const step = steps[stepIndex] ?? steps[0];
   const correctIds = step?.correctPartIds ?? [];
   const isLast = stepIndex >= steps.length - 1;
+  const leadCopy = combineCopy(instructions, step?.prompt);
 
   useEffect(
     () => () => {
@@ -81,9 +86,7 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
   return (
     <div className="visual-discovery">
       {title && <h2 className="visual-title">{title}</h2>}
-      {instructions && <p className="visual-instructions">{instructions}</p>}
-
-      <p className="visual-prompt">{step.prompt}</p>
+      {leadCopy && <p className="visual-instructions">{leadCopy}</p>}
 
       <div className="visual-card-grid">
         {(step.cards ?? []).map((card) => {

@@ -111,7 +111,7 @@ export const stage1 = {
     type: 'visual-discovery',
     title: 'Crew Roster',
     instructions:
-      'Use the crew pictures and nameplates to discover the job words.',
+      'Read the crew nameplates by matching each part to the picture clue.',
     steps: [
       {
         prompt:
@@ -284,8 +284,8 @@ export const stage1 = {
     type: 'builder',
     title: 'Cabin Door Lock',
     instructions:
-      'The door shows a lock symbol and the word "gane". Build the word that reverses the lock.',
-    prompt: 'Door display: [ ___ ] + [ gane ]',
+      'The door shows a lock symbol and the word "gane"; build the word that reverses the lock.',
+    prompt: 'Door display: [ ___ ] + [ gane ].',
     slotCount: 2,
     availableTiles: prefixTiles,
     correctSequence: ['op-', 'gane'],

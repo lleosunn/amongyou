@@ -34,7 +34,7 @@ export const stage4 = {
       'Build each response from your known alien-language word parts. The commander will only act when the meaning is clear.',
     steps: [
       {
-        alien: 'al... op-derbe?',
+        alien: 'al derbe-uk?',
         prompt: 'Scanner status.',
         sceneImageKey: 'clueBridgeScanner',
         sceneTitle: 'Medical Scanner',
@@ -46,14 +46,14 @@ export const stage4 = {
         successMessage: 'The medic scanner accepts your healed status.',
       },
       {
-        alien: 'dodarom op-derbe?',
+        alien: 'dodarom derbe?',
         prompt: 'Return route and healing mission.',
         sceneImageKey: 'clueBridgeRoute',
         sceneTitle: 'Earth Route',
         sceneCaption: 'The route panel shows Earth and the loaded medicine.',
-        slotCount: 6,
+        slotCount: 5,
         availableTiles: finalTiles,
-        correctSequence: ['il', 'ya-', 'ramde', 'derbe', 'doda', 'rom'],
+        correctSequence: ['il', 'ramde', 'derbe', 'doda', 'rom'],
         reply: 'dodarom derbe.',
         successMessage: 'The commander understands Earth needs healing.',
       },

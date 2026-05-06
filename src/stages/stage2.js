@@ -345,8 +345,8 @@ export const stage2 = {
     type: 'builder',
     title: 'Refill Machine',
     instructions:
-      'The rack is empty, then the machine fills the same bottles again.',
-    prompt: 'The rack needs the command that fills the same bottles again.',
+      'The clue card shows an empty rack filling again.',
+    prompt: 'Build the matching refill command.',
     clues: [
       {
         id: 'refill-cycle',

@@ -7,6 +7,10 @@ function normalizeTile(tile) {
   return tile;
 }
 
+function combineCopy(...parts) {
+  return parts.filter(Boolean).join(' ');
+}
+
 function makeStep({
   title,
   instructions,
@@ -57,6 +61,7 @@ export default function BuilderPuzzle(props) {
     Array.from({ length: slotCount }, (_, i) => Boolean(placements[i])).every(
       Boolean
     );
+  const leadCopy = combineCopy(instructions, step.prompt);
 
   useEffect(
     () => () => {
@@ -84,6 +89,41 @@ export default function BuilderPuzzle(props) {
     setPlacements((prev) => {
       const next = [...prev];
       next[index] = null;
+      return next;
+    });
+    setFeedback(null);
+  };
+
+  const movePlacement = (fromIndex, toIndex) => {
+    if (solved || fromIndex === toIndex) return;
+
+    setPlacements((prev) => {
+      const next = [...prev];
+      const moving = next[fromIndex];
+      next[fromIndex] = next[toIndex] ?? null;
+      next[toIndex] = moving ?? null;
+      return next;
+    });
+    setFeedback(null);
+  };
+
+  const dropTile = (event, slotIndex) => {
+    event.preventDefault();
+    if (solved) return;
+
+    const sourceSlot = event.dataTransfer.getData('application/x-builder-slot');
+    if (sourceSlot !== '') {
+      movePlacement(Number(sourceSlot), slotIndex);
+      return;
+    }
+
+    const tileId = event.dataTransfer.getData('text/plain');
+    const tile = tiles.find((entry) => entry.id === tileId);
+    if (!tile || usedIds.has(tile.id)) return;
+
+    setPlacements((prev) => {
+      const next = [...prev];
+      next[slotIndex] = tile;
       return next;
     });
     setFeedback(null);
@@ -141,8 +181,7 @@ export default function BuilderPuzzle(props) {
       tabIndex={-1}
     >
       {title && <h2 className="builder-title">{title}</h2>}
-      {instructions && <p className="builder-instructions">{instructions}</p>}
-      {step.prompt && <p className="builder-prompt">{step.prompt}</p>}
+      {leadCopy && <p className="builder-instructions">{leadCopy}</p>}
       <PuzzleClueCards clues={clues} />
 
       <div className="builder-slots" style={{ '--slot-count': slotCount }}>
@@ -152,6 +191,16 @@ export default function BuilderPuzzle(props) {
             <button
               key={index}
               className={`builder-slot ${tile ? 'filled' : ''}`}
+              draggable={Boolean(tile) && !solved}
+              onDragStart={(event) => {
+                if (!tile) return;
+                event.dataTransfer.setData('application/x-builder-slot', String(index));
+                event.dataTransfer.effectAllowed = 'move';
+              }}
+              onDragOver={(event) => {
+                if (!solved) event.preventDefault();
+              }}
+              onDrop={(event) => dropTile(event, index)}
               onClick={() => clearSlot(index)}
               aria-label={`Slot ${index + 1}`}
             >
@@ -170,6 +219,11 @@ export default function BuilderPuzzle(props) {
           <button
             key={tile.id}
             className="builder-tile"
+            draggable={!usedIds.has(tile.id) && !solved}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', tile.id);
+              event.dataTransfer.effectAllowed = 'move';
+            }}
             onClick={() => placeTile(tile)}
             disabled={usedIds.has(tile.id) || solved}
           >
