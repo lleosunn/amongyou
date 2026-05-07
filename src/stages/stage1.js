@@ -111,7 +111,6 @@ export const stage1 = {
         cards: [
           {
             id: 'pilot-card',
-            title: 'Flight Crew',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -122,7 +121,6 @@ export const stage1 = {
           },
           {
             id: 'medic-card',
-            title: 'Medical Crew',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -138,11 +136,10 @@ export const stage1 = {
           'Both labels end with nu. -nu marks a person or doer.',
       },
       {
-        prompt: 'Which crewmate is the pilot?',
+        prompt: 'Which alien label belongs to the pilot?',
         cards: [
           {
             id: 'pilot-card',
-            title: 'Flight Crew',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -153,7 +150,6 @@ export const stage1 = {
           },
           {
             id: 'medic-card',
-            title: 'Medical Crew',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -165,16 +161,15 @@ export const stage1 = {
         ],
         correctCardIds: ['pilot-card'],
         wrongMessage:
-          'The flight gear points to the pilot, not the medical crew.',
+          'The flight gear points to the pilot, not the other crewmate.',
         successMessage:
           'ramde points to fly or go. ramdenu is a pilot.',
       },
       {
-        prompt: 'Which crewmate is the medic?',
+        prompt: 'Which alien label belongs to the medic?',
         cards: [
           {
             id: 'pilot-card',
-            title: 'Flight Crew',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -185,7 +180,6 @@ export const stage1 = {
           },
           {
             id: 'medic-card',
-            title: 'Medical Crew',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -197,7 +191,7 @@ export const stage1 = {
         ],
         correctCardIds: ['medic-card'],
         wrongMessage:
-          'The medical tools point to the medic, not the flight crew.',
+          'The medical tools point to the medic, not the other crewmate.',
         successMessage:
           'derbe points to healing. derbenu is a doctor or medic.',
       },
@@ -270,18 +264,16 @@ export const stage1 = {
     instructions:
       'Rotate the gear until the reversing prefix flips into place in front of gane.',
     rootWord: 'gane',
-    rootMeaning: 'lock',
     prefixLabel: 'op',
     solvedWord: 'opgane',
-    solvedMeaning: 'unlock',
-    successMessage: 'op- means un-.',
+    successMessage: 'The panel accepts opgane.',
     morphemesLearned: ['gane', 'op-', 'opgane'],
     objective: 'stage1-complete',
     afterSolve: {
       type: 'narration',
       title: 'The Door Opens',
       lines: [
-        'op- reverses. gane is lock. opgane is unlock.',
+        'The door accepts opgane and slides open.',
         'The Clinic is open now. If puacarda is medicine, I need to find it fast.',
       ],
     },

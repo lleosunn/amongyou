@@ -13,14 +13,18 @@ function angleFromPoint(clientX, clientY, rect) {
   return (Math.atan2(clientY - centerY, clientX - centerX) * 180) / Math.PI;
 }
 
+function angleDelta(fromAngle, toAngle) {
+  return ((toAngle - fromAngle + 540) % 360) - 180;
+}
+
 export default function GearLockPuzzle({
   title,
   instructions,
   rootWord = 'gane',
-  rootMeaning = 'lock',
+  rootMeaning,
   prefixLabel = 'op',
   solvedWord = 'opgane',
-  solvedMeaning = 'unlock',
+  solvedMeaning,
   successMessage = 'op- means un-',
   onSolve,
 }) {
@@ -28,6 +32,7 @@ export default function GearLockPuzzle({
   const dragStateRef = useRef(null);
   const [rotation, setRotation] = useState(0);
   const [solved, setSolved] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [showContinue, setShowContinue] = useState(false);
 
   useEffect(() => {
@@ -49,12 +54,16 @@ export default function GearLockPuzzle({
       const rect = gear.getBoundingClientRect();
       const currentAngle = angleFromPoint(event.clientX, event.clientY, rect);
       const nextRotation = normalizeAngle(
-        drag.startRotation + (currentAngle - drag.startAngle)
+        drag.rotation + angleDelta(drag.lastAngle, currentAngle)
       );
+
+      drag.lastAngle = currentAngle;
+      drag.rotation = nextRotation;
 
       if (Math.abs(nextRotation - 180) <= 16) {
         setRotation(180);
         setSolved(true);
+        setDragging(false);
         dragStateRef.current = null;
         return;
       }
@@ -64,6 +73,7 @@ export default function GearLockPuzzle({
 
     const handlePointerUp = () => {
       dragStateRef.current = null;
+      setDragging(false);
     };
 
     window.addEventListener('pointermove', handlePointerMove);
@@ -79,10 +89,13 @@ export default function GearLockPuzzle({
     if (solved || !gearRef.current) return;
 
     const rect = gearRef.current.getBoundingClientRect();
+    const startAngle = angleFromPoint(event.clientX, event.clientY, rect);
+    event.currentTarget.setPointerCapture?.(event.pointerId);
     dragStateRef.current = {
-      startAngle: angleFromPoint(event.clientX, event.clientY, rect),
-      startRotation: rotation,
+      lastAngle: startAngle,
+      rotation,
     };
+    setDragging(true);
   };
 
   const displayWord = solved ? solvedWord : rootWord;
@@ -98,7 +111,9 @@ export default function GearLockPuzzle({
       <div className={`gear-lock-stage ${solved ? 'solved' : ''}`}>
         <div
           ref={gearRef}
-          className={`gear-lock-wheel ${solved ? 'solved' : ''}`}
+          className={`gear-lock-wheel ${solved ? 'solved' : ''} ${
+            dragging ? 'dragging' : ''
+          }`}
           onPointerDown={handlePointerDown}
           role="presentation"
         >
@@ -113,7 +128,9 @@ export default function GearLockPuzzle({
           </div>
           <div className="gear-lock-center">
             <div className="gear-lock-word">{displayWord}</div>
-            <div className="gear-lock-meaning">{displayMeaning}</div>
+            {displayMeaning && (
+              <div className="gear-lock-meaning">{displayMeaning}</div>
+            )}
           </div>
         </div>
       </div>

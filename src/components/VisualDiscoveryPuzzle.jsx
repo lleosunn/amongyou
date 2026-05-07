@@ -38,6 +38,10 @@ function makeSolvedMeaningPlacements(step) {
   );
 }
 
+function getCardChoiceName(card) {
+  return card.answerLabel ?? card.label ?? card.title ?? card.id;
+}
+
 export default function VisualDiscoveryPuzzle({
   title,
   instructions,
@@ -334,7 +338,7 @@ export default function VisualDiscoveryPuzzle({
                   )}
                 </div>
                 <div className="visual-card-copy">
-                  <h3>{card.title}</h3>
+                  {card.title && <h3>{card.title}</h3>}
                   {card.caption && <p>{card.caption}</p>}
                 </div>
                 {renderLabel(card, false)}
@@ -412,7 +416,7 @@ export default function VisualDiscoveryPuzzle({
                   )}
                 </div>
                 <div className="visual-card-copy">
-                  <h3>{card.title}</h3>
+                  {card.title && <h3>{card.title}</h3>}
                   {(card.labelParts ?? []).length > 0 && renderLabel(card, false)}
                   {card.caption && <p>{card.caption}</p>}
                 </div>
@@ -501,7 +505,7 @@ export default function VisualDiscoveryPuzzle({
               onClick={isCardChoice ? () => chooseCard(card.id) : undefined}
               disabled={isCardChoice ? advancing || solved : undefined}
               type={isCardChoice ? 'button' : undefined}
-              aria-label={isCardChoice ? card.title : undefined}
+              aria-label={isCardChoice ? getCardChoiceName(card) : undefined}
             >
               <div
                 className={`visual-picture visual-picture-${card.visual} ${

@@ -63,7 +63,12 @@
   position: absolute;
   inset: 0;
   transform: rotate(var(--gear-rotation));
-  transition: transform 0.12s linear;
+  transition: transform 0.22s cubic-bezier(0.2, 0.85, 0.24, 1);
+  will-change: transform;
+}
+
+.gear-lock-wheel.dragging .gear-lock-rotor {
+  transition: none;
 }
 
 .gear-lock-teeth {
