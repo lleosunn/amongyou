@@ -2,6 +2,7 @@ const commandTiles = [
   { id: 'moll', label: 'moll' },
   { id: 'ya-', label: 'ya-' },
   { id: 'puacarda', label: 'puacarda' },
+  { id: 'desa', label: 'desa' },
   { id: 'doda', label: 'doda' },
   { id: 'rom', label: 'rom' },
   { id: 'gane', label: 'gane' },
@@ -26,7 +27,7 @@ export const stage3 = {
     lines: [
       'A production lab. Bottle racks, mixing vats, and a star map glow across the room.',
       'This is where the medicine can be made in bulk.',
-      'I need enough puacarda for Earth, and I need the words to tell the aliens where to send it.',
+      'I need enough puacarda for Mars, and I need the words to tell the aliens where to send it.',
     ],
   },
 
@@ -145,21 +146,21 @@ export const stage3 = {
     title: 'Destination Map',
     instructions:
       'The star map highlights the cabin poster world and needs its destination label.',
-    prompt: 'Build the highlighted destination.',
+    prompt: 'Build the highlighted Mars destination.',
     clues: [
       {
-        id: 'blue-ocean-world',
-        title: 'Blue Ocean World',
-        caption: 'The highlighted world matches the cabin poster and dispenser clues.',
-        imageKey: 'clueDestinationMap',
+        id: 'red-planet-world',
+        title: 'Desa Rom',
+        caption: 'The highlighted world matches the Mars poster from the cabin.',
+        imageKey: 'planetDesarom',
       },
     ],
     slotCount: 2,
     availableTiles: commandTiles,
-    correctSequence: ['doda', 'rom'],
+    correctSequence: ['desa', 'rom'],
     wrongMessage: 'The map cannot lock that destination.',
-    successMessage: 'Destination locked: dodarom.',
-    morphemesLearned: ['dodarom'],
+    successMessage: 'Destination locked: desarom.',
+    morphemesLearned: ['desa', 'desarom'],
     objective: 'lab-destination',
   },
 
@@ -199,7 +200,7 @@ export const stage3 = {
     title: 'Ready To Speak',
     lines: [
       'The cargo rack is full of puacarda.',
-      'Earth is dodarom: the water planet.',
+      'Mars is desarom: the red planet.',
       'I can speak enough of the alien language to ask for help.',
     ],
   },

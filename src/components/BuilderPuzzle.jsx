@@ -20,6 +20,7 @@ function makeStep({
   slotCount,
   successMessage,
   wrongMessage,
+  wrongEffect,
   clues,
 }) {
   return {
@@ -31,6 +32,7 @@ function makeStep({
     slotCount,
     successMessage,
     wrongMessage,
+    wrongEffect,
     clues,
   };
 }
@@ -52,6 +54,7 @@ export default function BuilderPuzzle(props) {
   const title = step.title ?? props.title;
   const instructions = step.instructions ?? props.instructions;
   const clues = step.clues ?? props.clues ?? [];
+  const wrongEffect = step.wrongEffect ?? props.wrongEffect;
   const isLast = stepIndex >= stepList.length - 1;
   const phrase = Array.from({ length: slotCount }, (_, i) => placements[i]?.label)
     .filter(Boolean)
@@ -176,13 +179,25 @@ export default function BuilderPuzzle(props) {
     <div
       className={`builder-puzzle ${
         feedback ? `builder-has-${feedback.type}` : ''
-      }`}
+      } ${wrongEffect ? `builder-effect-${wrongEffect}` : ''}`}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
       {title && <h2 className="builder-title">{title}</h2>}
       {leadCopy && <p className="builder-instructions">{leadCopy}</p>}
       <PuzzleClueCards clues={clues} />
+      {wrongEffect === 'door-lock' && (
+        <div className="builder-door-console" aria-hidden="true">
+          <span className="builder-door-light" />
+          <span className="builder-door-status">
+            {feedback?.type === 'success'
+              ? 'UNLOCKED'
+              : feedback?.type === 'wrong'
+                ? 'THUNK - LOCKED'
+                : 'LOCKED'}
+          </span>
+        </div>
+      )}
 
       <div className="builder-slots" style={{ '--slot-count': slotCount }}>
         {Array.from({ length: slotCount }, (_, index) => {

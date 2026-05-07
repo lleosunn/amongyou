@@ -10,6 +10,7 @@ export const pronouns = {
 
 export const roots = {
   rom: { blah: 'rom', english: 'planet' },
+  desa: { blah: 'desa', english: 'red / rust' },
   doda: { blah: 'doda', english: 'water' },
   carda: { blah: 'carda', english: 'virus' },
   ema: { blah: 'ema', english: 'mom' },
@@ -44,7 +45,7 @@ export const fullWords = {
   opgane: { blah: 'opgane', english: 'unlock' },
   puacarda: { blah: 'puacarda', english: 'antiviral medicine' },
   yamoll: { blah: 'yamoll', english: 'refill' },
-  dodarom: { blah: 'dodarom', english: 'Earth / water planet' },
+  desarom: { blah: 'desarom', english: 'Mars / red planet' },
   ramdenu: { blah: 'ramdenu', english: 'pilot' },
   derbenu: { blah: 'derbenu', english: 'doctor / medic' },
   derbemar: { blah: 'derbemar', english: 'clinic' },

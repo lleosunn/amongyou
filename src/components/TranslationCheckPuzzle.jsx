@@ -31,6 +31,7 @@ export default function TranslationCheckPuzzle({
   readyMessage,
   wrongMessage = 'That does not match the word parts yet.',
   successMessage = 'That translation fits.',
+  successDelayMs = 2500,
   acceptedKeywordGroups = [],
   showDecode = true,
   onSolve,
@@ -62,7 +63,7 @@ export default function TranslationCheckPuzzle({
 
     setSolved(true);
     setFeedback({ type: 'success', text: successMessage });
-    solveTimeoutRef.current = setTimeout(() => onSolve?.(), 900);
+    solveTimeoutRef.current = setTimeout(() => onSolve?.(), successDelayMs);
   };
 
   return (

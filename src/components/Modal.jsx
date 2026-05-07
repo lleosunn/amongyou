@@ -210,6 +210,7 @@ export default function Modal({ children, onClose }) {
             readyMessage={content.readyMessage}
             wrongMessage={content.wrongMessage}
             successMessage={content.successMessage}
+            successDelayMs={content.successDelayMs}
             acceptedKeywordGroups={content.acceptedKeywordGroups}
             showDecode={content.showDecode}
             onSolve={() => {

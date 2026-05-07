@@ -17,8 +17,8 @@ export const stage1 = {
     lines: [
       'Ouch. My head hurts. Where am I?',
       'I see metal walls, strange technology, and stars outside the window. It seems I am on an alien spaceship.',
-      'There is a message in my pocket. I must have carried it from Earth: "We are all counting on you to bring home the antiviral medicine to cure zadotitis."',
-      'All the writing in this spaceship is in an unfamiliar language. I need to learn enough words to find the cure, then tell the aliens I need to go back to Earth.',
+      'There is a message in my pocket. I must have carried it from Mars: "We are all counting on you to bring home the antiviral medicine to cure zadotitis."',
+      'All of the writing in this spaceship is unfamiliar. How can I communicate to the aliens that I need to return home with a cure?',
       'Time to gather some clues from the words around me.',
     ],
   },
@@ -27,37 +27,40 @@ export const stage1 = {
     type: 'visual-discovery',
     title: 'Message Screen',
     instructions:
-      'Compare the avatar gestures on the message screen. Click the tag aimed at the person in front of the screen.',
+      'Match the words to what the alien is pointing at.',
     steps: [
       {
-        prompt:
-          'One tag appears when the avatar taps its chest. The other appears when it points outward. Click the outward-pointing tag.',
+        meaningChips: [
+          { id: 'i-me', label: 'I / me' },
+          { id: 'you', label: 'you' },
+        ],
         cards: [
           {
             id: 'message-self-card',
-            title: 'Screen Tag A',
+            title: 'il',
+            caption: 'The alien taps their chest.',
             visual: 'message-self',
             imageKey: 'messageSelf',
             label: 'il',
-            labelParts: [{ id: 'message-self-il', text: 'il' }],
+            acceptedMeaningId: 'i-me',
           },
           {
             id: 'message-you-card',
-            title: 'Screen Tag B',
+            title: 'al',
+            caption: 'The alien points outward.',
             visual: 'message-you',
             imageKey: 'messageYou',
             label: 'al',
-            labelParts: [{ id: 'message-you-al', text: 'al' }],
+            acceptedMeaningId: 'you',
           },
         ],
-        correctPartIds: ['message-you-al'],
         wrongMessage:
-          'That tag is paired with the avatar pointing to itself. Look for the outward gesture.',
+          'That meaning belongs with the other gesture.',
         successMessage:
-          'The outward gesture marks the person in front of the screen. al means you.',
+          'il marks the speaker. al marks the person being addressed.',
       },
     ],
-    morphemesLearned: ['al'],
+    morphemesLearned: ['il', 'al'],
     objective: 'pilot-chat',
   },
 
@@ -65,42 +68,42 @@ export const stage1 = {
     type: 'visual-discovery',
     title: 'Planet Posters',
     instructions:
-      'Compare the alien labels with the pictures. Click the word part that repeats on both planet posters.',
+      'There are two posters of planets. One is red and dusty, and the other has orange bands. What is the root of both words?',
     steps: [
       {
-        prompt:
-          'Both posters show worlds, but only one word part is shared. Click the shared part on both labels.',
         cards: [
           {
-            id: 'dodarom-poster',
-            title: 'Blue Water World',
-            caption: 'The poster shows a blue planet with oceans.',
-            visual: 'earth',
-            imageKey: 'planetDodarom',
-            label: 'dodarom',
+            id: 'desarom-poster',
+            title: 'Desa Rom',
+            caption: 'The poster shows Mars, a red planet.',
+            visual: 'mars',
+            imageKey: 'planetDesarom',
+            label: 'desa rom',
+            labelOnImage: true,
             labelParts: [
-              { id: 'dodarom-doda', text: 'doda' },
-              { id: 'dodarom-rom', text: 'rom' },
+              { id: 'desarom-desa', text: 'desa' },
+              { id: 'desarom-rom', text: 'rom' },
             ],
           },
           {
             id: 'fannarom-poster',
-            title: 'Ringed Amber World',
-            caption: 'The poster shows another planet with rings.',
-            visual: 'amber',
+            title: 'Fanna Rom',
+            caption: 'The poster shows Jupiter, an orange planet with bands.',
+            visual: 'jupiter',
             imageKey: 'planetFannarom',
-            label: 'fannarom',
+            label: 'fanna rom',
+            labelOnImage: true,
             labelParts: [
               { id: 'fannarom-fanna', text: 'fanna' },
               { id: 'fannarom-rom', text: 'rom' },
             ],
           },
         ],
-        correctPartIds: ['dodarom-rom', 'fannarom-rom'],
+        correctPartIds: ['desarom-rom', 'fannarom-rom'],
         wrongMessage:
-          'Look for the part that appears on both labels and matches what both pictures have in common.',
+          'Look for the part that appears on both planet names.',
         successMessage:
-          'Both pictures are planets, and both labels end with rom. rom means planet.',
+          'Both names end with rom. rom means planet.',
       },
     ],
     morphemesLearned: ['rom'],
@@ -120,7 +123,7 @@ export const stage1 = {
           {
             id: 'pilot-card',
             title: 'Flight Crew',
-            caption: 'This crewmate wears a flight helmet beside a route map.',
+            caption: 'A helmet, map, and ship controls are visible in this image.',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -132,7 +135,7 @@ export const stage1 = {
           {
             id: 'medic-card',
             title: 'Medical Crew',
-            caption: 'This crewmate wears a medical coat and holds a scanner.',
+            caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -149,13 +152,12 @@ export const stage1 = {
           'Both labels end with nu, and both pictures show people with jobs. -nu marks a person or doer.',
       },
       {
-        prompt:
-          'Now focus on the flight crew picture. Click the part that names the flight action.',
+        prompt: 'Which crewmate is the pilot?',
         cards: [
           {
             id: 'pilot-card',
             title: 'Flight Crew',
-            caption: 'Helmet, route map, and ship controls point to flying or going.',
+            caption: 'A helmet, map, and ship controls are visible in this image.',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -167,7 +169,7 @@ export const stage1 = {
           {
             id: 'medic-card',
             title: 'Medical Crew',
-            caption: 'The second card is a different job.',
+            caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -177,20 +179,19 @@ export const stage1 = {
             ],
           },
         ],
-        correctPartIds: ['pilot-ramde'],
+        correctCardIds: ['pilot-card'],
         wrongMessage:
-          'The ending marks the person. The other part on the flight card names the action.',
+          'The flight gear points to the pilot, not the medical crew.',
         successMessage:
           'ramde points to fly or go. ramdenu is a pilot.',
       },
       {
-        prompt:
-          'Now focus on the medical crew picture. Click the part that names healing.',
+        prompt: 'Which crewmate is the medic?',
         cards: [
           {
             id: 'pilot-card',
             title: 'Flight Crew',
-            caption: 'The first card is the flight job.',
+            caption: 'A helmet, map, and ship controls are visible in this image.',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -202,7 +203,7 @@ export const stage1 = {
           {
             id: 'medic-card',
             title: 'Medical Crew',
-            caption: 'Medical coat, scanner, and kit point to healing.',
+            caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -212,9 +213,9 @@ export const stage1 = {
             ],
           },
         ],
-        correctPartIds: ['medic-derbe'],
+        correctCardIds: ['medic-card'],
         wrongMessage:
-          'The medical picture points to the root, not the person ending.',
+          'The medical tools point to the medic, not the flight crew.',
         successMessage:
           'derbe points to healing. derbenu is a doctor or medic.',
       },
@@ -271,6 +272,7 @@ export const stage1 = {
       'Not quite. Use the two word parts you have learned from the message screen and the planet posters.',
     successMessage:
       'Yes. It reads like "you: planet?" The aliens were trying to identify where you came from. puacarda is still unresolved.',
+    successDelayMs: 3200,
     acceptedKeywordGroups: [
       ['you', 'your'],
       ['planet', 'world'],
@@ -284,12 +286,22 @@ export const stage1 = {
     type: 'builder',
     title: 'Cabin Door Lock',
     instructions:
-      'The door shows a lock symbol and the word "gane"; build the word that reverses the lock.',
+      'The door panel pairs gane with a locked icon and op- with a reversing arrow.',
     prompt: 'Door display: [ ___ ] + [ gane ].',
+    clues: [
+      {
+        id: 'door-prefix-hint',
+        title: 'Door Hint',
+        caption:
+          'gane is lock. The reversing arrow beside op- shows the lock changing state.',
+      },
+    ],
     slotCount: 2,
     availableTiles: prefixTiles,
     correctSequence: ['op-', 'gane'],
-    wrongMessage: 'The lock clicks, then resets.',
+    wrongEffect: 'door-lock',
+    wrongMessage:
+      'A red light snaps on. The door gives a heavy mechanical thunk and stays locked.',
     successMessage: 'The lock turns green. opgane: unlock.',
     morphemesLearned: ['gane', 'op-', 'opgane'],
     objective: 'stage1-complete',

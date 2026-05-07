@@ -378,7 +378,7 @@ export const stage2 = {
     title: 'Medicine Found',
     lines: [
       'puacarda: anti-virus medicine. That was what they were giving me.',
-      'I feel steadier, but the card was clear: Earth needs more than one dose.',
+      'I feel steadier, but the card was clear: Mars needs more than one dose.',
       'The Lab should have the machinery to make this in bulk.',
     ],
   },

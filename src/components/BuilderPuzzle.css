@@ -80,6 +80,57 @@
   text-align: center;
 }
 
+.builder-door-console {
+  align-items: center;
+  align-self: center;
+  background: rgba(8, 10, 16, 0.7);
+  border: 1px solid rgba(120, 135, 170, 0.34);
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  min-width: 180px;
+  padding: 10px 14px;
+}
+
+.builder-door-light {
+  background: #f7c948;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(247, 201, 72, 0.48);
+  height: 14px;
+  width: 14px;
+}
+
+.builder-door-status {
+  color: #d8d8f0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.builder-effect-door-lock.builder-has-wrong {
+  animation: door-thunk 0.34s ease;
+}
+
+.builder-effect-door-lock.builder-has-wrong .builder-door-console {
+  background: rgba(72, 9, 9, 0.42);
+  border-color: rgba(255, 86, 86, 0.82);
+  box-shadow:
+    inset 0 0 18px rgba(255, 40, 40, 0.14),
+    0 0 24px rgba(255, 40, 40, 0.12);
+}
+
+.builder-effect-door-lock.builder-has-wrong .builder-door-light {
+  background: #ff3636;
+  box-shadow: 0 0 18px rgba(255, 54, 54, 0.9);
+}
+
+.builder-effect-door-lock.builder-has-success .builder-door-light {
+  background: #8aff9a;
+  box-shadow: 0 0 18px rgba(138, 255, 154, 0.82);
+}
+
 .builder-tiles {
   display: flex;
   flex-wrap: wrap;
@@ -216,5 +267,24 @@
 
   70% {
     transform: translateX(4px);
+  }
+}
+
+@keyframes door-thunk {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  18% {
+    transform: translateX(-8px);
+  }
+
+  36% {
+    transform: translateX(5px);
+  }
+
+  54% {
+    transform: translateX(-3px);
   }
 }

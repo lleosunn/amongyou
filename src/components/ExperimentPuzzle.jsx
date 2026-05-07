@@ -11,6 +11,7 @@ export default function ExperimentPuzzle({
 }) {
   const [activeSampleId, setActiveSampleId] = useState(null);
   const [testedSampleIds, setTestedSampleIds] = useState(new Set());
+  const [fillRun, setFillRun] = useState(0);
   const [solved, setSolved] = useState(false);
 
   const activeSample = useMemo(
@@ -22,6 +23,7 @@ export default function ExperimentPuzzle({
   const testSample = (sample) => {
     if (solved) return;
     setActiveSampleId(sample.id);
+    setFillRun((run) => run + 1);
     setTestedSampleIds((current) => new Set(current).add(sample.id));
   };
 
@@ -60,6 +62,7 @@ export default function ExperimentPuzzle({
           >
             {activeSample && (
               <span
+                key={`${activeSample.id}-${fillRun}`}
                 className="experiment-liquid"
                 style={{ background: activeSample.color }}
               />

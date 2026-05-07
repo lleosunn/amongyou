@@ -46,6 +46,32 @@
   padding: 12px;
 }
 
+button.visual-card {
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+}
+
+.visual-card-selectable {
+  transition:
+    border-color 0.16s ease,
+    background 0.16s ease,
+    transform 0.16s ease;
+}
+
+.visual-card-selectable:hover:not(:disabled),
+.visual-card-selectable:focus-visible,
+.visual-card-selectable.selected {
+  background: rgba(70, 96, 160, 0.22);
+  border-color: rgba(143, 162, 255, 0.85);
+  outline: none;
+}
+
+.visual-card-selectable.selected {
+  box-shadow: inset 0 0 0 2px rgba(138, 255, 154, 0.24);
+}
+
 .visual-picture {
   position: relative;
   display: grid;
@@ -209,6 +235,18 @@
   min-width: 0;
 }
 
+.visual-picture .visual-label {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+}
+
+.visual-label-static {
+  pointer-events: none;
+}
+
 .visual-part {
   min-height: 40px;
   background: #25253e;
@@ -251,6 +289,90 @@
 .visual-part:disabled {
   cursor: default;
   opacity: 0.75;
+}
+
+.visual-part-static {
+  align-items: center;
+  display: inline-flex;
+  cursor: default;
+}
+
+.visual-picture .visual-part {
+  background: rgba(14, 18, 30, 0.86);
+  border-color: rgba(180, 200, 255, 0.58);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.visual-meaning-card {
+  grid-template-rows: auto minmax(62px, auto) auto;
+}
+
+.visual-meaning-target {
+  min-height: 42px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1.5px dashed rgba(120, 135, 170, 0.62);
+  border-radius: 8px;
+  color: rgba(232, 232, 244, 0.72);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 8px 10px;
+}
+
+.visual-meaning-target:hover:not(:disabled),
+.visual-meaning-target:focus-visible {
+  background: rgba(74, 106, 255, 0.14);
+  border-color: #8fa2ff;
+  outline: none;
+}
+
+.visual-meaning-target.filled {
+  background: rgba(138, 255, 154, 0.14);
+  border-color: rgba(138, 255, 154, 0.72);
+  border-style: solid;
+  color: #dcffe4;
+}
+
+.visual-meaning-chips {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(120, 135, 170, 0.26);
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  min-height: 58px;
+  padding: 10px;
+}
+
+.visual-meaning-chip {
+  min-height: 38px;
+  background: #25253e;
+  border: 1.5px solid #4a4a68;
+  border-radius: 8px;
+  color: #e8e8f4;
+  cursor: grab;
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 8px 14px;
+}
+
+.visual-meaning-chip:hover:not(:disabled),
+.visual-meaning-chip.selected {
+  background: #343450;
+  border-color: #8fa2ff;
+  color: #fff;
+}
+
+.visual-meaning-chip:active {
+  cursor: grabbing;
+}
+
+.visual-meaning-chip:disabled {
+  cursor: default;
+  opacity: 0.6;
 }
 
 .visual-feedback {

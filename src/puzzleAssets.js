@@ -1,4 +1,4 @@
-import planetDodaromImg from './assets/discovery/planet-dodarom.png';
+import planetDesaromImg from './assets/discovery/planet-desarom.png';
 import planetFannaromImg from './assets/discovery/planet-fannarom.png';
 import crewPilotImg from './assets/discovery/crew-pilot.png';
 import crewMedicImg from './assets/discovery/crew-medic.png';
@@ -18,7 +18,7 @@ import clueTreatmentBeforeImg from './assets/discovery/clue-treatment-before.png
 import clueTreatmentLogImg from './assets/discovery/clue-treatment-log.png';
 
 export const puzzleAssets = {
-  planetDodarom: planetDodaromImg,
+  planetDesarom: planetDesaromImg,
   planetFannarom: planetFannaromImg,
   crewPilot: crewPilotImg,
   crewMedic: crewMedicImg,

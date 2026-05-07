@@ -5,7 +5,7 @@ Among You is a React/Vite educational escape-room game based on the local
 documents.
 
 The player is an astronaut who wakes up aboard a benevolent alien ship on
-Planet 999. Earth is infected with zadotitis, and the astronaut must decode the
+Planet 999. Mars is infected with zadotitis, and the astronaut must decode the
 alien language to find antiviral medicine, manufacture more of it, and ask the
 aliens to send the medicine home.
 
@@ -20,11 +20,11 @@ The current game implements the main four-room arc described in the PDFs:
 2. **Clinic** - identify `derbemar`, learn treatment and medicine vocabulary,
    build `pua- carda` to identify `puacarda`, heal the player, and learn
    `yamoll`.
-3. **Lab / Factory** - manufacture bulk `puacarda`, build `dodarom` for Earth,
+3. **Lab / Factory** - manufacture bulk `puacarda`, build `desarom` for Mars,
    prepare to speak with `il kume`, and review collected vocabulary before the
    Bridge.
 4. **Bridge / Comms** - complete the final commander conversation to prove
-   treatment, explain the Earth mission, request transport, and trigger the
+   treatment, explain the Mars mission, request transport, and trigger the
    ending.
 
 Core systems from the room design are also represented:

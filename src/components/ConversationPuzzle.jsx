@@ -210,7 +210,6 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
       {!solved && (
         <>
           <PuzzleClueCards clues={clues} />
-          {step.prompt && <p className="conversation-prompt">{step.prompt}</p>}
 
           <div className="conversation-slots" style={{ '--slot-count': slotCount }}>
             {Array.from({ length: slotCount }, (_, index) => {
