@@ -1,11 +1,3 @@
-const prefixTiles = [
-  { id: 'op-', label: 'op-' },
-  { id: 'a-', label: 'a-' },
-  { id: 'ya-', label: 'ya-' },
-  { id: 'me-', label: 'me-' },
-  { id: 'gane', label: 'gane' },
-];
-
 export const stage1 = {
   id: 'stage1',
   name: "Stage 1 - Pilot's Cabin",
@@ -219,26 +211,61 @@ export const stage1 = {
   },
 
   doorBuilder: {
-    type: 'builder',
+    type: 'visual-discovery',
     title: 'Cabin Door Lock',
     instructions:
-      'The door panel pairs gane with a locked icon and op- with a reversing arrow.',
-    prompt: 'Door display: [ ___ ] + [ gane ].',
-    clues: [
+      'Use the lock panel image to find the word part that reverses the locked state.',
+    steps: [
       {
-        id: 'door-prefix-hint',
-        title: 'Door Hint',
-        caption:
-          'gane is lock. The reversing arrow beside op- shows the lock changing state.',
+        prompt:
+          'The panel shows a lock becoming unlocked. Click the reversing prefix in the door command.',
+        cards: [
+          {
+            id: 'cabin-door-lock-card',
+            title: 'Door Command',
+            caption:
+              'The cabin display shows the lock state changing into an unlocked state.',
+            visual: 'door-lock',
+            imageKey: 'clueCabinDoorLock',
+            label: 'opgane',
+            labelAsTitle: true,
+            labelParts: [
+              { id: 'door-lock-op', text: 'op-' },
+              { id: 'door-lock-gane', text: 'gane' },
+            ],
+          },
+        ],
+        correctPartIds: ['door-lock-op'],
+        partialMessage:
+          'The reversing arrow points to the prefix before the lock word.',
+        wrongMessage:
+          'gane names the lock. The reversing arrow points to the part that changes that state.',
+        successMessage: 'op- reverses. gane is lock. opgane is unlock.',
+      },
+      {
+        prompt: 'Now click the lock root in the completed command.',
+        cards: [
+          {
+            id: 'cabin-door-root-card',
+            title: 'Door Command',
+            caption:
+              'The same command combines a reversing prefix with the lock root.',
+            visual: 'door-lock',
+            imageKey: 'clueCabinDoorLock',
+            label: 'opgane',
+            labelAsTitle: true,
+            labelParts: [
+              { id: 'door-root-op', text: 'op-' },
+              { id: 'door-root-gane', text: 'gane' },
+            ],
+          },
+        ],
+        correctPartIds: ['door-root-gane'],
+        wrongMessage:
+          'op- reverses the state. The root is the part that names the lock.',
+        successMessage: 'gane is lock. Together, opgane unlocks the door.',
       },
     ],
-    slotCount: 2,
-    availableTiles: prefixTiles,
-    correctSequence: ['op-', 'gane'],
-    wrongEffect: 'door-lock',
-    wrongMessage:
-      'A red light snaps on. The door gives a heavy mechanical thunk and stays locked.',
-    successMessage: 'The lock turns green. opgane: unlock.',
     morphemesLearned: ['gane', 'op-', 'opgane'],
     objective: 'stage1-complete',
     afterSolve: {

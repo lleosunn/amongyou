@@ -184,6 +184,8 @@ export const stage2 = {
     beforeLabel: 'a-sondy',
     afterLabel: 'me-sondy',
     rootLabel: 'sondy',
+    beforeImageKey: 'treatmentWallBeforeAi',
+    afterImageKey: 'treatmentWallAfterAi',
     successMessage:
       'sondy is the treatment. a- marks before, and me- marks after.',
     morphemesLearned: ['a-', 'me-', 'sondy'],

@@ -258,7 +258,11 @@ export default function VisualDiscoveryPuzzle({
         {title && <h2 className="visual-title">{title}</h2>}
         {leadCopy && <p className="visual-instructions">{leadCopy}</p>}
 
-        <div className="visual-card-grid">
+        <div
+          className={`visual-card-grid ${
+            (step.cards ?? []).length === 1 ? 'visual-card-grid-single' : ''
+          }`}
+        >
           {(step.cards ?? []).map((card) => {
             const image = getPuzzleAsset(card.imageKey);
             const placedMeaning = meaningChips.find(
@@ -351,7 +355,11 @@ export default function VisualDiscoveryPuzzle({
       {title && <h2 className="visual-title">{title}</h2>}
       {leadCopy && <p className="visual-instructions">{leadCopy}</p>}
 
-      <div className="visual-card-grid">
+      <div
+        className={`visual-card-grid ${
+          (step.cards ?? []).length === 1 ? 'visual-card-grid-single' : ''
+        }`}
+      >
         {(step.cards ?? []).map((card) => {
           const image = getPuzzleAsset(card.imageKey);
 

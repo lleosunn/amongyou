@@ -245,6 +245,8 @@ export default function Modal({ children, onClose }) {
             beforeLabel={content.beforeLabel}
             afterLabel={content.afterLabel}
             rootLabel={content.rootLabel}
+            beforeImageKey={content.beforeImageKey}
+            afterImageKey={content.afterImageKey}
             successMessage={content.successMessage}
             initiallySolved={content.initiallySolved}
             onSolve={() => {

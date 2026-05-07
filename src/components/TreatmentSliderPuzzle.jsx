@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getPuzzleAsset } from '../puzzleAssets';
 import './TreatmentSliderPuzzle.css';
 
 export default function TreatmentSliderPuzzle({
@@ -7,6 +8,8 @@ export default function TreatmentSliderPuzzle({
   beforeLabel = 'a-sondy',
   afterLabel = 'me-sondy',
   rootLabel = 'sondy',
+  beforeImageKey,
+  afterImageKey,
   successMessage,
   initiallySolved = false,
   onSolve,
@@ -15,6 +18,9 @@ export default function TreatmentSliderPuzzle({
   const [solved, setSolved] = useState(initiallySolved);
   const recoveryRatio = recovery / 100;
   const ready = recovery >= 90;
+  const beforeImage = getPuzzleAsset(beforeImageKey);
+  const afterImage = getPuzzleAsset(afterImageKey);
+  const hasTreatmentImages = beforeImage && afterImage;
 
   const finish = () => {
     if (!ready || solved) return;
@@ -45,19 +51,41 @@ export default function TreatmentSliderPuzzle({
         <div className="treatment-status treatment-status-before">
           <span>{beforeLabel}</span>
         </div>
-        <div className="treatment-portrait" aria-hidden="true">
-          <div className="treatment-face treatment-face-sick">
-            <span className="treatment-eye left" />
-            <span className="treatment-eye right" />
-            <span className="treatment-mouth" />
-            <span className="treatment-spot spot-one" />
-            <span className="treatment-spot spot-two" />
-          </div>
-          <div className="treatment-face treatment-face-well">
-            <span className="treatment-eye left" />
-            <span className="treatment-eye right" />
-            <span className="treatment-mouth" />
-          </div>
+        <div
+          className={`treatment-portrait ${
+            hasTreatmentImages ? 'treatment-portrait-images' : ''
+          }`}
+          aria-hidden="true"
+        >
+          {hasTreatmentImages ? (
+            <>
+              <img
+                className="treatment-image treatment-image-before"
+                src={beforeImage}
+                alt=""
+              />
+              <img
+                className="treatment-image treatment-image-after"
+                src={afterImage}
+                alt=""
+              />
+            </>
+          ) : (
+            <>
+              <div className="treatment-face treatment-face-sick">
+                <span className="treatment-eye left" />
+                <span className="treatment-eye right" />
+                <span className="treatment-mouth" />
+                <span className="treatment-spot spot-one" />
+                <span className="treatment-spot spot-two" />
+              </div>
+              <div className="treatment-face treatment-face-well">
+                <span className="treatment-eye left" />
+                <span className="treatment-eye right" />
+                <span className="treatment-mouth" />
+              </div>
+            </>
+          )}
         </div>
         <div className="treatment-status treatment-status-after">
           <span>{afterLabel}</span>

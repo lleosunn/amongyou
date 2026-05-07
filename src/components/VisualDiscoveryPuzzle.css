@@ -35,6 +35,14 @@
   gap: 12px;
 }
 
+.visual-card-grid-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.visual-card-grid-single .visual-picture {
+  aspect-ratio: 16 / 9;
+}
+
 .visual-card {
   display: grid;
   gap: 10px;

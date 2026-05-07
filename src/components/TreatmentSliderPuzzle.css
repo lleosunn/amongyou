@@ -70,6 +70,11 @@
   position: relative;
 }
 
+.treatment-portrait-images {
+  aspect-ratio: 1;
+  min-height: 0;
+}
+
 .treatment-portrait::before {
   content: '';
   position: absolute;
@@ -80,6 +85,31 @@
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: auto, auto, 22px 22px, 22px 22px;
+}
+
+.treatment-portrait-images::before {
+  content: none;
+}
+
+.treatment-image {
+  display: block;
+  grid-area: 1 / 1;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  width: 100%;
+}
+
+.treatment-image-before {
+  opacity: var(--sick-opacity);
+  transform: scale(calc(1 + var(--well-opacity) * 0.015));
+}
+
+.treatment-image-after {
+  opacity: var(--well-opacity);
+  transform: scale(calc(1.015 - var(--well-opacity) * 0.015));
 }
 
 .treatment-face {
@@ -276,7 +306,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .treatment-face {
+  .treatment-face,
+  .treatment-image {
     transition: none;
   }
 }

@@ -4,6 +4,7 @@ import crewPilotImg from './assets/discovery/crew-pilot.png';
 import crewMedicImg from './assets/discovery/crew-medic.png';
 import messageSelfImg from './assets/discovery/message-self.png';
 import messageYouImg from './assets/discovery/message-you.png';
+import clueCabinDoorLockImg from './assets/discovery/clue-cabin-door-lock.png';
 import clueBridgeRouteImg from './assets/discovery/clue-bridge-route.png';
 import clueBridgeScannerImg from './assets/discovery/clue-bridge-scanner.png';
 import clueBridgeTransportImg from './assets/discovery/clue-bridge-transport.png';
@@ -16,6 +17,8 @@ import clueRefillMachineImg from './assets/discovery/clue-refill-machine.png';
 import clueTreatmentAfterImg from './assets/discovery/clue-treatment-after.png';
 import clueTreatmentBeforeImg from './assets/discovery/clue-treatment-before.png';
 import clueTreatmentLogImg from './assets/discovery/clue-treatment-log.png';
+import treatmentWallAfterAiImg from './assets/discovery/treatment-wall-after-ai.png';
+import treatmentWallBeforeAiImg from './assets/discovery/treatment-wall-before-ai.png';
 
 export const puzzleAssets = {
   planetDodarom: planetDodaromImg,
@@ -24,6 +27,7 @@ export const puzzleAssets = {
   crewMedic: crewMedicImg,
   messageSelf: messageSelfImg,
   messageYou: messageYouImg,
+  clueCabinDoorLock: clueCabinDoorLockImg,
   clueBridgeRoute: clueBridgeRouteImg,
   clueBridgeScanner: clueBridgeScannerImg,
   clueBridgeTransport: clueBridgeTransportImg,
@@ -36,6 +40,8 @@ export const puzzleAssets = {
   clueTreatmentAfter: clueTreatmentAfterImg,
   clueTreatmentBefore: clueTreatmentBeforeImg,
   clueTreatmentLog: clueTreatmentLogImg,
+  treatmentWallAfterAi: treatmentWallAfterAiImg,
+  treatmentWallBeforeAi: treatmentWallBeforeAiImg,
 };
 
 export function getPuzzleAsset(imageKey) {
