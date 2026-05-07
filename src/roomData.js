@@ -231,7 +231,7 @@ export const roomConfigs = {
     stage: 4,
     unlockedBy: 'vocab-review-complete',
     missionLog: {
-      goal: 'Convince the commander to send medicine to Mars.',
+      goal: 'Convince the commander to send medicine to Earth.',
     },
     hotspots: [
       {

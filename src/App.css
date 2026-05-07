@@ -92,6 +92,30 @@
   color: #dfffe5;
 }
 
+.reset-progress-button {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 7;
+  background: rgba(35, 18, 24, 0.88);
+  border: 1px solid rgba(255, 150, 150, 0.42);
+  border-radius: 999px;
+  color: #ffe0e0;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 8px 11px;
+  text-transform: uppercase;
+}
+
+.reset-progress-button:hover,
+.reset-progress-button:focus-visible {
+  background: rgba(58, 28, 38, 0.94);
+  border-color: rgba(255, 210, 210, 0.72);
+  outline: none;
+}
+
 .word-toast,
 .room-event {
   position: fixed;
@@ -150,6 +174,7 @@
   .health-warning,
   .idle-hint,
   .dev-lock-toggle,
+  .reset-progress-button,
   .word-toast,
   .room-event {
     animation: none;

@@ -14,16 +14,28 @@ export default function ChoicePuzzle({
   options = [],
   correctOptionId,
   steps,
+  initiallySolved = false,
   onSolve,
 }) {
   const stepList =
     steps?.length > 0
       ? steps
       : [{ body, question, options, correctOptionId }];
-  const [index, setIndex] = useState(0);
-  const [feedback, setFeedback] = useState(null);
-  const [locked, setLocked] = useState(false);
-  const [selectedOptionId, setSelectedOptionId] = useState(null);
+  const initialIndex = initiallySolved ? Math.max(0, stepList.length - 1) : 0;
+  const initialStep = stepList[initialIndex] ?? stepList[0];
+  const [index, setIndex] = useState(initialIndex);
+  const [feedback, setFeedback] = useState(() =>
+    initiallySolved
+      ? {
+          type: 'success',
+          text: initialStep?.correctMessage ?? 'That fits.',
+        }
+      : null
+  );
+  const [locked, setLocked] = useState(initiallySolved);
+  const [selectedOptionId, setSelectedOptionId] = useState(
+    initiallySolved ? initialStep?.correctOptionId ?? null : null
+  );
   const timeoutRef = useRef(null);
 
   const step = stepList[index] ?? stepList[0];
@@ -56,16 +68,17 @@ export default function ChoicePuzzle({
       text: step.correctMessage ?? 'That fits.',
     });
 
+    if (isLast) {
+      onSolve?.();
+      return;
+    }
+
     timeoutRef.current = setTimeout(() => {
-      if (isLast) {
-        onSolve?.();
-      } else {
-        setIndex((i) => i + 1);
-        setFeedback(null);
-        setSelectedOptionId(null);
-        setLocked(false);
-      }
-    }, isLast ? 900 : 750);
+      setIndex((i) => i + 1);
+      setFeedback(null);
+      setSelectedOptionId(null);
+      setLocked(false);
+    }, 750);
   };
 
   return (

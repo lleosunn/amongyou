@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useGameState } from '../gameContext';
 import { getMorpheme } from '../languageData';
 import './TranslationCheckPuzzle.css';
@@ -20,6 +20,13 @@ function answerMatches(value, keywordGroups = []) {
   );
 }
 
+function makeCompletedAnswer(keywordGroups = []) {
+  return keywordGroups
+    .map((group) => group[0])
+    .filter(Boolean)
+    .join(' ');
+}
+
 export default function TranslationCheckPuzzle({
   title,
   instructions,
@@ -31,26 +38,23 @@ export default function TranslationCheckPuzzle({
   readyMessage,
   wrongMessage = 'That does not match the word parts yet.',
   successMessage = 'That translation fits.',
-  successDelayMs = 2500,
   acceptedKeywordGroups = [],
   showDecode = true,
+  initiallySolved = false,
   onSolve,
 }) {
   const { hasLearned } = useGameState();
-  const [answer, setAnswer] = useState('');
-  const [feedback, setFeedback] = useState(null);
-  const [solved, setSolved] = useState(false);
-  const solveTimeoutRef = useRef(null);
+  const [answer, setAnswer] = useState(() =>
+    initiallySolved ? makeCompletedAnswer(acceptedKeywordGroups) : ''
+  );
+  const [feedback, setFeedback] = useState(
+    initiallySolved ? { type: 'success', text: successMessage } : null
+  );
+  const [solved, setSolved] = useState(initiallySolved);
 
   const learnedRequired = requiredMorphemes.filter((id) => hasLearned(id));
-  const ready = learnedRequired.length === requiredMorphemes.length;
-
-  useEffect(
-    () => () => {
-      if (solveTimeoutRef.current) clearTimeout(solveTimeoutRef.current);
-    },
-    []
-  );
+  const ready =
+    initiallySolved || learnedRequired.length === requiredMorphemes.length;
 
   const submit = (event) => {
     event.preventDefault();
@@ -63,7 +67,7 @@ export default function TranslationCheckPuzzle({
 
     setSolved(true);
     setFeedback({ type: 'success', text: successMessage });
-    solveTimeoutRef.current = setTimeout(() => onSolve?.(), successDelayMs);
+    onSolve?.();
   };
 
   return (

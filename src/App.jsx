@@ -24,11 +24,18 @@ const INTERACTIVE_TYPES = new Set([
   'prefix-wheel',
   'sequence',
   'translation-check',
+  'treatment-slider',
   'visual-discovery',
 ]);
 
 const DEV_ROOM_LOCK_OVERRIDE_KEY = 'amongyou.devRoomLocksBypassed';
 const INTRO_BED_LABEL_HOTSPOT_ID = 'pilot-bed-label';
+const ROOM_INTROS = {
+  [stage1.room]: stage1.introNarration,
+  [stage2.room]: stage2.introNarration,
+  [stage3.room]: stage3.introNarration,
+  [stage4.room]: stage4.introNarration,
+};
 
 function getCompletionId(hotspot, content) {
   return content?.objective ?? content?.completionObjective ?? hotspot.objective;
@@ -80,6 +87,7 @@ export default function App() {
     learnedMorphemes,
     health,
     heal,
+    resetProgress,
   } = useGameState();
   const room = rooms[currentRoomId];
 
@@ -364,13 +372,9 @@ export default function App() {
       if (objectiveId) markObjectiveComplete(objectiveId, alreadyComplete);
       if (content.healAmount && !alreadyComplete) heal(content.healAmount);
 
-      if (content.afterSolve) {
-        setTimeout(() => {
-          setModalContent({ ...content.afterSolve });
-        }, content.healAmount ? 1800 : 350);
-      } else {
-        setModalContent(null);
-      }
+      setModalContent((current) =>
+        current ? { ...current, outcomeApplied: true } : current
+      );
     },
     [learn, markObjectiveComplete, heal, isComplete]
   );
@@ -381,9 +385,13 @@ export default function App() {
       if (!content) return;
 
       if (INTERACTIVE_TYPES.has(content.type)) {
+        const objectiveId = getCompletionId(hotspot, content);
+        const alreadyComplete = objectiveId ? isComplete(objectiveId) : false;
+
         setModalContent({
           ...content,
           stationLabel: hotspot.label,
+          initiallySolved: alreadyComplete,
           onSolve: () => applyContentOutcome(hotspot, content),
         });
         return;
@@ -410,13 +418,52 @@ export default function App() {
     [openContent]
   );
 
+  const handleResetProgress = useCallback(() => {
+    if (
+      typeof window !== 'undefined' &&
+      !window.confirm('Reset all saved progress and start over?')
+    ) {
+      return;
+    }
+
+    if (pulseTimeoutRef.current) clearTimeout(pulseTimeoutRef.current);
+    if (unlockTimeoutRef.current) clearTimeout(unlockTimeoutRef.current);
+    if (introHintTimeoutRef.current) clearTimeout(introHintTimeoutRef.current);
+
+    resetProgress();
+    learnedRef.current = new Set();
+    setCurrentRoomId(startingRoom);
+    setModalContent(null);
+    setIdleHint(null);
+    setCompletedPulseObjective(null);
+    setUnlockedPulseRoomId(null);
+    setWordToast(null);
+    setS1IntroShown(false);
+    setS2IntroShown(false);
+    setS3IntroShown(false);
+    setS4IntroShown(false);
+    setPendingVocabularyReview(false);
+    setBedLabelIntroPulseShown(false);
+  }, [resetProgress]);
+
+  const reviewRoomIntro = useCallback(() => {
+    const intro = ROOM_INTROS[currentRoomId];
+    if (!intro) return;
+    setIdleHint(null);
+    setModalContent({ ...intro, stationLabel: 'Mission briefing' });
+  }, [currentRoomId]);
+
   const handleModalClose = useCallback(() => {
     if (modalContent?.type === 'vocabulary-review') {
       completeVocabularyReview();
       return;
     }
 
-    setModalContent(null);
+    setModalContent(
+      modalContent?.outcomeApplied && modalContent.afterSolve
+        ? { ...modalContent.afterSolve }
+        : null
+    );
   }, [completeVocabularyReview, modalContent]);
 
   return (
@@ -453,6 +500,12 @@ export default function App() {
             >
               Dev Locks {roomLocksBypassed ? 'Off' : 'On'}
             </button>
+            <button
+              className="reset-progress-button"
+              onClick={handleResetProgress}
+            >
+              Reset Progress
+            </button>
             {idleHint && !modalContent && (
               <div className="idle-hint">{idleHint.text}</div>
             )}
@@ -478,6 +531,7 @@ export default function App() {
             activeHotspotId={idleHint?.hotspotId}
             completedPulseObjective={completedPulseObjective}
             onInteract={handleInteract}
+            onReviewIntro={reviewRoomIntro}
           />
         </div>
       </div>

@@ -7,12 +7,17 @@ export default function ExperimentPuzzle({
   samples = [],
   correctSampleId,
   successMessage,
+  initiallySolved = false,
   onSolve,
 }) {
-  const [activeSampleId, setActiveSampleId] = useState(null);
-  const [testedSampleIds, setTestedSampleIds] = useState(new Set());
+  const [activeSampleId, setActiveSampleId] = useState(
+    initiallySolved ? correctSampleId : null
+  );
+  const [testedSampleIds, setTestedSampleIds] = useState(
+    () => new Set(initiallySolved && correctSampleId ? [correctSampleId] : [])
+  );
   const [fillRun, setFillRun] = useState(0);
-  const [solved, setSolved] = useState(false);
+  const [solved, setSolved] = useState(initiallySolved);
 
   const activeSample = useMemo(
     () => samples.find((sample) => sample.id === activeSampleId),
@@ -68,11 +73,6 @@ export default function ExperimentPuzzle({
               />
             )}
           </div>
-          <p>
-            {activeSample
-              ? activeSample.result
-              : 'The cup is empty. Press a button to test it.'}
-          </p>
         </div>
       </div>
 

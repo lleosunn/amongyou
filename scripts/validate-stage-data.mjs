@@ -17,6 +17,7 @@ const allowedContentTypes = new Set([
   'prefix-wheel',
   'sequence',
   'translation-check',
+  'treatment-slider',
   'visual-discovery',
   'vocabulary-review',
 ]);

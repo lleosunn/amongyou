@@ -1,20 +1,28 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import './MatchingPuzzle.css';
 
+function makeSolvedPlacements(targets) {
+  return Object.fromEntries(
+    targets.map((target) => [target.id, [...(target.acceptedChips ?? [])]])
+  );
+}
+
 export default function MatchingPuzzle({
   title,
   instructions,
   image,
   targets = [],
   chips = [],
+  initiallySolved = false,
   onSolve,
 }) {
-  const [placements, setPlacements] = useState({});
+  const [placements, setPlacements] = useState(() =>
+    initiallySolved ? makeSolvedPlacements(targets) : {}
+  );
   const [selectedChip, setSelectedChip] = useState(null);
   const [wrongPulse, setWrongPulse] = useState(null);
-  const [solved, setSolved] = useState(false);
+  const [solved, setSolved] = useState(initiallySolved);
   const wrongPulseTimeoutRef = useRef(null);
-  const solveTimeoutRef = useRef(null);
 
   const placedChipIds = useMemo(
     () => new Set(Object.values(placements).flat()),
@@ -28,7 +36,6 @@ export default function MatchingPuzzle({
       if (wrongPulseTimeoutRef.current) {
         clearTimeout(wrongPulseTimeoutRef.current);
       }
-      if (solveTimeoutRef.current) clearTimeout(solveTimeoutRef.current);
     },
     []
   );
@@ -40,25 +47,22 @@ export default function MatchingPuzzle({
     const isCorrect = target.acceptedChips.includes(selectedChip.id);
 
     if (isCorrect) {
-      setPlacements((prev) => {
-        const next = {
-          ...prev,
-          [target.id]: [...(prev[target.id] ?? []), selectedChip.id],
-        };
-
-        const allSolved = targets.every((t) => {
-          const placed = next[t.id] ?? [];
-          return t.acceptedChips.every((c) => placed.includes(c));
-        });
-
-        if (allSolved) {
-          setSolved(true);
-          solveTimeoutRef.current = setTimeout(() => onSolve?.(), 600);
-        }
-
-        return next;
+      const nextPlacements = {
+        ...placements,
+        [target.id]: [...(placements[target.id] ?? []), selectedChip.id],
+      };
+      const allSolved = targets.every((t) => {
+        const placed = nextPlacements[t.id] ?? [];
+        return t.acceptedChips.every((c) => placed.includes(c));
       });
+
+      setPlacements(nextPlacements);
       setSelectedChip(null);
+
+      if (allSolved) {
+        setSolved(true);
+        onSolve?.();
+      }
     } else {
       setWrongPulse(target.id);
       if (wrongPulseTimeoutRef.current) {

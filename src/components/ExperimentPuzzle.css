@@ -79,13 +79,6 @@
   text-align: center;
 }
 
-.experiment-output p {
-  color: #d8d8f0;
-  font-size: 0.92rem;
-  line-height: 1.45;
-  margin: 12px 0 0;
-}
-
 .experiment-cup {
   align-items: end;
   background: linear-gradient(

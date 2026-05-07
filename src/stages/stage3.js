@@ -2,7 +2,6 @@ const commandTiles = [
   { id: 'moll', label: 'moll' },
   { id: 'ya-', label: 'ya-' },
   { id: 'puacarda', label: 'puacarda' },
-  { id: 'desa', label: 'desa' },
   { id: 'doda', label: 'doda' },
   { id: 'rom', label: 'rom' },
   { id: 'gane', label: 'gane' },
@@ -27,7 +26,7 @@ export const stage3 = {
     lines: [
       'A production lab. Bottle racks, mixing vats, and a star map glow across the room.',
       'This is where the medicine can be made in bulk.',
-      'I need enough puacarda for Mars, and I need the words to tell the aliens where to send it.',
+      'I need enough puacarda for Earth, and I need the words to tell the aliens where to send it.',
     ],
   },
 
@@ -145,22 +144,21 @@ export const stage3 = {
     type: 'builder',
     title: 'Destination Map',
     instructions:
-      'The star map highlights the cabin poster world and needs its destination label.',
-    prompt: 'Build the highlighted Mars destination.',
+      'The star map highlights a blue ocean world and needs its destination label.',
+    prompt: 'Build the highlighted Earth destination.',
     clues: [
       {
-        id: 'red-planet-world',
-        title: 'Desa Rom',
-        caption: 'The highlighted world matches the Mars poster from the cabin.',
-        imageKey: 'planetDesarom',
+        id: 'earth-world',
+        title: 'Earth',
+        caption: 'The highlighted world is blue with oceans and green land.',
+        imageKey: 'planetDodarom',
       },
     ],
     slotCount: 2,
     availableTiles: commandTiles,
-    correctSequence: ['desa', 'rom'],
+    correctSequence: ['doda', 'rom'],
     wrongMessage: 'The map cannot lock that destination.',
-    successMessage: 'Destination locked: desarom.',
-    morphemesLearned: ['desa', 'desarom'],
+    successMessage: 'Destination locked: Earth.',
     objective: 'lab-destination',
   },
 
@@ -200,7 +198,7 @@ export const stage3 = {
     title: 'Ready To Speak',
     lines: [
       'The cargo rack is full of puacarda.',
-      'Mars is desarom: the red planet.',
+      'The destination is Earth, the blue ocean world.',
       'I can speak enough of the alien language to ask for help.',
     ],
   },

@@ -25,16 +25,21 @@ export default function SequencePuzzle({
   entries = [],
   correctOrder = [],
   replaySteps = [],
+  initiallySolved = false,
   onSolve,
 }) {
   const [order, setOrder] = useState(() =>
-    makeInitialOrder(entries, correctOrder)
+    initiallySolved ? [...correctOrder] : makeInitialOrder(entries, correctOrder)
   );
   const [selected, setSelected] = useState(null);
-  const [feedback, setFeedback] = useState(null);
+  const [feedback, setFeedback] = useState(
+    initiallySolved
+      ? { type: 'success', text: 'Sequence accepted.' }
+      : null
+  );
   const [replaying, setReplaying] = useState(false);
   const [replayIndex, setReplayIndex] = useState(-1);
-  const [solved, setSolved] = useState(false);
+  const [solved, setSolved] = useState(initiallySolved);
   const timeoutRefs = useRef([]);
 
   const clearReplayTimeouts = useCallback(() => {
@@ -116,8 +121,7 @@ export default function SequencePuzzle({
     const solveTimeout = setTimeout(() => {
       setSolved(true);
       setReplaying(false);
-      const closeTimeout = setTimeout(() => onSolve?.(), 600);
-      timeoutRefs.current.push(closeTimeout);
+      onSolve?.();
     }, replaySteps.length * REPLAY_STEP_MS);
     timeoutRefs.current.push(solveTimeout);
   };

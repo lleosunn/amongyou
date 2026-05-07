@@ -17,6 +17,7 @@ export default function RoomStationPanel({
   activeHotspotId,
   completedPulseObjective,
   onInteract,
+  onReviewIntro,
 }) {
   const { isComplete } = useGameState();
   const stations = room.hotspots ?? [];
@@ -55,6 +56,11 @@ export default function RoomStationPanel({
         <p className="mission-log-count">
           {unresolvedCount} unresolved station{unresolvedCount === 1 ? '' : 's'}
         </p>
+        {onReviewIntro && (
+          <button className="mission-log-review" onClick={onReviewIntro}>
+            Review Briefing
+          </button>
+        )}
       </div>
 
       <div className="station-list">

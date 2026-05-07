@@ -11,12 +11,63 @@ function combineCopy(...parts) {
   return parts.filter(Boolean).join(' ');
 }
 
-export default function ConversationPuzzle({ title, instructions, steps = [], onSolve }) {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [placements, setPlacements] = useState([]);
-  const [feedback, setFeedback] = useState(null);
-  const [history, setHistory] = useState([]);
-  const [solved, setSolved] = useState(false);
+function makeCorrectPlacements(step) {
+  const tiles = (step?.availableTiles ?? []).map(normalizeTile);
+  return (step?.correctSequence ?? []).map(
+    (id) => tiles.find((tile) => tile.id === id) ?? { id, label: id }
+  );
+}
+
+function makeSolvedPhrase(step) {
+  return makeCorrectPlacements(step)
+    .map((tile) => tile.label)
+    .join(' ');
+}
+
+function makeSolvedHistory(steps) {
+  return steps.flatMap((step) => [
+    { speaker: 'Alien', text: step.alien },
+    { speaker: 'You', text: makeSolvedPhrase(step) },
+    ...(step.reply ? [{ speaker: 'Alien', text: step.reply }] : []),
+  ]);
+}
+
+function getWrongFeedbackText(step, attemptCount) {
+  const hintAfterAttempts = step?.hintAfterAttempts ?? 5;
+
+  if (step?.attemptHint && attemptCount >= hintAfterAttempts) {
+    return step.attemptHint;
+  }
+
+  return step?.wrongMessage ?? 'The commander waits. That did not land.';
+}
+
+export default function ConversationPuzzle({
+  title,
+  instructions,
+  steps = [],
+  initiallySolved = false,
+  onSolve,
+}) {
+  const initialStepIndex = initiallySolved ? Math.max(0, steps.length - 1) : 0;
+  const initialStep = steps[initialStepIndex] ?? steps[0];
+  const [stepIndex, setStepIndex] = useState(initialStepIndex);
+  const [placements, setPlacements] = useState(() =>
+    initiallySolved ? makeCorrectPlacements(initialStep) : []
+  );
+  const [feedback, setFeedback] = useState(() =>
+    initiallySolved
+      ? {
+          type: 'success',
+          text: initialStep?.successMessage ?? 'Message accepted.',
+        }
+      : null
+  );
+  const [history, setHistory] = useState(() =>
+    initiallySolved ? makeSolvedHistory(steps) : []
+  );
+  const [solved, setSolved] = useState(initiallySolved);
+  const [wrongAttempts, setWrongAttempts] = useState(0);
   const timeoutRef = useRef(null);
   const logRef = useRef(null);
 
@@ -46,7 +97,7 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
     Array.from({ length: slotCount }, (_, i) => Boolean(placements[i])).every(
       Boolean
     );
-  const leadCopy = combineCopy(instructions, step?.prompt);
+  const leadCopy = combineCopy(instructions, solved ? null : step?.prompt);
 
   useEffect(
     () => () => {
@@ -132,9 +183,11 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
       actual.every((id, i) => id === correctSequence[i]);
 
     if (!correct) {
+      const nextWrongAttempts = wrongAttempts + 1;
+      setWrongAttempts(nextWrongAttempts);
       setFeedback({
         type: 'wrong',
-        text: step.wrongMessage ?? 'The commander waits. That did not land.',
+        text: getWrongFeedbackText(step, nextWrongAttempts),
       });
       return;
     }
@@ -158,12 +211,13 @@ export default function ConversationPuzzle({ title, instructions, steps = [], on
 
     if (isLast) {
       setSolved(true);
-      timeoutRef.current = setTimeout(() => onSolve?.(), 1000);
+      onSolve?.();
       return;
     }
 
     timeoutRef.current = setTimeout(() => {
       setStepIndex((i) => i + 1);
+      setWrongAttempts(0);
       reset();
     }, 900);
   };

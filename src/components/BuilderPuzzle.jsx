@@ -37,13 +37,33 @@ function makeStep({
   };
 }
 
+function makeCorrectPlacements(step) {
+  const tiles = (step?.availableTiles ?? []).map(normalizeTile);
+  return (step?.correctSequence ?? []).map(
+    (id) => tiles.find((tile) => tile.id === id) ?? { id, label: id }
+  );
+}
+
 export default function BuilderPuzzle(props) {
   const stepList =
     props.steps?.length > 0 ? props.steps : [makeStep(props)];
-  const [stepIndex, setStepIndex] = useState(0);
-  const [placements, setPlacements] = useState([]);
-  const [feedback, setFeedback] = useState(null);
-  const [solved, setSolved] = useState(false);
+  const initialStepIndex = props.initiallySolved
+    ? Math.max(0, stepList.length - 1)
+    : 0;
+  const initialStep = stepList[initialStepIndex] ?? stepList[0];
+  const [stepIndex, setStepIndex] = useState(initialStepIndex);
+  const [placements, setPlacements] = useState(() =>
+    props.initiallySolved ? makeCorrectPlacements(initialStep) : []
+  );
+  const [feedback, setFeedback] = useState(() =>
+    props.initiallySolved
+      ? {
+          type: 'success',
+          text: initialStep?.successMessage ?? 'Accepted.',
+        }
+      : null
+  );
+  const [solved, setSolved] = useState(Boolean(props.initiallySolved));
   const timeoutRef = useRef(null);
 
   const step = stepList[stepIndex] ?? stepList[0];
@@ -56,11 +76,13 @@ export default function BuilderPuzzle(props) {
   const clues = step.clues ?? props.clues ?? [];
   const wrongEffect = step.wrongEffect ?? props.wrongEffect;
   const isLast = stepIndex >= stepList.length - 1;
+  const advancing = feedback?.type === 'success' && !isLast;
   const phrase = Array.from({ length: slotCount }, (_, i) => placements[i]?.label)
     .filter(Boolean)
     .join(' ');
   const canSubmit =
     !solved &&
+    !advancing &&
     Array.from({ length: slotCount }, (_, i) => Boolean(placements[i])).every(
       Boolean
     );
@@ -74,7 +96,7 @@ export default function BuilderPuzzle(props) {
   );
 
   const placeTile = (tile) => {
-    if (solved) return;
+    if (solved || advancing) return;
     const nextIndex = placements.findIndex((entry) => !entry);
     const openIndex = nextIndex === -1 ? placements.length : nextIndex;
     if (openIndex >= slotCount) return;
@@ -88,7 +110,7 @@ export default function BuilderPuzzle(props) {
   };
 
   const clearSlot = (index) => {
-    if (solved) return;
+    if (solved || advancing) return;
     setPlacements((prev) => {
       const next = [...prev];
       next[index] = null;
@@ -98,7 +120,7 @@ export default function BuilderPuzzle(props) {
   };
 
   const movePlacement = (fromIndex, toIndex) => {
-    if (solved || fromIndex === toIndex) return;
+    if (solved || advancing || fromIndex === toIndex) return;
 
     setPlacements((prev) => {
       const next = [...prev];
@@ -112,7 +134,7 @@ export default function BuilderPuzzle(props) {
 
   const dropTile = (event, slotIndex) => {
     event.preventDefault();
-    if (solved) return;
+    if (solved || advancing) return;
 
     const sourceSlot = event.dataTransfer.getData('application/x-builder-slot');
     if (sourceSlot !== '') {
@@ -133,6 +155,7 @@ export default function BuilderPuzzle(props) {
   };
 
   const resetStep = () => {
+    if (advancing) return;
     setPlacements([]);
     setFeedback(null);
   };
@@ -159,13 +182,14 @@ export default function BuilderPuzzle(props) {
 
     if (isLast) {
       setSolved(true);
-      timeoutRef.current = setTimeout(() => props.onSolve?.(), 900);
+      props.onSolve?.();
       return;
     }
 
     timeoutRef.current = setTimeout(() => {
+      setPlacements([]);
+      setFeedback(null);
       setStepIndex((i) => i + 1);
-      resetStep();
     }, 850);
   };
 
@@ -206,14 +230,14 @@ export default function BuilderPuzzle(props) {
             <button
               key={index}
               className={`builder-slot ${tile ? 'filled' : ''}`}
-              draggable={Boolean(tile) && !solved}
+              draggable={Boolean(tile) && !solved && !advancing}
               onDragStart={(event) => {
                 if (!tile) return;
                 event.dataTransfer.setData('application/x-builder-slot', String(index));
                 event.dataTransfer.effectAllowed = 'move';
               }}
               onDragOver={(event) => {
-                if (!solved) event.preventDefault();
+                if (!solved && !advancing) event.preventDefault();
               }}
               onDrop={(event) => dropTile(event, index)}
               onClick={() => clearSlot(index)}
@@ -234,13 +258,13 @@ export default function BuilderPuzzle(props) {
           <button
             key={tile.id}
             className="builder-tile"
-            draggable={!usedIds.has(tile.id) && !solved}
+            draggable={!usedIds.has(tile.id) && !solved && !advancing}
             onDragStart={(event) => {
               event.dataTransfer.setData('text/plain', tile.id);
               event.dataTransfer.effectAllowed = 'move';
             }}
             onClick={() => placeTile(tile)}
-            disabled={usedIds.has(tile.id) || solved}
+            disabled={usedIds.has(tile.id) || solved || advancing}
           >
             {tile.label}
           </button>
@@ -248,7 +272,11 @@ export default function BuilderPuzzle(props) {
       </div>
 
       <div className="builder-actions">
-        <button className="builder-secondary" onClick={resetStep} disabled={solved}>
+        <button
+          className="builder-secondary"
+          onClick={resetStep}
+          disabled={solved || advancing}
+        >
           Clear
         </button>
         <button

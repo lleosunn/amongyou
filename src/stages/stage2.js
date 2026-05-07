@@ -177,115 +177,15 @@ export const stage2 = {
   },
 
   photosChoice: {
-    type: 'visual-discovery',
+    type: 'treatment-slider',
     title: 'Treatment Wall',
     instructions:
-      'Compare the before and after treatment photos to recover the photo labels.',
-    steps: [
-      {
-        prompt:
-          'Both photos are about the same procedure. Click the part shared by both labels.',
-        cards: [
-          {
-            id: 'before-treatment-card',
-            title: 'Before Photo',
-            caption: 'The patient looks weak before treatment.',
-            visual: 'treatment-before',
-            imageKey: 'clueTreatmentBefore',
-            label: 'a-sondy',
-            labelParts: [
-              { id: 'before-a', text: 'a-' },
-              { id: 'before-sondy', text: 'sondy' },
-            ],
-          },
-          {
-            id: 'after-treatment-card',
-            title: 'After Photo',
-            caption: 'The patient looks healthy after treatment.',
-            visual: 'treatment-after',
-            imageKey: 'clueTreatmentAfter',
-            label: 'me-sondy',
-            labelParts: [
-              { id: 'after-me', text: 'me-' },
-              { id: 'after-sondy', text: 'sondy' },
-            ],
-          },
-        ],
-        correctPartIds: ['before-sondy', 'after-sondy'],
-        wrongMessage:
-          'The shared part names what both pictures are about.',
-        successMessage:
-          'Both labels share sondy. sondy is the treatment or procedure.',
-      },
-      {
-        prompt:
-          'Now click the marker on the before-treatment label.',
-        cards: [
-          {
-            id: 'before-treatment-card',
-            title: 'Before Photo',
-            caption: 'The patient has not recovered yet.',
-            visual: 'treatment-before',
-            imageKey: 'clueTreatmentBefore',
-            label: 'a-sondy',
-            labelParts: [
-              { id: 'before-a-2', text: 'a-' },
-              { id: 'before-sondy-2', text: 'sondy' },
-            ],
-          },
-          {
-            id: 'after-treatment-card',
-            title: 'After Photo',
-            caption: 'The second label is the after state.',
-            visual: 'treatment-after',
-            imageKey: 'clueTreatmentAfter',
-            label: 'me-sondy',
-            labelParts: [
-              { id: 'after-me-2', text: 'me-' },
-              { id: 'after-sondy-2', text: 'sondy' },
-            ],
-          },
-        ],
-        correctPartIds: ['before-a-2'],
-        wrongMessage:
-          'The shared root is already known. The before marker is attached to the first label.',
-        successMessage: 'a- marks the before state.',
-      },
-      {
-        prompt:
-          'Finally, click the marker on the after-treatment label.',
-        cards: [
-          {
-            id: 'before-treatment-card',
-            title: 'Before Photo',
-            caption: 'The first label is the before state.',
-            visual: 'treatment-before',
-            imageKey: 'clueTreatmentBefore',
-            label: 'a-sondy',
-            labelParts: [
-              { id: 'before-a-3', text: 'a-' },
-              { id: 'before-sondy-3', text: 'sondy' },
-            ],
-          },
-          {
-            id: 'after-treatment-card',
-            title: 'After Photo',
-            caption: 'The patient has recovered.',
-            visual: 'treatment-after',
-            imageKey: 'clueTreatmentAfter',
-            label: 'me-sondy',
-            labelParts: [
-              { id: 'after-me-3', text: 'me-' },
-              { id: 'after-sondy-3', text: 'sondy' },
-            ],
-          },
-        ],
-        correctPartIds: ['after-me-3'],
-        wrongMessage:
-          'The after marker is attached to the recovered photo label.',
-        successMessage: 'me- marks the after state.',
-      },
-    ],
+      'Drag the treatment record from a-sondy to me-sondy.',
+    beforeLabel: 'a-sondy',
+    afterLabel: 'me-sondy',
+    rootLabel: 'sondy',
+    successMessage:
+      'sondy is the treatment. a- marks before, and me- marks after.',
     morphemesLearned: ['a-', 'me-', 'sondy'],
     objective: 'clinic-photos',
   },
@@ -378,7 +278,7 @@ export const stage2 = {
     title: 'Medicine Found',
     lines: [
       'puacarda: anti-virus medicine. That was what they were giving me.',
-      'I feel steadier, but the card was clear: Mars needs more than one dose.',
+      'I feel steadier, but the card was clear: Earth needs more than one dose.',
       'The Lab should have the machinery to make this in bulk.',
     ],
   },

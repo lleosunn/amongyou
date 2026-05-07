@@ -12,14 +12,59 @@ function combineCopy(...parts) {
   return parts.filter(Boolean).join(' ');
 }
 
-export default function VisualDiscoveryPuzzle({ title, instructions, steps = [], onSolve }) {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [selectedIds, setSelectedIds] = useState([]);
+function getPartText(step, partId) {
+  return (step?.cards ?? [])
+    .flatMap((card) => card.labelParts ?? [])
+    .find((part) => part.id === partId)?.text;
+}
+
+function makeSolvedSelectedIds(step) {
+  if ((step?.correctPartIds ?? []).length > 0) {
+    return [...step.correctPartIds];
+  }
+
+  if ((step?.correctCardIds ?? []).length > 0) {
+    return [...step.correctCardIds];
+  }
+
+  return [];
+}
+
+function makeSolvedMeaningPlacements(step) {
+  return Object.fromEntries(
+    (step?.cards ?? [])
+      .filter((card) => card.acceptedMeaningId)
+      .map((card) => [card.id, card.acceptedMeaningId])
+  );
+}
+
+export default function VisualDiscoveryPuzzle({
+  title,
+  instructions,
+  steps = [],
+  initiallySolved = false,
+  onSolve,
+}) {
+  const initialStepIndex = initiallySolved ? Math.max(0, steps.length - 1) : 0;
+  const initialStep = steps[initialStepIndex] ?? steps[0];
+  const [stepIndex, setStepIndex] = useState(initialStepIndex);
+  const [selectedIds, setSelectedIds] = useState(() =>
+    initiallySolved ? makeSolvedSelectedIds(initialStep) : []
+  );
   const [selectedMeaningId, setSelectedMeaningId] = useState(null);
-  const [meaningPlacements, setMeaningPlacements] = useState({});
-  const [feedback, setFeedback] = useState(null);
+  const [meaningPlacements, setMeaningPlacements] = useState(() =>
+    initiallySolved ? makeSolvedMeaningPlacements(initialStep) : {}
+  );
+  const [feedback, setFeedback] = useState(() =>
+    initiallySolved
+      ? {
+          type: 'success',
+          text: initialStep?.successMessage ?? 'That pattern fits.',
+        }
+      : null
+  );
   const [advancing, setAdvancing] = useState(false);
-  const [solved, setSolved] = useState(false);
+  const [solved, setSolved] = useState(initiallySolved);
   const timeoutRef = useRef(null);
 
   const step = steps[stepIndex] ?? steps[0];
@@ -50,7 +95,7 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
   const moveNext = () => {
     if (isLast) {
       setSolved(true);
-      timeoutRef.current = setTimeout(() => onSolve?.(), 900);
+      onSolve?.();
       return;
     }
 
@@ -63,6 +108,7 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
   const choosePart = (partId) => {
     if (!step || advancing || solved) return;
 
+    const isDeselecting = selectedIds.includes(partId);
     const nextSelection = selectedIds.includes(partId)
       ? selectedIds.filter((id) => id !== partId)
       : [...selectedIds, partId];
@@ -70,7 +116,40 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
     setSelectedIds(nextSelection);
     setFeedback(null);
 
-    if (nextSelection.length < correctIds.length) return;
+    if (isDeselecting) {
+      setFeedback({
+        type: 'hint',
+        text:
+          nextSelection.length > 0
+            ? 'Selection updated.'
+            : 'Selection cleared.',
+      });
+      return;
+    }
+
+    if (
+      !isDeselecting &&
+      correctIds.length > 0 &&
+      !correctIds.includes(partId)
+    ) {
+      setAdvancing(true);
+      setFeedback({
+        type: 'wrong',
+        text: step.wrongMessage ?? 'That pattern does not fit the pictures.',
+      });
+      timeoutRef.current = setTimeout(resetStep, 850);
+      return;
+    }
+
+    if (nextSelection.length < correctIds.length) {
+      setFeedback({
+        type: 'hint',
+        text:
+          step.partialMessage ??
+          `${getPartText(step, partId) ?? 'That part'} is selected. Find the matching part on the other poster.`,
+      });
+      return;
+    }
 
     if (!sameSelection(nextSelection, correctIds)) {
       setAdvancing(true);
@@ -206,6 +285,7 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
                 </div>
                 <div className="visual-card-copy">
                   <h3>{card.title}</h3>
+                  {(card.labelParts ?? []).length > 0 && renderLabel(card, false)}
                   {card.caption && <p>{card.caption}</p>}
                 </div>
                 <button
@@ -221,7 +301,7 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
                   disabled={advancing || solved}
                   aria-label={`Match meaning for ${card.label}`}
                 >
-                  {placedMeaning?.label ?? 'Drop meaning'}
+                  {placedMeaning?.label ?? step.meaningTargetLabel ?? 'Drop meaning'}
                 </button>
               </article>
             );
@@ -278,6 +358,7 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
           const CardTag = isCardChoice ? 'button' : 'article';
           const label = renderLabel(card, !isCardChoice);
           const labelOnImage = card.labelOnImage && !isCardChoice;
+          const labelAsTitle = card.labelAsTitle && !isCardChoice;
 
           return (
             <CardTag
@@ -308,10 +389,14 @@ export default function VisualDiscoveryPuzzle({ title, instructions, steps = [],
                 {labelOnImage && label}
               </div>
               <div className="visual-card-copy">
-                <h3>{card.title}</h3>
+                {labelAsTitle ? (
+                  label
+                ) : (
+                  card.title && <h3>{card.title}</h3>
+                )}
                 {card.caption && <p>{card.caption}</p>}
               </div>
-              {!labelOnImage && label}
+              {!labelOnImage && !labelAsTitle && label}
             </CardTag>
           );
         })}

@@ -9,6 +9,7 @@ import ExperimentPuzzle from './ExperimentPuzzle';
 import VocabularyReview from './VocabularyReview';
 import TranslationCheckPuzzle from './TranslationCheckPuzzle';
 import VisualDiscoveryPuzzle from './VisualDiscoveryPuzzle';
+import TreatmentSliderPuzzle from './TreatmentSliderPuzzle';
 import MorphemeInventory from './MorphemeInventory';
 import './Modal.css';
 
@@ -82,7 +83,8 @@ export default function Modal({ children, onClose }) {
     content?.type === 'prefix-wheel' ||
     content?.type === 'sequence' ||
     content?.type === 'translation-check' ||
-    content?.type === 'visual-discovery';
+    content?.type === 'visual-discovery' ||
+    content?.type === 'treatment-slider';
   const isReview = content?.type === 'vocabulary-review';
 
   useEffect(() => {
@@ -125,6 +127,7 @@ export default function Modal({ children, onClose }) {
             image={content.image}
             targets={content.targets}
             chips={content.chips}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -140,6 +143,7 @@ export default function Modal({ children, onClose }) {
             options={content.options}
             correctOptionId={content.correctOptionId}
             steps={content.steps}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -158,6 +162,7 @@ export default function Modal({ children, onClose }) {
             clues={content.clues}
             wrongMessage={content.wrongMessage}
             successMessage={content.successMessage}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -171,6 +176,7 @@ export default function Modal({ children, onClose }) {
             samples={content.samples}
             correctSampleId={content.correctSampleId}
             successMessage={content.successMessage}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -182,6 +188,7 @@ export default function Modal({ children, onClose }) {
             title={content.title}
             instructions={content.instructions}
             steps={content.steps}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -210,9 +217,9 @@ export default function Modal({ children, onClose }) {
             readyMessage={content.readyMessage}
             wrongMessage={content.wrongMessage}
             successMessage={content.successMessage}
-            successDelayMs={content.successDelayMs}
             acceptedKeywordGroups={content.acceptedKeywordGroups}
             showDecode={content.showDecode}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -224,6 +231,22 @@ export default function Modal({ children, onClose }) {
             title={content.title}
             instructions={content.instructions}
             steps={content.steps}
+            initiallySolved={content.initiallySolved}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
+      case 'treatment-slider':
+        return (
+          <TreatmentSliderPuzzle
+            title={content.title}
+            instructions={content.instructions}
+            beforeLabel={content.beforeLabel}
+            afterLabel={content.afterLabel}
+            rootLabel={content.rootLabel}
+            successMessage={content.successMessage}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -240,6 +263,7 @@ export default function Modal({ children, onClose }) {
             correctPrefixId={content.correctPrefixId}
             wrongMessage={content.wrongMessage}
             successMessage={content.successMessage}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -253,6 +277,7 @@ export default function Modal({ children, onClose }) {
             entries={content.entries}
             correctOrder={content.correctOrder}
             replaySteps={content.replaySteps}
+            initiallySolved={content.initiallySolved}
             onSolve={() => {
               content.onSolve?.();
             }}
@@ -264,8 +289,12 @@ export default function Modal({ children, onClose }) {
   };
 
   const isWide = isInteractive || isReview;
+  const puzzleSolved =
+    isInteractive && (content?.outcomeApplied || content?.initiallySolved);
   const closeLabel = isReview
     ? 'Close vocabulary review'
+    : puzzleSolved
+      ? 'Close completed puzzle'
     : isInteractive
       ? 'Close and reset puzzle'
       : 'Close modal';
@@ -298,7 +327,11 @@ export default function Modal({ children, onClose }) {
         )}
         <div className="modal-body">{renderContent()}</div>
         {isInteractive && (
-          <p className="modal-close-note">Closing resets this interaction.</p>
+          <p className="modal-close-note">
+            {puzzleSolved
+              ? 'Progress saved. Close when you are ready.'
+              : 'Closing resets this interaction.'}
+          </p>
         )}
       </div>
     </div>

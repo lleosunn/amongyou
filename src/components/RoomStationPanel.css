@@ -79,6 +79,28 @@
   font-weight: 800;
 }
 
+.mission-log-review {
+  justify-self: start;
+  background: rgba(76, 108, 180, 0.14);
+  border: 1px solid rgba(145, 185, 255, 0.36);
+  border-radius: 8px;
+  color: #dbe6ff;
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+  margin-top: 3px;
+  padding: 7px 9px;
+  text-transform: uppercase;
+}
+
+.mission-log-review:hover,
+.mission-log-review:focus-visible {
+  background: rgba(76, 108, 180, 0.28);
+  border-color: rgba(165, 190, 255, 0.7);
+  outline: none;
+}
+
 .station-list {
   display: flex;
   flex-direction: column;
