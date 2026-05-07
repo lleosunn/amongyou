@@ -4,7 +4,7 @@ import { GameContext } from './gameContext';
 const HEALTH_START = 0.6;
 const HEALTH_MIN = 0.2;
 const HEALTH_DRAIN_PER_SEC = 0.001;
-const SAVE_KEY = 'amongyou.gameProgress.v1';
+const SAVE_KEY = 'puacarda.gameProgress.v1';
 const REMOVED_SAVED_MORPHEMES = new Set(['desa', 'desarom']);
 
 function readSavedProgress() {

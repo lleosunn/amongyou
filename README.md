@@ -1,6 +1,6 @@
-# Among You
+# Puacarda
 
-Among You is a React/Vite educational escape-room game based on the local
+Puacarda is a React/Vite educational escape-room game based on the local
 `game_design_docs/room_design.pdf` and `game_design_docs/storyline.pdf` design
 documents.
 
