@@ -1,4 +1,4 @@
-# Among You - Game Design
+# Puacarda - Game Design
 
 ## Premise
 

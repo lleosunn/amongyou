@@ -30,7 +30,7 @@ const INTERACTIVE_TYPES = new Set([
   'visual-discovery',
 ]);
 
-const DEV_ROOM_LOCK_OVERRIDE_KEY = 'amongyou.devRoomLocksBypassed';
+const DEV_ROOM_LOCK_OVERRIDE_KEY = 'puacarda.devRoomLocksBypassed';
 const INTRO_BED_LABEL_HOTSPOT_ID = 'pilot-bed-label';
 const ROOM_INTROS = {
   [stage1.room]: stage1.introNarration,
