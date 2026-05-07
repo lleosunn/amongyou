@@ -107,11 +107,20 @@ export const stage2 = {
     type: 'visual-discovery',
     title: 'Medic Screen',
     instructions:
-      'Use the medic screen and treatment log to recover the missing tags.',
+      'Use the medic screen and treatment log to infer the missing meanings.',
     steps: [
       {
         prompt:
-          'The medic taps their own chest. Click the tag paired with that gesture.',
+          'The medic taps their own chest. What does il mean?',
+        meaningOptions: [
+          { id: 'i-me', label: 'I/me' },
+          { id: 'you', label: 'you' },
+          { id: 'she-her', label: 'she/her' },
+          { id: 'he-him', label: 'he/him' },
+          { id: 'we-us', label: 'us/we' },
+          { id: 'they-them', label: 'they/them' },
+        ],
+        correctMeaningId: 'i-me',
         cards: [
           {
             id: 'medic-self-card',
@@ -122,20 +131,10 @@ export const stage2 = {
             label: 'il',
             labelParts: [{ id: 'medic-self-il', text: 'il' }],
           },
-          {
-            id: 'message-you-card',
-            title: 'Viewer Gesture',
-            caption: 'A known screen tag points outward.',
-            visual: 'message-you',
-            imageKey: 'messageYou',
-            label: 'al',
-            labelParts: [{ id: 'medic-you-al', text: 'al' }],
-          },
         ],
-        correctPartIds: ['medic-self-il'],
         wrongMessage:
-          'That tag does not match the medic pointing to themself.',
-        successMessage: 'il fits the self-pointing gesture.',
+          'The medic is pointing to themself, not outward at someone else.',
+        successMessage: 'il fits the self-pointing gesture. il means I/me.',
       },
       {
         prompt:

@@ -144,13 +144,11 @@ export const stage3 = {
     type: 'builder',
     title: 'Destination Map',
     instructions:
-      'The star map highlights a blue ocean world and needs its destination label.',
-    prompt: 'Build the highlighted Earth destination.',
+      'The star map highlights a blue world and needs its destination label.',
+    prompt: 'Build the highlighted destination.',
     clues: [
       {
-        id: 'earth-world',
-        title: 'Earth',
-        caption: 'The highlighted world is blue with oceans and green land.',
+        id: 'blue-planet-world',
         imageKey: 'planetDodarom',
       },
     ],
@@ -158,7 +156,8 @@ export const stage3 = {
     availableTiles: commandTiles,
     correctSequence: ['doda', 'rom'],
     wrongMessage: 'The map cannot lock that destination.',
-    successMessage: 'Destination locked: Earth.',
+    successMessage: 'Destination locked: dodarom.',
+    morphemesLearned: ['dodarom'],
     objective: 'lab-destination',
   },
 
@@ -198,7 +197,7 @@ export const stage3 = {
     title: 'Ready To Speak',
     lines: [
       'The cargo rack is full of puacarda.',
-      'The destination is Earth, the blue ocean world.',
+      'Earth is dodarom: the water planet.',
       'I can speak enough of the alien language to ask for help.',
     ],
   },

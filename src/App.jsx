@@ -20,6 +20,7 @@ const INTERACTIVE_TYPES = new Set([
   'builder',
   'conversation',
   'experiment',
+  'gear-lock',
   'matching',
   'prefix-wheel',
   'sequence',

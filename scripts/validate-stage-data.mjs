@@ -12,6 +12,7 @@ const allowedContentTypes = new Set([
   'clue',
   'conversation',
   'experiment',
+  'gear-lock',
   'matching',
   'narration',
   'prefix-wheel',
@@ -186,6 +187,26 @@ function validateContent(content, path) {
       for (const id of step.correctPartIds ?? []) {
         if (!partIds.has(id)) {
           addError(`${stepPath}: correct part "${id}" is not in card label parts`);
+        }
+      }
+
+      for (const id of step.anyCorrectPartIds ?? []) {
+        if (!partIds.has(id)) {
+          addError(`${stepPath}: accepted part "${id}" is not in card label parts`);
+        }
+      }
+
+      if (step.meaningOptions) {
+        const optionIds = (step.meaningOptions ?? []).map((option) => option.id);
+        const optionIdSet = new Set(optionIds);
+        const duplicateOptionIds = findDuplicates(optionIds);
+
+        if (duplicateOptionIds.length) {
+          addError(`${stepPath}: duplicate meaning option id(s) ${duplicateOptionIds.join(', ')}`);
+        }
+
+        if (!optionIdSet.has(step.correctMeaningId)) {
+          addError(`${stepPath}: correct meaning option is not in meaningOptions`);
         }
       }
     }

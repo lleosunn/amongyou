@@ -36,7 +36,8 @@
 }
 
 .visual-card-grid-single {
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(220px, 340px);
+  justify-content: center;
 }
 
 .visual-card-grid-single .visual-picture {

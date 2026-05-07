@@ -1,3 +1,4 @@
+import planetDesaromImg from './assets/discovery/planet-desarom.png';
 import planetDodaromImg from './assets/discovery/planet-dodarom.png';
 import planetFannaromImg from './assets/discovery/planet-fannarom.png';
 import crewPilotImg from './assets/discovery/crew-pilot.png';
@@ -21,6 +22,7 @@ import treatmentWallAfterAiImg from './assets/discovery/treatment-wall-after-ai.
 import treatmentWallBeforeAiImg from './assets/discovery/treatment-wall-before-ai.png';
 
 export const puzzleAssets = {
+  planetDesarom: planetDesaromImg,
   planetDodarom: planetDodaromImg,
   planetFannarom: planetFannaromImg,
   crewPilot: crewPilotImg,

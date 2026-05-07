@@ -69,12 +69,15 @@ export default function VisualDiscoveryPuzzle({
 
   const step = steps[stepIndex] ?? steps[0];
   const correctIds = step?.correctPartIds ?? [];
+  const anyCorrectIds = step?.anyCorrectPartIds ?? [];
   const correctCardIds = step?.correctCardIds ?? [];
   const meaningChips = step?.meaningChips ?? [];
+  const meaningOptions = step?.meaningOptions ?? [];
   const isLast = stepIndex >= steps.length - 1;
   const leadCopy = combineCopy(instructions, step?.prompt);
   const isCardChoice = correctCardIds.length > 0;
   const isMeaningMatch = meaningChips.length > 0;
+  const isMeaningChoice = meaningOptions.length > 0;
   const placedMeaningIds = new Set(Object.values(meaningPlacements));
 
   useEffect(
@@ -107,6 +110,29 @@ export default function VisualDiscoveryPuzzle({
 
   const choosePart = (partId) => {
     if (!step || advancing || solved) return;
+
+    if (anyCorrectIds.length) {
+      setSelectedIds([partId]);
+      setFeedback(null);
+
+      if (!anyCorrectIds.includes(partId)) {
+        setAdvancing(true);
+        setFeedback({
+          type: 'wrong',
+          text: step.wrongMessage ?? 'That pattern does not fit the pictures.',
+        });
+        timeoutRef.current = setTimeout(resetStep, 850);
+        return;
+      }
+
+      setAdvancing(true);
+      setFeedback({
+        type: 'success',
+        text: step.successMessage ?? 'That pattern fits.',
+      });
+      moveNext();
+      return;
+    }
 
     const isDeselecting = selectedIds.includes(partId);
     const nextSelection = selectedIds.includes(partId)
@@ -223,6 +249,29 @@ export default function VisualDiscoveryPuzzle({
     moveNext();
   };
 
+  const chooseMeaningOption = (optionId) => {
+    if (!step || advancing || solved) return;
+
+    setSelectedMeaningId(optionId);
+
+    if (optionId !== step.correctMeaningId) {
+      setAdvancing(true);
+      setFeedback({
+        type: 'wrong',
+        text: step.wrongMessage ?? 'That meaning does not fit the clues.',
+      });
+      timeoutRef.current = setTimeout(resetStep, 850);
+      return;
+    }
+
+    setAdvancing(true);
+    setFeedback({
+      type: 'success',
+      text: step.successMessage ?? 'That meaning fits.',
+    });
+    moveNext();
+  };
+
   const renderLabel = (card, interactive = true) => (
     <div
       className={`visual-label ${interactive ? '' : 'visual-label-static'}`}
@@ -251,6 +300,81 @@ export default function VisualDiscoveryPuzzle({
   );
 
   if (!step) return null;
+
+  if (isMeaningChoice) {
+    return (
+      <div className="visual-discovery">
+        {title && <h2 className="visual-title">{title}</h2>}
+        {leadCopy && <p className="visual-instructions">{leadCopy}</p>}
+
+        <div
+          className={`visual-card-grid ${
+            (step.cards ?? []).length === 1 ? 'visual-card-grid-single' : ''
+          }`}
+        >
+          {(step.cards ?? []).map((card) => {
+            const image = getPuzzleAsset(card.imageKey);
+
+            return (
+              <article key={card.id} className="visual-card">
+                <div
+                  className={`visual-picture visual-picture-${card.visual} ${
+                    image ? 'has-image' : ''
+                  }`}
+                  aria-hidden="true"
+                >
+                  {image ? (
+                    <img className="visual-image" src={image} alt="" />
+                  ) : (
+                    <>
+                      <span className="visual-orbit" />
+                      <span className="visual-figure" />
+                      <span className="visual-tool" />
+                    </>
+                  )}
+                </div>
+                <div className="visual-card-copy">
+                  <h3>{card.title}</h3>
+                  {card.caption && <p>{card.caption}</p>}
+                </div>
+                {renderLabel(card, false)}
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="visual-meaning-chips">
+          {meaningOptions.map((option) => (
+            <button
+              key={option.id}
+              className={`visual-meaning-chip ${
+                selectedMeaningId === option.id ? 'selected' : ''
+              }`}
+              onClick={() => chooseMeaningOption(option.id)}
+              disabled={advancing || solved}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
+        {feedback && (
+          <p
+            className={`visual-feedback visual-feedback-${feedback.type}`}
+            aria-live="polite"
+          >
+            {feedback.text}
+          </p>
+        )}
+
+        {steps.length > 1 && (
+          <div className="visual-progress">
+            {stepIndex + 1} / {steps.length}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (isMeaningMatch) {
     return (

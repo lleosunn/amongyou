@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import MatchingPuzzle from './MatchingPuzzle';
+import GearLockPuzzle from './GearLockPuzzle';
 import PrefixWheelPuzzle from './PrefixWheelPuzzle';
 import SequencePuzzle from './SequencePuzzle';
 import ChoicePuzzle from './ChoicePuzzle';
@@ -80,6 +81,7 @@ export default function Modal({ children, onClose }) {
     content?.type === 'builder' ||
     content?.type === 'conversation' ||
     content?.type === 'experiment' ||
+    content?.type === 'gear-lock' ||
     content?.type === 'prefix-wheel' ||
     content?.type === 'sequence' ||
     content?.type === 'translation-check' ||
@@ -177,6 +179,22 @@ export default function Modal({ children, onClose }) {
             correctSampleId={content.correctSampleId}
             successMessage={content.successMessage}
             initiallySolved={content.initiallySolved}
+            onSolve={() => {
+              content.onSolve?.();
+            }}
+          />
+        );
+      case 'gear-lock':
+        return (
+          <GearLockPuzzle
+            title={content.title}
+            instructions={content.instructions}
+            rootWord={content.rootWord}
+            rootMeaning={content.rootMeaning}
+            prefixLabel={content.prefixLabel}
+            solvedWord={content.solvedWord}
+            solvedMeaning={content.solvedMeaning}
+            successMessage={content.successMessage}
             onSolve={() => {
               content.onSolve?.();
             }}

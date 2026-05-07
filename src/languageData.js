@@ -44,6 +44,8 @@ export const fullWords = {
   opgane: { blah: 'opgane', english: 'unlock' },
   puacarda: { blah: 'puacarda', english: 'antiviral medicine' },
   yamoll: { blah: 'yamoll', english: 'refill' },
+  desarom: { blah: 'desarom', english: 'Mars / red planet' },
+  dodarom: { blah: 'dodarom', english: 'Earth / water planet' },
   ramdenu: { blah: 'ramdenu', english: 'pilot' },
   derbenu: { blah: 'derbenu', english: 'doctor / medic' },
   derbemar: { blah: 'derbemar', english: 'clinic' },

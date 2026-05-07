@@ -9,7 +9,7 @@ export const stage1 = {
     lines: [
       'Ouch. My head hurts. Where am I?',
       'I see metal walls, strange technology, and stars outside the window. It seems I am on an alien spaceship.',
-      'There is a message in my pocket. I must have carried it from Earth: "We are all counting on you to bring home the antiviral medicine to cure zadotitis."',
+      'There is a message in my pocket. I must have carried it from Mars: "We are all counting on you to bring home the antiviral medicine to cure zadotitis."',
       'All of the writing in this spaceship is unfamiliar. How can I communicate to the aliens that I need to return home with a cure?',
       'Time to gather some clues from the words around me.',
     ],
@@ -19,23 +19,18 @@ export const stage1 = {
     type: 'visual-discovery',
     title: 'Message Screen',
     instructions:
-      'Match the words to what the alien is pointing at.',
+      'Infer what al means from the alien message.',
     steps: [
       {
         meaningChips: [
-          { id: 'i-me', label: 'I / me' },
+          { id: 'i-me', label: 'I/me' },
           { id: 'you', label: 'you' },
+          { id: 'she-her', label: 'she/her' },
+          { id: 'he-him', label: 'he/him' },
+          { id: 'we-us', label: 'we/us' },
+          { id: 'they-them', label: 'they/them' },
         ],
         cards: [
-          {
-            id: 'message-self-card',
-            title: 'il',
-            caption: 'The alien taps their chest.',
-            visual: 'message-self',
-            imageKey: 'messageSelf',
-            label: 'il',
-            acceptedMeaningId: 'i-me',
-          },
           {
             id: 'message-you-card',
             title: 'al',
@@ -47,12 +42,12 @@ export const stage1 = {
           },
         ],
         wrongMessage:
-          'That meaning belongs with the other gesture.',
+          'The alien is pointing outward, toward the person being addressed.',
         successMessage:
-          'il marks the speaker. al marks the person being addressed.',
+          'al marks the person being addressed.',
       },
     ],
-    morphemesLearned: ['il', 'al'],
+    morphemesLearned: ['al'],
     objective: 'pilot-chat',
   },
 
@@ -60,41 +55,36 @@ export const stage1 = {
     type: 'visual-discovery',
     title: 'Planet Posters',
     instructions:
-      'There are two posters of planets. One is blue with oceans, and the other has orange bands. What is the root of both words?',
+      "There are two posters of planets. One is red and dusty, and the other has orange bands. These posters are labeled with the planets' names. Click on the alien word for 'planet'?",
     steps: [
       {
-        prompt: 'Click the shared root on both planet labels.',
         cards: [
           {
-            id: 'earth-poster',
-            title: 'Earth Poster',
-            caption: 'The poster shows Earth, a blue ocean planet.',
-            visual: 'earth',
-            imageKey: 'planetDodarom',
-            label: 'doda rom',
-            labelAsTitle: true,
+            id: 'desarom-poster',
+            caption: 'The poster shows Mars, a red planet.',
+            visual: 'mars',
+            imageKey: 'planetDesarom',
+            label: 'desa rom',
+            labelOnImage: true,
             labelParts: [
-              { id: 'earth-doda', text: 'doda' },
-              { id: 'earth-rom', text: 'rom' },
+              { id: 'desarom-desa', text: 'desa' },
+              { id: 'desarom-rom', text: 'rom' },
             ],
           },
           {
             id: 'fannarom-poster',
-            title: 'Banded Poster',
             caption: 'The poster shows Jupiter, an orange planet with bands.',
             visual: 'jupiter',
             imageKey: 'planetFannarom',
             label: 'fanna rom',
-            labelAsTitle: true,
+            labelOnImage: true,
             labelParts: [
               { id: 'fannarom-fanna', text: 'fanna' },
               { id: 'fannarom-rom', text: 'rom' },
             ],
           },
         ],
-        correctPartIds: ['earth-rom', 'fannarom-rom'],
-        partialMessage:
-          'That part is selected. Click the matching rom on the other poster.',
+        anyCorrectPartIds: ['desarom-rom', 'fannarom-rom'],
         wrongMessage:
           'Look for the part that appears on both planet names.',
         successMessage:
@@ -109,24 +99,26 @@ export const stage1 = {
     type: 'visual-discovery',
     title: 'Crew Roster',
     instructions:
-      'Use the nameplates as evidence. Match each role root to the crew image.',
+      'Compare the crew nameplates and infer what the shared ending means.',
     steps: [
       {
-        prompt: 'Drop each root onto the role it names.',
-        meaningChips: [
-          { id: 'ramde', label: 'ramde' },
-          { id: 'derbe', label: 'derbe' },
+        prompt:
+          'Both labels end in nu, and both images show crew members. What does nu mean?',
+        meaningOptions: [
+          { id: 'person', label: 'person' },
+          { id: 'place', label: 'place' },
+          { id: 'thing', label: 'thing' },
+          { id: 'theory', label: 'theory' },
         ],
-        meaningTargetLabel: 'Drop root',
+        correctMeaningId: 'person',
         cards: [
           {
             id: 'pilot-card',
-            title: 'Pilot Role',
+            title: 'Flight Crew',
             caption: 'A helmet, map, and ship controls are visible in this image.',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
-            acceptedMeaningId: 'ramde',
             labelParts: [
               { id: 'pilot-ramde', text: 'ramde' },
               { id: 'pilot-nu', text: 'nu' },
@@ -134,12 +126,11 @@ export const stage1 = {
           },
           {
             id: 'medic-card',
-            title: 'Medic Role',
+            title: 'Medical Crew',
             caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
-            acceptedMeaningId: 'derbe',
             labelParts: [
               { id: 'medic-derbe', text: 'derbe' },
               { id: 'medic-nu', text: 'nu' },
@@ -147,9 +138,77 @@ export const stage1 = {
           },
         ],
         wrongMessage:
-          'That root belongs with the other crew image.',
+          'Both pictures show people with jobs, not places, objects, or ideas.',
         successMessage:
-          'ramde points to fly or go. derbe points to healing. Both labels end with nu, so -nu marks a person or doer.',
+          'Both labels end with nu. -nu marks a person or doer.',
+      },
+      {
+        prompt: 'Which crewmate is the pilot?',
+        cards: [
+          {
+            id: 'pilot-card',
+            title: 'Flight Crew',
+            caption: 'A helmet, map, and ship controls are visible in this image.',
+            visual: 'pilot',
+            imageKey: 'crewPilot',
+            label: 'ramdenu',
+            labelParts: [
+              { id: 'pilot-ramde', text: 'ramde' },
+              { id: 'pilot-nu', text: 'nu' },
+            ],
+          },
+          {
+            id: 'medic-card',
+            title: 'Medical Crew',
+            caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
+            visual: 'medic',
+            imageKey: 'crewMedic',
+            label: 'derbenu',
+            labelParts: [
+              { id: 'medic-derbe', text: 'derbe' },
+              { id: 'medic-nu', text: 'nu' },
+            ],
+          },
+        ],
+        correctCardIds: ['pilot-card'],
+        wrongMessage:
+          'The flight gear points to the pilot, not the medical crew.',
+        successMessage:
+          'ramde points to fly or go. ramdenu is a pilot.',
+      },
+      {
+        prompt: 'Which crewmate is the medic?',
+        cards: [
+          {
+            id: 'pilot-card',
+            title: 'Flight Crew',
+            caption: 'A helmet, map, and ship controls are visible in this image.',
+            visual: 'pilot',
+            imageKey: 'crewPilot',
+            label: 'ramdenu',
+            labelParts: [
+              { id: 'pilot-ramde', text: 'ramde' },
+              { id: 'pilot-nu', text: 'nu' },
+            ],
+          },
+          {
+            id: 'medic-card',
+            title: 'Medical Crew',
+            caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
+            visual: 'medic',
+            imageKey: 'crewMedic',
+            label: 'derbenu',
+            labelParts: [
+              { id: 'medic-derbe', text: 'derbe' },
+              { id: 'medic-nu', text: 'nu' },
+            ],
+          },
+        ],
+        correctCardIds: ['medic-card'],
+        wrongMessage:
+          'The medical tools point to the medic, not the flight crew.',
+        successMessage:
+          'derbe points to healing. derbenu is a doctor or medic.',
       },
     ],
     morphemesLearned: ['-nu', 'ramde', 'derbe', 'ramdenu', 'derbenu'],
@@ -165,16 +224,19 @@ export const stage1 = {
       {
         id: 'tito',
         label: 'tito',
+        result: 'The cup fills.',
         color: '#8f4dff',
       },
       {
         id: 'bibi',
         label: 'bibi',
+        result: 'The cup fills.',
         color: '#70d86c',
       },
       {
         id: 'doda',
         label: 'doda',
+        result: 'The cup fills.',
         color: '#7ec7ff',
       },
     ],
@@ -201,6 +263,7 @@ export const stage1 = {
       'Not quite. Use the two word parts you have learned from the message screen and the planet posters.',
     successMessage:
       'Yes. It reads like "you: planet?" The aliens were trying to identify where you came from. puacarda is still unresolved.',
+    successDelayMs: 3200,
     acceptedKeywordGroups: [
       ['you', 'your'],
       ['planet', 'world'],
@@ -211,61 +274,16 @@ export const stage1 = {
   },
 
   doorBuilder: {
-    type: 'visual-discovery',
+    type: 'gear-lock',
     title: 'Cabin Door Lock',
     instructions:
-      'Use the lock panel image to find the word part that reverses the locked state.',
-    steps: [
-      {
-        prompt:
-          'The panel shows a lock becoming unlocked. Click the reversing prefix in the door command.',
-        cards: [
-          {
-            id: 'cabin-door-lock-card',
-            title: 'Door Command',
-            caption:
-              'The cabin display shows the lock state changing into an unlocked state.',
-            visual: 'door-lock',
-            imageKey: 'clueCabinDoorLock',
-            label: 'opgane',
-            labelAsTitle: true,
-            labelParts: [
-              { id: 'door-lock-op', text: 'op-' },
-              { id: 'door-lock-gane', text: 'gane' },
-            ],
-          },
-        ],
-        correctPartIds: ['door-lock-op'],
-        partialMessage:
-          'The reversing arrow points to the prefix before the lock word.',
-        wrongMessage:
-          'gane names the lock. The reversing arrow points to the part that changes that state.',
-        successMessage: 'op- reverses. gane is lock. opgane is unlock.',
-      },
-      {
-        prompt: 'Now click the lock root in the completed command.',
-        cards: [
-          {
-            id: 'cabin-door-root-card',
-            title: 'Door Command',
-            caption:
-              'The same command combines a reversing prefix with the lock root.',
-            visual: 'door-lock',
-            imageKey: 'clueCabinDoorLock',
-            label: 'opgane',
-            labelAsTitle: true,
-            labelParts: [
-              { id: 'door-root-op', text: 'op-' },
-              { id: 'door-root-gane', text: 'gane' },
-            ],
-          },
-        ],
-        correctPartIds: ['door-root-gane'],
-        wrongMessage:
-          'op- reverses the state. The root is the part that names the lock.',
-        successMessage: 'gane is lock. Together, opgane unlocks the door.',
-      },
-    ],
+      'Rotate the gear until the reversing prefix flips into place in front of gane.',
+    rootWord: 'gane',
+    rootMeaning: 'lock',
+    prefixLabel: 'op',
+    solvedWord: 'opgane',
+    solvedMeaning: 'unlock',
+    successMessage: 'op- means un-.',
     morphemesLearned: ['gane', 'op-', 'opgane'],
     objective: 'stage1-complete',
     afterSolve: {
