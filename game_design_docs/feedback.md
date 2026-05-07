@@ -116,9 +116,9 @@ Legend:
 
 ### Destination Map
 
-- `[Partial]` Current destination map uses Earth as `doda rom` and shows a blue ocean world.
-- `[Todo]` Make the player figure out or remember Earth = water + planet more independently.
-- `[Todo]` Avoid prompts that refresh the player's memory too directly.
+- ~~`[Partial]` Current destination map uses Earth as `doda rom` and shows a blue ocean world.~~
+- ~~`[Todo]` Make the player figure out or remember Earth = water + planet more independently.~~
+- ~~`[Todo]` Avoid prompts that refresh the player's memory too directly.~~
 
 ## Communication / Vocabulary Review
 

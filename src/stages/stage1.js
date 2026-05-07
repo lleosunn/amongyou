@@ -9,7 +9,7 @@ export const stage1 = {
     lines: [
       'Ouch. My head hurts. Where am I?',
       'I see metal walls, strange technology, and stars outside the window. It seems I am on an alien spaceship.',
-      'There is a message in my pocket. I must have carried it from Mars: "We are all counting on you to bring home the antiviral medicine to cure zadotitis."',
+      'There is a message in my pocket. I must have carried it from Earth: "We are all counting on you to bring home the antiviral medicine to cure zadotitis."',
       'All of the writing in this spaceship is unfamiliar. How can I communicate to the aliens that I need to return home with a cure?',
       'Time to gather some clues from the words around me.',
     ],
@@ -34,7 +34,6 @@ export const stage1 = {
           {
             id: 'message-you-card',
             title: 'al',
-            caption: 'The alien points outward.',
             visual: 'message-you',
             imageKey: 'messageYou',
             label: 'al',
@@ -55,13 +54,12 @@ export const stage1 = {
     type: 'visual-discovery',
     title: 'Planet Posters',
     instructions:
-      "There are two posters of planets. One is red and dusty, and the other has orange bands. These posters are labeled with the planets' names. Click on the alien word for 'planet'?",
+      "Click on the alien word for 'planet'.",
     steps: [
       {
         cards: [
           {
             id: 'desarom-poster',
-            caption: 'The poster shows Mars, a red planet.',
             visual: 'mars',
             imageKey: 'planetDesarom',
             label: 'desa rom',
@@ -73,7 +71,6 @@ export const stage1 = {
           },
           {
             id: 'fannarom-poster',
-            caption: 'The poster shows Jupiter, an orange planet with bands.',
             visual: 'jupiter',
             imageKey: 'planetFannarom',
             label: 'fanna rom',
@@ -115,7 +112,6 @@ export const stage1 = {
           {
             id: 'pilot-card',
             title: 'Flight Crew',
-            caption: 'A helmet, map, and ship controls are visible in this image.',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -127,7 +123,6 @@ export const stage1 = {
           {
             id: 'medic-card',
             title: 'Medical Crew',
-            caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -148,7 +143,6 @@ export const stage1 = {
           {
             id: 'pilot-card',
             title: 'Flight Crew',
-            caption: 'A helmet, map, and ship controls are visible in this image.',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -160,7 +154,6 @@ export const stage1 = {
           {
             id: 'medic-card',
             title: 'Medical Crew',
-            caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -182,7 +175,6 @@ export const stage1 = {
           {
             id: 'pilot-card',
             title: 'Flight Crew',
-            caption: 'A helmet, map, and ship controls are visible in this image.',
             visual: 'pilot',
             imageKey: 'crewPilot',
             label: 'ramdenu',
@@ -194,7 +186,6 @@ export const stage1 = {
           {
             id: 'medic-card',
             title: 'Medical Crew',
-            caption: 'A medical coat, scanner, and medicine kit are visible in this image.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',

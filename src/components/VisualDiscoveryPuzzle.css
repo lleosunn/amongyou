@@ -220,7 +220,6 @@ button.visual-card {
 .visual-card-copy {
   display: grid;
   gap: 4px;
-  min-height: 70px;
   text-align: center;
 }
 
@@ -280,7 +279,7 @@ button.visual-card {
   border-radius: 8px;
 }
 
-.visual-part + .visual-part {
+.visual-part+.visual-part {
   border-left: 0;
 }
 
