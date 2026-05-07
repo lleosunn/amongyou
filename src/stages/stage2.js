@@ -30,12 +30,18 @@ export const stage2 = {
     steps: [
       {
         prompt:
-          'Both panels are doorway signs. Click the shared ending on both labels.',
+          'Both labels end in mar, and both images show rooms. What does mar mean?',
+        meaningOptions: [
+          { id: 'place', label: 'place' },
+          { id: 'person', label: 'person' },
+          { id: 'thing', label: 'thing' },
+          { id: 'idea', label: 'idea' },
+        ],
+        correctMeaningId: 'place',
         cards: [
           {
             id: 'clinic-sign-card',
             title: 'Clinic Door',
-            caption: 'A medical room entrance with a blank sign panel.',
             visual: 'clinic-sign',
             imageKey: 'clueClinicSign',
             label: 'derbemar',
@@ -47,7 +53,6 @@ export const stage2 = {
           {
             id: 'flight-sign-card',
             title: 'Flight Door',
-            caption: 'A navigation room entrance with the same kind of sign.',
             visual: 'flight-sign',
             imageKey: 'clueFlightSign',
             label: 'ramdemar',
@@ -57,11 +62,10 @@ export const stage2 = {
             ],
           },
         ],
-        correctPartIds: ['clinic-sign-mar', 'flight-sign-mar'],
         wrongMessage:
-          'Look for the ending that appears on both doorway labels.',
+          'Both pictures show rooms, not people, objects, or ideas.',
         successMessage:
-          'Both doorway labels end with mar. -mar marks a place or room.',
+          'Both labels end with mar. -mar marks a place or room.',
       },
       {
         prompt:
@@ -70,7 +74,6 @@ export const stage2 = {
           {
             id: 'clinic-sign-card',
             title: 'Clinic Door',
-            caption: 'The sign belongs to the medical room.',
             visual: 'clinic-sign',
             imageKey: 'clueClinicSign',
             label: 'derbemar',
@@ -82,7 +85,6 @@ export const stage2 = {
           {
             id: 'flight-sign-card',
             title: 'Flight Door',
-            caption: 'This sign belongs to a different room.',
             visual: 'flight-sign',
             imageKey: 'clueFlightSign',
             label: 'ramdemar',
@@ -125,7 +127,6 @@ export const stage2 = {
           {
             id: 'medic-self-card',
             title: 'Medic Gesture',
-            caption: 'The medic points to themself.',
             visual: 'medic-self',
             imageKey: 'clueMedicSelf',
             label: 'il',
@@ -143,7 +144,6 @@ export const stage2 = {
           {
             id: 'medic-job-card',
             title: 'Medical Crew',
-            caption: 'A crew card for the medic job.',
             visual: 'medic',
             imageKey: 'crewMedic',
             label: 'derbenu',
@@ -155,7 +155,6 @@ export const stage2 = {
           {
             id: 'treatment-log-card',
             title: 'Completed Log',
-            caption: 'The scanner panel shows treatment is finished.',
             visual: 'treatment-log',
             imageKey: 'clueTreatmentLog',
             label: 'derbeuk',
@@ -252,7 +251,6 @@ export const stage2 = {
       {
         id: 'refill-cycle',
         title: 'Refill Cycle',
-        caption: 'Empty bottles return to the rack, then fill again.',
         imageKey: 'clueRefillMachine',
       },
     ],

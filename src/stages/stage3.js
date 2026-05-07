@@ -37,12 +37,18 @@ export const stage3 = {
     instructions: 'Compare room signs from the clinic and lab.',
     steps: [
       {
-        prompt: 'Both are room signs. Click the shared ending on both labels.',
+        prompt: 'Both labels share a room ending. What does cruta mean?',
+        meaningOptions: [
+          { id: 'lab', label: 'lab/work' },
+          { id: 'place', label: 'place' },
+          { id: 'person', label: 'person' },
+          { id: 'thing', label: 'thing' },
+        ],
+        correctMeaningId: 'lab',
         cards: [
           {
             id: 'lab-compare-clinic',
             title: 'Clinic Door',
-            caption: 'The known clinic sign from the medical room.',
             visual: 'clinic-sign',
             imageKey: 'clueClinicSign',
             label: 'derbemar',
@@ -54,7 +60,6 @@ export const stage3 = {
           {
             id: 'lab-sign-card',
             title: 'Production Lab',
-            caption: 'A bench room with vats, racks, and analysis screens.',
             visual: 'lab-sign',
             imageKey: 'clueLabSign',
             label: 'crutamar',
@@ -64,44 +69,10 @@ export const stage3 = {
             ],
           },
         ],
-        correctPartIds: ['lab-compare-clinic-mar', 'lab-sign-mar'],
-        wrongMessage:
-          'The matching ending is shared by both room signs.',
-        successMessage: 'The lab sign uses the same room ending: -mar.',
-      },
-      {
-        prompt: 'Now focus on the production lab picture. Click the part that names lab work.',
-        cards: [
-          {
-            id: 'lab-compare-clinic',
-            title: 'Clinic Door',
-            caption: 'This sign names the healing room.',
-            visual: 'clinic-sign',
-            imageKey: 'clueClinicSign',
-            label: 'derbemar',
-            labelParts: [
-              { id: 'lab-compare-clinic-derbe-2', text: 'derbe' },
-              { id: 'lab-compare-clinic-mar-2', text: 'mar' },
-            ],
-          },
-          {
-            id: 'lab-sign-card',
-            title: 'Production Lab',
-            caption: 'The room is full of lab equipment and production vats.',
-            visual: 'lab-sign',
-            imageKey: 'clueLabSign',
-            label: 'crutamar',
-            labelParts: [
-              { id: 'lab-sign-cruta-2', text: 'cruta' },
-              { id: 'lab-sign-mar-2', text: 'mar' },
-            ],
-          },
-        ],
-        correctPartIds: ['lab-sign-cruta-2'],
-        wrongMessage:
-          'The room ending is already known. The lab-specific root is the other part.',
+        wrongMessage: 'The lab-specific part names the work done in the room, not the room ending.',
         successMessage: 'cruta points to lab work. crutamar is the lab.',
       },
+
     ],
     morphemesLearned: ['cruta', 'crutamar'],
     objective: 'lab-sign',
@@ -111,7 +82,7 @@ export const stage3 = {
     type: 'manufacturing-machine',
     title: 'Manufacturing Machine',
     instructions:
-      'Fill in the missing treatment word, then increase production to the largest possible amount.',
+      'What are you producing?',
     firstPrompt: 'Drag the correct word into the blank.',
     secondPrompt: 'Now push the machine output to its maximum size.',
     blankLabel: 'Sondy:',
@@ -153,7 +124,6 @@ export const stage3 = {
       {
         id: 'door-reply-screen',
         title: 'Door Screen',
-        caption: 'The screen points the speaking question toward you.',
         imageKey: 'messageYou',
       },
     ],
