@@ -13,6 +13,7 @@ const allowedContentTypes = new Set([
   'conversation',
   'experiment',
   'gear-lock',
+  'manufacturing-machine',
   'matching',
   'narration',
   'prefix-wheel',

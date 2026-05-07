@@ -21,6 +21,7 @@ const INTERACTIVE_TYPES = new Set([
   'conversation',
   'experiment',
   'gear-lock',
+  'manufacturing-machine',
   'matching',
   'prefix-wheel',
   'sequence',

@@ -5,6 +5,7 @@ const commandTiles = [
   { id: 'doda', label: 'doda' },
   { id: 'rom', label: 'rom' },
   { id: 'gane', label: 'gane' },
+  { id: 'derbe', label: 'derbe' },
 ];
 
 const speechTiles = [
@@ -107,36 +108,17 @@ export const stage3 = {
   },
 
   machineBuilder: {
-    type: 'builder',
+    type: 'manufacturing-machine',
     title: 'Manufacturing Machine',
     instructions:
-      'Use known alien-language words as production commands.',
-    steps: [
-      {
-        prompt: 'The empty vat needs one batch of antiviral medicine.',
-        slotCount: 2,
-        availableTiles: commandTiles,
-        correctSequence: ['moll', 'puacarda'],
-        wrongMessage: 'The vat stays empty.',
-        successMessage: 'Accepted. The first bottles fill with puacarda.',
-      },
-      {
-        prompt: 'The cargo rack needs the same filling action again.',
-        clues: [
-          {
-            id: 'lab-refill-cycle',
-            title: 'Rack Cycle',
-            caption: 'The rack returns empty bottles, then fills them again.',
-            imageKey: 'clueRefillMachine',
-          },
-        ],
-        slotCount: 3,
-        availableTiles: commandTiles,
-        correctSequence: ['ya-', 'moll', 'puacarda'],
-        wrongMessage: 'The cargo rack does not engage.',
-        successMessage: 'Accepted. The cargo rack refills with puacarda.',
-      },
-    ],
+      'Fill in the missing treatment word, then increase production to the largest possible amount.',
+    firstPrompt: 'Drag the correct word into the blank.',
+    secondPrompt: 'Now push the machine output to its maximum size.',
+    blankLabel: 'Sondy:',
+    sliderLabel: 'Moll',
+    options: commandTiles,
+    correctOptionId: 'puacarda',
+    successMessage: 'Correct! We want to maximize the amount of Anti-Virus we send. Now select the destination of the medicine on the destination map.',
     objective: 'lab-machine',
   },
 
