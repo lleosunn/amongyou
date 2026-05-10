@@ -13,6 +13,9 @@ const finalTiles = [
   { id: 'gane', label: 'gane' },
 ];
 
+const pickFinalTiles = (...ids) =>
+  ids.map((id) => finalTiles.find((tile) => tile.id === id));
+
 export const stage4 = {
   id: 'stage4',
   name: 'Stage 4 - Bridge',
@@ -40,9 +43,13 @@ export const stage4 = {
         sceneTitle: 'Medical Scanner',
         sceneCaption: 'The bridge scanner checks that your treatment is complete.',
         slotCount: 3,
-        availableTiles: finalTiles,
+        availableTiles: pickFinalTiles('al', '-uk', 'il', 'derbe'),
         correctSequence: ['il', 'derbe', '-uk'],
         reply: 'derbe-uk.',
+        wrongMessage:
+          'The scanner needs who is healed, the healing root, and the completed ending.',
+        hintAfterAttempts: 2,
+        attemptHint: 'Hint: build "I am healed"',
         successMessage: 'The medic scanner accepts your healed status.',
       },
       {
@@ -53,14 +60,20 @@ export const stage4 = {
         sceneTitle: 'Earth Route',
         sceneCaption: 'The route panel shows Earth and the loaded medicine.',
         slotCount: 5,
-        availableTiles: finalTiles,
+        availableTiles: pickFinalTiles(
+          'doda',
+          'ramde',
+          'al',
+          'rom',
+          'il',
+          'derbe'
+        ),
         correctSequence: ['il', 'ramde', 'derbe', 'doda', 'rom'],
         reply: 'doda rom derbe.',
         wrongMessage:
           'The commander still needs the mission idea: who is going, what action, and which planet needs healing.',
-        hintAfterAttempts: 5,
-        attemptHint:
-          'Hint: build "I fly/go heal Earth" with il + ramde + derbe + doda + rom.',
+        hintAfterAttempts: 2,
+        attemptHint: 'Hint: build "I fly/go heal Earth"',
         successMessage: 'The commander understands Earth needs healing.',
       },
       {
@@ -70,9 +83,21 @@ export const stage4 = {
         sceneTitle: 'Transport Request',
         sceneCaption: 'The commander studies the cargo ship route.',
         slotCount: 6,
-        availableTiles: finalTiles,
+        availableTiles: pickFinalTiles(
+          'carda',
+          'rom',
+          'il',
+          'doda',
+          'pua-',
+          'al',
+          'ramde'
+        ),
         correctSequence: ['al', 'ramde', 'pua-', 'carda', 'doda', 'rom'],
         reply: 'ya-derbe doda rom.',
+        wrongMessage:
+          'Start with who flies, then name the medicine, then name the destination.',
+        hintAfterAttempts: 2,
+        attemptHint: 'Hint: build "you fly puacarda Earth"',
         successMessage: 'The commander salutes and orders the cargo loaded.',
       },
     ],
